@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "patch:types": "node ../../scripts/patch-acala-types",
     "build": "tsc -b",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",

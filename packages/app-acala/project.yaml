@@ -3,8 +3,7 @@ description: ""
 repository: ""
 schema: ./schema.graphql
 network:
-  endpoint: wss://polkadot.api.onfinality.io/public-ws
-  dictionary: https://api.subquery.network/sq/subquery/dictionary-polkadot
+  endpoint: wss://crosschain-dev.polkawallet.io:9905
   typesBundle:
     spec:
       acala:

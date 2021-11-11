@@ -19,7 +19,7 @@ function patchTypesToConfig (config) {
 
     _config['network'] = {
         ...config['network'],
-	typesBundle
+        typesBundle
     }
 
     return _config
