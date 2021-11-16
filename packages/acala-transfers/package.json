@@ -1,15 +1,14 @@
 {
-  "name": "@acala-subql/app-karura",
+  "name": "@acala-subql/acala-transfers",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "patch:types": "node ../../scripts/patch-acala-types.js",
     "build": "tsc -b",
-    "prepack": "rm -rf dist && npm build",
+    "prepack": "rm -rf dist && yarn build",
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen",
-    "gen:schema": "node ./scripts/generate-schema.js && yarn run codegen"
+    "start": "./node_modules/.bin/subql-node -f . --local --timeout=512 --batch-size=100 --port=3123"
   },
   "homepage": "https://github.com/subquery/subql-starter",
   "repository": "github:subquery/subql-starter",
@@ -23,10 +22,8 @@
   "devDependencies": {
     "@polkadot/api": "^6",
     "@subql/cli": "latest",
+    "@subql/node": "latest",
     "@subql/types": "latest",
     "typescript": "^4.1.3"
-  },
-  "dependencies": {
-    "@acala-subql/module-tokens": "^1.0.0"
   }
 }

@@ -1,0 +1,34 @@
+type Account @entity {
+  id: ID!
+
+  transferIn: [Transfer] @derivedFrom(field: "to")
+  transferOut: [Transfer] @derivedFrom(field: "to")
+  daily: [DailyRecord] @derivedFrom(field: "account")
+}
+
+type Transfer @entity {
+  id: ID!
+
+  amount: BigInt
+  token: String!
+  from: Account!
+  to: Account!
+
+  atBlock: BigInt!
+  atBlockHash: String!
+  atExtrinsic: String!
+
+  timestamp: Date!
+}
+
+type DailyRecord @entity {
+  id: ID! # account-timestamp
+
+  account: Account!
+
+  amount: BigInt
+  in: BigInt
+  out: BigInt
+
+  timestamp: Date!
+}
