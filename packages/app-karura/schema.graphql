@@ -1,7 +1,0 @@
-# include from module-tokens/schema.graphql
-type Token @entity {
-  id: ID!
-  symbol: String
-  decimal: Int
-}
-

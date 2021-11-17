@@ -20,7 +20,7 @@ a collection of acala/karura sub-query services.
 
 + patch types of acala/karura
   ```bash
-  cd SERVICE_DIRECTION && node ../../scripts/patch-acala-types.js
+  cd SERVICE_DIR && node ../../scripts/patch-acala-types.js
   ```
 
 ### Use Acala/Karura Dictionary
@@ -33,4 +33,24 @@ network:
   endpoint: wss://polkadot.api.onfinality.io/public-ws
   dictionary: https://api.subquery.network/sq/AcalaNetwork/karura-dictionary
 ...
+```
+
+### Start Local Test Service
+
++ install @subql/node service
+```bash
+cd SERVICE_DIR && yarn add @subql/node
+```
++ edit package.json
+```json
+...
+scripts: {
+  "start": "./node_modules/.bin/subql-node -f . --local --timeout=512 --batch-size=100 --port=3123"
+}
+...
+```
++ start dev server
+> please ensure that postgres db is connectable. 
+```bash
+yarn run start
 ```
