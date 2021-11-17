@@ -12,7 +12,7 @@
     "@open-web3/orml-types" "^1.0.2-0"
     "@polkadot/api-derive" "^6.5.2"
 
-"@acala-network/api@^3.0.2":
+"@acala-network/api@3.0.2", "@acala-network/api@^3.0.2":
   version "3.0.2"
   resolved "https://registry.npmjs.org/@acala-network/api/-/api-3.0.2.tgz"
   integrity sha512-p7QaOohDUjB5B1wmqmaV4G1XE1BBFb6F4uNvjUc30GBw/cR8cIoBj4+PBfy3rd4vwtPf9da7ZtGKwBNecIlcgw==
@@ -23,6 +23,31 @@
     "@open-web3/orml-api-derive" "^1.0.2-0"
     "@polkadot/api" "^6.5.2"
     "@polkadot/rpc-core" "^6.5.2"
+
+"@acala-network/sdk-core@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@acala-network/sdk-core/-/sdk-core-3.0.2.tgz#9d24a6d23b47a8353b49c9f8da7e3474bed1e2d5"
+  integrity sha512-9HbnF2z9+8fdpFlgw1ySMGUIiu+z3S8L/YkDUzvCpBruSV2bXDahReBXXd+6UCkNwFUCrhKsJxNdH/Aotn2UIA==
+  dependencies:
+    "@acala-network/api" "3.0.2"
+    "@acala-network/type-definitions" "3.0.2"
+    "@polkadot/api" "^6.5.2"
+    "@polkadot/types" "^6.5.2"
+    "@types/events" "^3.0.0"
+    bignumber.js "^9.0.0"
+    events "^3.2.0"
+    lodash "^4.17.20"
+
+"@acala-network/sdk-wallet@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@acala-network/sdk-wallet/-/sdk-wallet-3.0.2.tgz#53d7232f38de1a5ee96f1ac2b17bb5e1d8f26dc9"
+  integrity sha512-S34UZhg4ACCZWk0Yv0UaVV7v2bhDW1fxf71m/Qj/vWhfookV3HL022GiwJOjoJlhT9nsFHzRlmnxtSmqct2LLw==
+  dependencies:
+    "@acala-network/sdk-core" "3.0.2"
+    "@polkadot/api" "^6.5.2"
+    "@polkadot/types" "^6.5.2"
+    lodash "^4.17.20"
+    rxjs "^7.4.0"
 
 "@acala-network/type-definitions@3.0.2":
   version "3.0.2"
@@ -1963,6 +1988,11 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.50.tgz#1e0caa9364d3fccd2931c3ed96fdbeaa5d4cca83"
   integrity sha512-C6N5s2ZFtuZRj54k2/zyRhNDjJwwcViAM3Nbm8zjBpbqAdZ00mr0CFxvSKeO8Y/e03WVFLpQMdHYVfUd6SB+Hw==
 
+"@types/events@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
+  integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
+
 "@types/json-schema@*", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   version "7.0.9"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.9.tgz"
@@ -2605,6 +2635,11 @@ bignumber.js@^8.1.1:
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-8.1.1.tgz#4b072ae5aea9c20f6730e4e5d529df1271c4d885"
   integrity sha512-QD46ppGintwPGuL1KqmwhR0O+N2cZUg8JG/VzwI2e28sM9TqHjQB10lI4QAaMHVbLzwVLLAwEglpKPViWX+5NQ==
+
+bignumber.js@^9.0.0:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.1.tgz#8d7ba124c882bfd8e43260c67475518d0689e4e5"
+  integrity sha512-IdZR9mh6ahOBv/hYGiXyVuyCetmGJhtYkqLBpTStdhEGjegpPlUawydyaF3pbIOFynJTpllEs+NP+CS9jKFLjA==
 
 bintrees@1.0.1:
   version "1.0.1"

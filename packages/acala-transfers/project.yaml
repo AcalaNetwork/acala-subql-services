@@ -3,7 +3,7 @@ description: ""
 repository: ""
 schema: ./schema.graphql
 network:
-  endpoint: wss://polkadot.api.onfinality.io/public-ws
+  endpoint: wss://karura.api.onfinality.io/public-ws
   dictionary: https://api.subquery.network/sq/AcalaNetwork/karura-dictionary
   typesBundle:
     spec:
@@ -4161,8 +4161,13 @@ dataSources:
     startBlock: 1
     mapping:
       handlers:
-        - handler: handleTransfer
+        - handler: handleNonNativeTokenTransfer
           kind: substrate/EventHandler
           filter:
             module: currencies
+            method: Transferred
+        - handler: handleNativeTokenTransfer 
+          kind: substrate/EventHandler
+          filter:
+            module: balances
             method: Transfer
