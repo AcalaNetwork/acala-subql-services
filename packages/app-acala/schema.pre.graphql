@@ -1,4 +1,0 @@
-type Token @entity {
-  symbol: String
-  decimal: Int
-}
