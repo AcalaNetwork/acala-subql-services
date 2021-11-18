@@ -59,6 +59,5 @@ type TokenDailyReport @entity {
   transferCount: Int # count token daily transfer
   _transferCount: Int # count all token daily transfer
   volumn: BigInt # total tranfser volumn
-
   timestamp: Date!
 }

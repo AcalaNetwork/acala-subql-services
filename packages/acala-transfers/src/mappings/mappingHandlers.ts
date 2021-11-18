@@ -7,7 +7,7 @@ import { getTokenName, isTokenEqual } from "../utils/token";
 const wallet = new WalletPromise(api);
 const nativeToken = wallet.getNativeToken();
 
-export async function handleNonNativeTokenTransfer (event: SubstrateEvent) {
+export async function handleNonNativeTokenTransfer(event: SubstrateEvent) {
   const extrinsic = event.extrinsic;
 
   // ignore transfer event which with no tx
@@ -29,7 +29,7 @@ export async function handleNonNativeTokenTransfer (event: SubstrateEvent) {
   );
 }
 
-export async function handleNativeTokenTransfer (event: SubstrateEvent) {
+export async function handleNativeTokenTransfer(event: SubstrateEvent) {
   const extrinsic = event.extrinsic;
 
   // ignore transfer event which with no tx

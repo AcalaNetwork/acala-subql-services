@@ -8,8 +8,7 @@ network:
   typesBundle:
     spec:
       acala:
-        rpc:
-          &a62
+        rpc: &a62
           oracle:
             getValue:
               description: Retrieves the oracle value for a given key.
@@ -124,26 +123,22 @@ network:
           council:
             - generalCouncil
         types:
-          - minmax:
-              &a63
+          - minmax: &a63
               - 600
               - 699
             types:
               CallOf: Call
-              DispatchTime:
-                &a1
+              DispatchTime: &a1
                 _enum:
                   At: BlockNumber
                   After: BlockNumber
               ScheduleTaskIndex: u32
-              DelayedOrigin:
-                &a2
+              DelayedOrigin: &a2
                 delay: BlockNumber
                 origin: PalletsOrigin
               AuthorityOrigin: DelayedOrigin
               StorageValue: Vec<u8>
-              GraduallyUpdate:
-                &a3
+              GraduallyUpdate: &a3
                 key: StorageKey
                 targetValue: StorageValue
                 perBlock: StorageValue
@@ -151,48 +146,40 @@ network:
               StorageValueBytes: Vec<u8>
               RpcDataProviderId: Text
               DataProviderId: u8
-              TimestampedValue:
-                &a4
+              TimestampedValue: &a4
                 value: OracleValue
                 timestamp: Moment
               TimestampedValueOf: TimestampedValue
               OrderedSet: Vec<AccountId>
-              OrmlAccountData:
-                &a5
+              OrmlAccountData: &a5
                 free: Balance
                 reserved: Balance
                 frozen: Balance
-              OrmlBalanceLock:
-                &a6
+              OrmlBalanceLock: &a6
                 amount: Balance
                 id: LockIdentifier
-              AuctionInfo:
-                &a7
+              AuctionInfo: &a7
                 bid: Option<(AccountId, Balance)>
                 start: BlockNumber
                 end: Option<BlockNumber>
-              DelayedDispatchTime:
-                &a8
+              DelayedDispatchTime: &a8
                 _enum:
                   At: BlockNumber
                   After: BlockNumber
               DispatchId: u32
               Price: FixedU128
-              OrmlVestingSchedule:
-                &a9
+              OrmlVestingSchedule: &a9
                 start: BlockNumber
                 period: BlockNumber
                 periodCount: u32
                 perPeriod: Compact<Balance>
               VestingScheduleOf: OrmlVestingSchedule
               OrmlCurrencyId: CurrencyId
-              PoolInfo:
-                &a10
+              PoolInfo: &a10
                 totalShares: Share
                 rewards: BTreeMap<OrmlCurrencyId, (Balance, Balance)>
               CompactBalance: Compact<Balance>
-              PoolInfoV0:
-                &a11
+              PoolInfoV0: &a11
                 totalShares: Compact<Share>
                 totalRewards: CompactBalance
                 totalWithdrawnRewards: CompactBalance
@@ -202,8 +189,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a64
+              TokenSymbol: &a64
                 _enum:
                   - ACA
                   - AUSD
@@ -211,34 +197,29 @@ network:
                   - XBTC
                   - LDOT
                   - RENBTC
-              DexShare:
-                &a12
+              DexShare: &a12
                 _enum:
                   Token: TokenSymbol
                   Erc20: EvmAddress
-              CurrencyId:
-                &a13
+              CurrencyId: &a13
                 _enum:
                   Token: TokenSymbol
                   DEXShare: (DexShare, DexShare)
                   ERC20: EvmAddress
                   StableAssetPoolToken: StableAssetPoolId
               CurrencyIdOf: CurrencyId
-              AirDropCurrencyId:
-                &a14
+              AirDropCurrencyId: &a14
                 _enum:
                   - KAR
                   - ACA
-              AuthoritysOriginId:
-                &a15
+              AuthoritysOriginId: &a15
                 _enum:
                   - Root
                   - Treasury
                   - HonzonTreasury
                   - HomaTreasury
                   - TreasuryReserve
-              AcalaDataProviderId:
-                &a16
+              AcalaDataProviderId: &a16
                 _enum:
                   - Aggregated
                   - Acala
@@ -246,166 +227,137 @@ network:
               TradingPair: (CurrencyId,  CurrencyId)
               ChainBridgeChainId: u8
               PalletBalanceOf: Balance
-              CollateralAuctionItem:
-                &a17
+              CollateralAuctionItem: &a17
                 refundRecipient: AccountId
                 currencyId: CurrencyId
                 initialAmount: Compact<Balance>
                 amount: Compact<Balance>
                 target: Compact<Balance>
                 startTime: BlockNumber
-              DebitAuctionItem:
-                &a18
+              DebitAuctionItem: &a18
                 initialAmount: Compact<Balance>
                 amount: Compact<Balance>
                 fix: Compact<Balance>
                 startTime: BlockNumber
-              SurplusAuctionItem:
-                &a19
+              SurplusAuctionItem: &a19
                 amount: Compact<Balance>
                 startTime: BlockNumber
-              LiquidationStrategy:
-                &a20
+              LiquidationStrategy: &a20
                 _enum:
                   - Auction
                   - Exchange
               OptionRate: Option<Rate>
               OptionRatio: Option<Ratio>
-              ChangeOptionRate:
-                &a21
+              ChangeOptionRate: &a21
                 _enum:
                   NoChange: "Null"
                   NewValue: OptionRate
-              ChangeOptionRatio:
-                &a22
+              ChangeOptionRatio: &a22
                 _enum:
                   NoChange: "Null"
                   NewValue: OptionRatio
-              ChangeBalance:
-                &a23
+              ChangeBalance: &a23
                 _enum:
                   NoChange: "Null"
                   NewValue: Balance
-              RiskManagementParams:
-                &a24
+              RiskManagementParams: &a24
                 maximumTotalDebitValue: Balance
                 interestRatePerSec: Option<Rate>
                 liquidationRatio: Option<Rate>
                 liquidationPenalty: Option<Rate>
                 requiredCollateralRatio: Option<Rate>
               CandidateInfoOf: CandidateInfo
-              TradingPairProvisionParameters:
-                &a25
+              TradingPairProvisionParameters: &a25
                 minContribution: (Balance, Balance)
                 targetProvision: (Balance, Balance)
                 accumulatedProvision: (Balance, Balance)
                 notBefore: BlockNumber
-              BalanceWrapper:
-                &a26
+              BalanceWrapper: &a26
                 amount: Balance
-              BalanceRequest:
-                &a27
+              BalanceRequest: &a27
                 amount: Balance
-              TradingPairStatus:
-                &a28
+              TradingPairStatus: &a28
                 _enum:
                   NotEnabled: "Null"
                   Provisioning: TradingPairProvisionParameters
                   Enabled: "Null"
-              Erc20Info:
-                &a29
+              Erc20Info: &a29
                 address: EvmAddress
                 name: Vec<u8>
                 symbol: Vec<u8>
                 decimals: u8
-              EstimateResourcesResponse:
-                &a30
+              EstimateResourcesResponse: &a30
                 gas: u256
                 storage: i32
                 weightFee: u256
-              EvmAccountInfo:
-                &a31
+              EvmAccountInfo: &a31
                 nonce: Index
                 contractInfo: Option<EvmContractInfo>
-              CodeInfo:
-                &a32
+              CodeInfo: &a32
                 codeSize: u32
                 refCount: u32
-              EvmContractInfo:
-                &a33
+              EvmContractInfo: &a33
                 codeHash: H256
                 maintainer: H160
                 deployed: bool
               EvmAddress: H160
-              CallRequest:
-                &a34
+              CallRequest: &a34
                 from: Option<H160>
                 to: Option<H160>
                 gasLimit: Option<u32>
                 storageLimit: Option<u32>
                 value: Option<U128>
                 data: Option<Bytes>
-              RedeemStrategy:
-                &a35
+              RedeemStrategy: &a35
                 _enum:
                   Immediately: "Null"
                   Target: EraIndex
                   WaitForUnbonding: "Null"
               RelaychainAccountId: AccountId
-              SlashInfo:
-                &a36
+              SlashInfo: &a36
                 validator: RelaychainAccountId
                 relaychainTokenAmount: Balance
-              ValidatorBacking:
-                &a37
+              ValidatorBacking: &a37
                 totalInsurance: Balance
                 isFrozen: bool
-              Guarantee:
-                &a38
+              Guarantee: &a38
                 total: Balance
                 bonded: Balance
                 unbonding: Option<(Balance, BlockNumber)>
-              PoolId:
-                &a39
+              PoolId: &a39
                 _enum:
                   Loans: CurrencyId
                   DexIncentive: CurrencyId
                   DexSaving: CurrencyId
                   Homa: "Null"
-              PoolIdV0:
-                &a40
+              PoolIdV0: &a40
                 _enum:
                   LoansIncentive: CurrencyId
                   DexIncentive: CurrencyId
                   HomaIncentive: "Null"
                   DexSaving: CurrencyId
                   HomaValidatorAllowance: AccountId
-              Position:
-                &a41
+              Position: &a41
                 collateral: Balance
                 debit: Balance
               CID: Vec<u8>
               Attributes: BTreeMap<Vec<u8>, Vec<u8>>
-              TokenInfoOf:
-                &a42
+              TokenInfoOf: &a42
                 metadata: CID
                 owner: AccountId
                 data: TokenData
-              Properties:
-                &a43
+              Properties: &a43
                 _set:
                   _bitLength: 8
                   Transferable: 1
                   Burnable: 2
                   Mintable: 4
                   ClassPropertiesMutable: 8
-              ClassData:
-                &a44
+              ClassData: &a44
                 deposit: Balance
                 properties: Properties
                 attributes: Attributes
-              TokenData:
-                &a45
+              TokenData: &a45
                 deposit: Balance
                 attributes: Attributes
               TokenId: u64
@@ -414,26 +366,22 @@ network:
               ClassIdOf: ClassId
               NFTBalance: u128
               NFTBalanceOf: NFTBalance
-              ClassInfoOf:
-                &a46
+              ClassInfoOf: &a46
                 metadata: CID
                 totalIssuance: TokenId
                 owner: AccountId
                 data: ClassData
               NomineeId: AccountId
-              HomaUnlockChunk:
-                &a47
+              HomaUnlockChunk: &a47
                 value: Balance
                 era: EraIndex
-              BondingLedger:
-                &a48
+              BondingLedger: &a48
                 total: Balance
                 active: Balance
                 unlocking: Vec<HomaUnlockChunk>
               OracleKey: CurrencyId
               AsOriginId: AuthoritysOriginId
-              ProxyType:
-                &a49
+              ProxyType: &a49
                 _enum:
                   - Any
                   - CancelProxy
@@ -444,44 +392,37 @@ network:
               AtLeast64BitUnsigned: u128
               StableAssetPoolId: u32
               RelayChainBlockNumberOf: RelayChainBlockNumber
-              SubAccountStatus:
-                &a50
+              SubAccountStatus: &a50
                 bonded: Balance
                 available: Balance
                 unbonding: Vec<(EraIndex,Balance)>
                 mockRewardRate: Rate
-              Params:
-                &a51
+              Params: &a51
                 targetMaxFreeUnbondedRatio: Ratio
                 targetMinFreeUnbondedRatio: Ratio
                 targetUnbondingToFreeRatio: Ratio
                 unbondingToFreeAdjustment: Ratio
                 baseFeeRate: Rate
-              StakingPoolPhase:
-                &a52
+              StakingPoolPhase: &a52
                 _enum:
                   - Started
                   - RelaychainUpdated
                   - LedgerUpdated
                   - Finished
-              Ledger:
-                &a53
+              Ledger: &a53
                 bonded: Balance
                 unbondingToFree: Balance
                 freePool: Balance
                 toUnbondNextEra: (Balance, Balance)
-              ChangeRate:
-                &a54
+              ChangeRate: &a54
                 _enum:
                   NoChange: "Null"
                   NewValue: Rate
-              ChangeRatio:
-                &a55
+              ChangeRatio: &a55
                 _enum:
                   NoChange: "Null"
                   NewValue: Ratio
-              BalanceInfo:
-                &a56
+              BalanceInfo: &a56
                 amount: Balance
               PolkadotAccountId: AccountId
               PolkadotAccountIdOf: PolkadotAccountId
@@ -501,8 +442,7 @@ network:
               Response: ResponseV0
               Address: LookupSource
               LookupSource: IndicesLookupSource
-          - minmax:
-              &a65
+          - minmax: &a65
               - 700
               - 719
             types:
@@ -538,8 +478,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a66
+              TokenSymbol: &a66
                 _enum:
                   - ACA
                   - AUSD
@@ -633,8 +572,7 @@ network:
               Response: ResponseV0
               Address: GenericMultiAddress
               LookupSource: GenericMultiAddress
-          - minmax:
-              &a67
+          - minmax: &a67
               - 720
               - 722
             types:
@@ -670,8 +608,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a68
+              TokenSymbol: &a68
                 _enum:
                   ACA: 0
                   AUSD: 1
@@ -691,8 +628,7 @@ network:
                   SDN: 135
                   KILT: 138
               DexShare: *a12
-              CurrencyId:
-                &a57
+              CurrencyId: &a57
                 _enum:
                   Token: TokenSymbol
                   DEXShare: (TokenSymbol, TokenSymbol)
@@ -781,8 +717,7 @@ network:
               XcmOrder: XcmOrderV0
               XcmError: XcmErrorV0
               Response: ResponseV0
-          - minmax:
-              &a69
+          - minmax: &a69
               - 723
               - 729
             types:
@@ -809,8 +744,7 @@ network:
               OrmlVestingSchedule: *a9
               VestingScheduleOf: OrmlVestingSchedule
               OrmlCurrencyId: CurrencyId
-              PoolInfo:
-                &a58
+              PoolInfo: &a58
                 totalShares: Compact<Share>
                 totalRewards: Compact<Balance>
                 totalWithdrawnRewards: Compact<Balance>
@@ -822,8 +756,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a70
+              TokenSymbol: &a70
                 _enum:
                   ACA: 0
                   AUSD: 1
@@ -878,8 +811,7 @@ network:
               SlashInfo: *a36
               ValidatorBacking: *a37
               Guarantee: *a38
-              PoolId:
-                &a59
+              PoolId: &a59
                 _enum:
                   LoansIncentive: CurrencyId
                   DexIncentive: CurrencyId
@@ -935,8 +867,7 @@ network:
               XcmOrder: XcmOrderV0
               XcmError: XcmErrorV0
               Response: ResponseV0
-          - minmax:
-              &a71
+          - minmax: &a71
               - 730
               - 1007
             types:
@@ -972,8 +903,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a72
+              TokenSymbol: &a72
                 _enum:
                   ACA: 0
                   AUSD: 1
@@ -1071,8 +1001,7 @@ network:
               XcmOrder: XcmOrderV0
               XcmError: XcmErrorV0
               Response: ResponseV0
-          - minmax:
-              &a73
+          - minmax: &a73
               - 1008
               - 1008
             types:
@@ -1108,8 +1037,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a74
+              TokenSymbol: &a74
                 _enum:
                   ACA: 0
                   AUSD: 1
@@ -1207,8 +1135,7 @@ network:
               XcmOrder: XcmOrderV0
               XcmError: XcmErrorV0
               Response: ResponseV0
-          - minmax:
-              &a75
+          - minmax: &a75
               - 1008
               - 1009
             types:
@@ -1244,8 +1171,7 @@ network:
               AmountOf: Amount
               AuctionId: u32
               AuctionIdOf: AuctionId
-              TokenSymbol:
-                &a60
+              TokenSymbol: &a60
                 _enum:
                   ACA: 0
                   AUSD: 1
@@ -1345,8 +1271,7 @@ network:
               XcmOrder: XcmOrderV0
               XcmError: XcmErrorV0
               Response: ResponseV0
-          - minmax:
-              &a76
+          - minmax: &a76
               - 1010
               - 1013
             types:
@@ -1419,8 +1344,7 @@ network:
               SlashInfo: *a36
               ValidatorBacking: *a37
               Guarantee: *a38
-              PoolId:
-                &a61
+              PoolId: &a61
                 _enum:
                   Loans: CurrencyId
                   Dex: CurrencyId
@@ -1473,8 +1397,7 @@ network:
               XcmOrder: XcmOrderV0
               XcmError: XcmErrorV0
               Response: ResponseV0
-          - minmax:
-              &a77
+          - minmax: &a77
               - 1014
               - 1018
             types:
@@ -1597,8 +1520,7 @@ network:
               XcmOrder: XcmOrderV1
               XcmError: XcmErrorV1
               Response: ResponseV1
-          - minmax:
-              &a78
+          - minmax: &a78
               - 1019
               - 9999
             types:
@@ -1715,8 +1637,7 @@ network:
               Keys: SessionKeys1
               Address: GenericMultiAddress
               LookupSource: GenericMultiAddress
-        alias:
-          &a79
+        alias: &a79
           stakingPool:
             Phase: StakingPoolPhase
           nomineesElection:
@@ -4166,7 +4087,7 @@ dataSources:
           filter:
             module: currencies
             method: Transferred
-        - handler: handleNativeTokenTransfer 
+        - handler: handleNativeTokenTransfer
           kind: substrate/EventHandler
           filter:
             module: balances
