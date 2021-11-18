@@ -1,6 +1,6 @@
 {
   "name": "@acala-subql/acala-transfers",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.1-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -20,16 +20,16 @@
   "author": "qwer951123",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@acala-subql/utils": "^0.1.0-alpha.0",
     "@polkadot/api": "^6",
     "@subql/cli": "latest",
     "@subql/node": "latest",
     "@subql/types": "latest",
-    "@acala-subql/utils": "^0.1.0-alpha.0",
     "typescript": "^4.1.3"
   },
   "dependencies": {
     "@acala-network/sdk-core": "^3.0.2",
     "@acala-network/sdk-wallet": "^3.0.2",
-    "@acala-subql/utils": "^0.1.0-alpha.0"
+    "@acala-subql/utils": "^0.1.1-alpha.0"
   }
 }
