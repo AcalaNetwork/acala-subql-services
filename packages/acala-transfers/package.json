@@ -1,5 +1,5 @@
 {
-  "name": "@acala-subql/acala-transfers",
+  "name": "@acala-network/acala-transfers-subql",
   "version": "0.1.3-alpha.0",
   "description": "",
   "main": "dist/index.js",
@@ -30,6 +30,7 @@
   "dependencies": {
     "@acala-network/sdk-core": "^3.0.2",
     "@acala-network/sdk-wallet": "^3.0.2",
-    "@acala-subql/utils": "^0.1.3-alpha.0"
-  }
+    "@acala-network/subql-utils": "^0.1.3-alpha.0"
+  },
+  "gitHead": "7d9b17cd9e413777b837d3b2454c8d1bcbb33859"
 }
