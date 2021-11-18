@@ -1,0 +1,78 @@
+type Account @entity {
+  id: ID!
+  address: String
+  positions: [LoanPosition] @derivedFrom(field: "owner")
+  hourLoanPositions: [HourLoanPosition] @derivedFrom(field: "owner")
+  dailyLoanPositions: [DailyLoanPosition] @derivedFrom(field: "owner")
+ }
+
+type Collateral @entity {
+  id: ID!
+  token: String
+  positions: [LoanPosition] @derivedFrom(field: "collateral")
+ }
+
+type LoanPosition @entity {
+  id: ID!
+  owner: Account
+  collateral: Collateral
+  debitAmount: String
+  collateralAmount: String
+}
+
+type HourLoanPosition @entity {
+  id: ID!
+  owner: Account
+  collateral: Collateral
+  debitAmount: String
+  collateralAmount: String
+  debitExchangeRate: String
+  timestamp: String
+}
+
+type DailyLoanPosition @entity {
+  id: ID!
+  owner: Account
+  collateral: Collateral
+  debitAmount: String
+  collateralAmount: String
+  debitExchangeRate: String
+  timestamp: String
+}
+
+type GlobalPosition @entity {
+  id: ID!
+  token: Collateral
+  debitAmount: String
+  collateralAmount: String
+}
+
+type HourGlobalPosition @entity {
+  id: ID!
+  token: Collateral
+  debitAmount: String
+  collateralAmount: String
+}
+
+type DailyGlobalPosition @entity {
+  id: ID!
+  token: Collateral
+  debitAmount: String
+  collateralAmount: String
+}
+
+type DailyLoanReport @entity {
+  id: ID!
+  actionCount: String
+  debitChange: String
+  collateralChange: String
+  timestamp: String
+}
+
+type HourLoanReport @entity {
+  id: ID!
+  actionCount: String
+  debitChange: String
+  collateralChange: String
+  timestamp: String
+}
