@@ -1,8 +1,8 @@
 type Account @entity {
   id: ID!
   isSystemAccount: Boolean
-  transferCount: Int # all user transfer count
-  _transferCount: Int # all transfer count
+  transferCount: Int
+  _transferCount: Int # all transfer
   in: [Transfer] @derivedFrom(field: "to") # all transfer-in record
   out: [Transfer] @derivedFrom(field: "from") # all tranfser-out record
   daily: [UserDailyReportGroup] @derivedFrom(field: "account") # user daily transfer reports
@@ -36,7 +36,7 @@ type UserDailyReportGroup @entity {
   transferCount: Int # count user daily transfer tx relate to `token`
   _transferCount: Int # count user daily transfer tx relate to `token`
   items: [UserDailyReport] @derivedFrom(field: "group")
-  timestmap: Date!
+  timestamp: Date!
 }
 
 type UserDailyReport @entity {
@@ -55,13 +55,9 @@ type UserDailyReport @entity {
 
 type TokenDailyReport @entity {
   id: ID! # `token`-`timestamp`
-  account: Account!
   token: Token!
   transferCount: Int # count token daily transfer
   _transferCount: Int # count all token daily transfer
-  abs: BigInt # transfer amount abs
-  in: BigInt # transfer in amount
-  out: BigInt # transfer out amount
   volumn: BigInt # total tranfser volumn
 
   timestamp: Date!

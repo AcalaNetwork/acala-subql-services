@@ -6,13 +6,13 @@
     "declaration": true,
     "importHelpers": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "module": "commonjs",
     "outDir": "dist",
     "target": "es2017"
   },
   "include": [
     "src/**/*",
-    "../packages/**/*",
     "node_modules/@subql/types/dist/global.d.ts"
   ]
 }
