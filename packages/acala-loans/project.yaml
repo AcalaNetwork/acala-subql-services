@@ -4175,3 +4175,5 @@ dataSources:
           filter:
             module: loans
             method: TransferLoan
+        - handler: handleBlock
+          kind: substrate/BlockHandler

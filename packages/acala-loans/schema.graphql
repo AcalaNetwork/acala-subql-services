@@ -16,17 +16,17 @@ type LoanPosition @entity {
   id: ID!
   owner: Account
   collateral: Collateral
-  debitAmount: String
-  collateralAmount: String
+  debitAmount: BigInt
+  collateralAmount: BigInt
 }
 
 type HourLoanPosition @entity {
   id: ID!
   owner: Account
   collateral: Collateral
-  debitAmount: String
-  collateralAmount: String
-  debitExchangeRate: String
+  debitAmount: BigInt
+  collateralAmount: BigInt
+  debitExchangeRate: BigInt
   timestamp: String
 }
 
@@ -34,45 +34,45 @@ type DailyLoanPosition @entity {
   id: ID!
   owner: Account
   collateral: Collateral
-  debitAmount: String
-  collateralAmount: String
-  debitExchangeRate: String
+  debitAmount: BigInt
+  collateralAmount: BigInt
+  debitExchangeRate: BigInt
   timestamp: String
 }
 
 type GlobalPosition @entity {
   id: ID!
   token: Collateral
-  debitAmount: String
-  collateralAmount: String
+  debitAmount: BigInt
+  collateralAmount: BigInt
 }
 
 type HourGlobalPosition @entity {
   id: ID!
   token: Collateral
-  debitAmount: String
-  collateralAmount: String
+  debitAmount: BigInt
+  collateralAmount: BigInt
 }
 
 type DailyGlobalPosition @entity {
   id: ID!
   token: Collateral
-  debitAmount: String
-  collateralAmount: String
+  debitAmount: BigInt
+  collateralAmount: BigInt
 }
 
 type DailyLoanReport @entity {
   id: ID!
-  actionCount: String
-  debitChange: String
-  collateralChange: String
+  actionCount: BigInt
+  debitChange: BigInt
+  collateralChange: BigInt
   timestamp: String
 }
 
 type HourLoanReport @entity {
   id: ID!
-  actionCount: String
-  debitChange: String
-  collateralChange: String
+  actionCount: BigInt
+  debitChange: BigInt
+  collateralChange: BigInt
   timestamp: String
 }

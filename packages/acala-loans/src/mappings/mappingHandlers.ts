@@ -1,4 +1,4 @@
-import { SubstrateEvent } from "@subql/types";
+import { SubstrateBlock, SubstrateEvent } from "@subql/types";
 import { ensureAccount, ensureCollateral, updateDailyLoanReport, updateHourLoanReport, updateLoanPosition } from "../handlers";
 
 export async function handlePositionUpdated(event: SubstrateEvent): Promise<void> {
@@ -28,4 +28,8 @@ export async function handleTransferLoan(event: SubstrateEvent): Promise<void> {
 
     // await updateHourLoanReport(event, 'TransferLoan');
     // await updateDailyLoanReport(event, 'TransferLoan');
+}
+
+export async function handleBlock(block: SubstrateBlock): Promise<void> {
+    
 }
