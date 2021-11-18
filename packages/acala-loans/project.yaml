@@ -4,6 +4,7 @@ repository: ""
 schema: ./schema.graphql
 network:
   endpoint: wss://karura.api.onfinality.io/public-ws
+  dictionary: https://api.subquery.network/sq/AcalaNetwork/karura-dictionary
   typesBundle:
     spec:
       acala:
@@ -4175,5 +4176,3 @@ dataSources:
           filter:
             module: loans
             method: TransferLoan
-        - handler: handleBlock
-          kind: substrate/BlockHandler

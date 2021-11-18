@@ -9,10 +9,10 @@ export const formatTime = (time: Date) => {
 
 export const getDailyTimeString = (time: Date) => {
   const { year, month, date } = formatTime(time);
-  return `${year}-${month}-${date}`
+  return `${year}:${month}:${date}`
 }
 
 export const getHourTimeString = (time: Date) => {
   const { year, month, date, hour } = formatTime(time);
-  return `${year}-${month}-${date}-${hour}`
+  return `${year}:${month}:${date}:${hour}`
 }

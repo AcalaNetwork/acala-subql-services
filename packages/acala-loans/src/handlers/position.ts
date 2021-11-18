@@ -1,146 +1,100 @@
+import { forceToCurrencyIdName } from "@acala-network/sdk-core";
 import { Rate, OptionRate } from "@acala-network/types/interfaces";
 import { SubstrateEvent } from "@subql/types"
-import { DailyGlobalPosition, DailyLoanPosition, GlobalPosition, HourGlobalPosition, HourLoanPosition, LoanPosition } from "../types";
-import { add, getDailyTimeString, getHourTimeString } from "../utils"
+import { getDateEndOfDay, getDateEndOfHour } from '@acala-network/subql-utils';
+import { getAccount, getCollateral, getDailyGlobalPosition, getDailyLoanPosition, getGlobalLoanPosition, getHourGolbalPosition, getHourLoanPosition, getLoanPosition } from "../utils/record";
 
 export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton = false) => {
-  const [owner, token, collateralAmount, debitAmount] = event.event.data;
+  const [account, collateral, collateral_amount, debit_amount] = event.event.data;
 
-  const _owner = owner.toString();
-  const _token = token.toString();
-  const _collateralAmount = isLiquidatiton ? (BigInt(0) - BigInt(collateralAmount.toString())) : BigInt(collateralAmount.toString());
-  const _debitAmount = isLiquidatiton ? (BigInt(0) - BigInt(debitAmount.toString())) : BigInt(debitAmount.toString())
+  const _account = await getAccount(account.toString());
+  const _token = await getCollateral(forceToCurrencyIdName(collateral));
 
-  // personal part
-  const positionId = `${_owner}-${_token}`;
-  const _position = await LoanPosition.get(positionId);
+  const owner = _account.id;
+  const token = _token.id;
+  const collateralAmount = isLiquidatiton ? -BigInt(collateral_amount.toString()) : BigInt(collateral_amount.toString());
+  const debitAmount = isLiquidatiton ? -BigInt(debit_amount.toString()) : BigInt(debit_amount.toString());
 
-  if (_position) {
-    const positionCollateralAmount = _position.collateralAmount;
-    const positionDebitAmount = _position.debitAmount;
-    _position.collateralAmount = positionCollateralAmount + _collateralAmount
-    _position.debitAmount = positionDebitAmount + _debitAmount
-    await _position.save();
-  } else {
-    const newPosition = new LoanPosition(positionId);
-    newPosition.ownerId = _owner;
-    newPosition.collateralId = _token;
-    newPosition.collateralAmount = _collateralAmount;
-    newPosition.debitAmount = _collateralAmount;
-    await newPosition.save();
-  }
-
-  // global part
-  const globalPositionId = _token;
-  const _globalPosition = await GlobalPosition.get(globalPositionId);
-
-  if(_globalPosition) {
-    const globalpositionCollateralAmount = _globalPosition.collateralAmount;
-    const globalpositionDebitAmount = _globalPosition.debitAmount;
-    _globalPosition.collateralAmount = globalpositionCollateralAmount + _collateralAmount
-    _globalPosition.debitAmount = globalpositionDebitAmount + _debitAmount
-    await _globalPosition.save();
-
-  } else {
-    const newGlobalPosition = new GlobalPosition(globalPositionId);
-    newGlobalPosition.tokenId = globalPositionId;
-    newGlobalPosition.collateralAmount = _collateralAmount;
-    newGlobalPosition.debitAmount = _debitAmount;
-    await newGlobalPosition.save();
-  }
-
-  const debitExchangeRate = (await api.query.cdpEngine.debitExchangeRate(token)) as unknown as OptionRate;
+  const debitExchangeRate = (await api.query.cdpEngine.debitExchangeRate(collateral)) as unknown as OptionRate;
   const globalExchangeRate = api.consts.cdpEngine.defaultDebitExchangeRate as unknown as Rate;
   const exchangeRate = debitExchangeRate.isNone ? BigInt(globalExchangeRate.toString()) : BigInt(debitExchangeRate.unwrapOrDefault().toString());
 
-  await updateHourLoanPosition(_owner, _token, _collateralAmount, _debitAmount, event.block.timestamp, exchangeRate);
-  await updateDailyLoanPosition(_owner, _token, _collateralAmount, _debitAmount, event.block.timestamp, exchangeRate);
-}
+  // loanposition personal part
+  const positionId = `${owner}-${token}`;
+  const position = await getLoanPosition(positionId);
 
-export const updateHourLoanPosition = async (owner: string, token: string, collateralAmount: bigint, debitAmount: bigint, timestamp: Date, exchangeRate: bigint) => {
-  const timeKey = getHourTimeString(timestamp);
+  const positionCollateralAmount = position.collateralAmount;
+  const positionDebitAmount = position.debitAmount;
+  position.collateralAmount = positionCollateralAmount + collateralAmount
+  position.debitAmount = positionDebitAmount + debitAmount
+  position.ownerId = owner;
+  position.collateralId = token;
 
+  // loanposition global part
+  const globalPositionId = token;
+  const globalPosition = await getGlobalLoanPosition(globalPositionId);
+
+  const globalPositionCollateralAmount = globalPosition.collateralAmount;
+  const globalPositionDebitAmount = globalPosition.debitAmount;
+  globalPosition.collateralAmount = globalPositionCollateralAmount + collateralAmount
+  globalPosition.debitAmount = globalPositionDebitAmount + debitAmount
+  globalPosition.collateralId = token;
+
+
+  const hourTimeKey = getDateEndOfHour(event.block.timestamp).toDate().getTime();
+  // hourloanposition personal part
+  const hourPositionId = `${owner}-${token}-${hourTimeKey}`;
+  const hourPosition = await getHourLoanPosition(hourPositionId);
+  const hourPositionCollateralAmount = hourPosition.collateralAmount;
+  const hourPositionDebitAmount = hourPosition.debitAmount;
+  hourPosition.collateralAmount = hourPositionCollateralAmount + collateralAmount
+  hourPosition.debitAmount = hourPositionDebitAmount + debitAmount
+  hourPosition.ownerId = owner;
+  hourPosition.timestamp = event.block.timestamp;
+  hourPosition.debitExchangeRate = exchangeRate;
+  hourPosition.collateralId = token;
+
+  // hourloanposition global part
+  const globalHourPositionId = `${token}-${hourTimeKey}`;
+  const hourGlobalPosition = await getHourGolbalPosition(globalHourPositionId);
+
+  const hourGlobalPositionCollateralAmount = hourGlobalPosition.collateralAmount;
+  const hourGlobalPositionDebitAmount = hourGlobalPosition.debitAmount;
+  hourGlobalPosition.collateralAmount = hourGlobalPositionCollateralAmount + collateralAmount
+  hourGlobalPosition.debitAmount = hourGlobalPositionDebitAmount + debitAmount
+  hourGlobalPosition.timestamp = event.block.timestamp;
+  hourGlobalPosition.collateralId = token;
+
+
+  const DailyTimeKey = getDateEndOfDay(event.block.timestamp).toDate().getTime();
   // personal part
-  const positionId = `${owner}-${token}-${timeKey}`;
-  const _hourPosition = await HourLoanPosition.get(positionId);
+  const dailyPositionId = `${owner}-${token}-${DailyTimeKey}`;
+  const dailyPosition = await getDailyLoanPosition(dailyPositionId);
 
-  if(_hourPosition) {
-    const positionCollateralAmount = _hourPosition.collateralAmount;
-    const positionDebitAmount = _hourPosition.debitAmount;
-    _hourPosition.collateralAmount = positionCollateralAmount + collateralAmount
-    _hourPosition.debitAmount = positionDebitAmount + debitAmount
-    await _hourPosition.save();
-
-  } else {
-    const newHourPosition = new HourLoanPosition(positionId);
-    newHourPosition.ownerId = owner;
-    newHourPosition.timestamp = timeKey;
-    newHourPosition.debitExchangeRate = exchangeRate;
-    newHourPosition.debitAmount = debitAmount;
-    newHourPosition.collateralId = token;
-    newHourPosition.collateralAmount = collateralAmount;
-    await newHourPosition.save();
-  }
+  const dailyPositionCollateralAmount = dailyPosition.collateralAmount;
+  const dailyPositionDebitAmount = dailyPosition.debitAmount;
+  dailyPosition.collateralAmount = dailyPositionCollateralAmount + collateralAmount
+  dailyPosition.debitAmount = dailyPositionDebitAmount + debitAmount
+  dailyPosition.ownerId = owner;
+  dailyPosition.timestamp = event.block.timestamp;
+  dailyPosition.debitExchangeRate = exchangeRate;
+  dailyPosition.collateralId = token;
 
   // global part
-  const globalPositionId = `${owner}-${token}-${timeKey}`;
-  const _hourGlobalPosition = await HourGlobalPosition.get(globalPositionId);
+  const dailyGlobalPositionId = `${token}-${DailyTimeKey}`;
+  const dailyGlobalPosition = await getDailyGlobalPosition(dailyGlobalPositionId)
 
-  if(_hourGlobalPosition) {
-    const hourGlobalPositionCollateralAmount = _hourGlobalPosition.collateralAmount;
-    const hourGlobalPositionDebitAmount = _hourGlobalPosition.debitAmount;
-    _hourGlobalPosition.collateralAmount = hourGlobalPositionCollateralAmount + collateralAmount
-    _hourGlobalPosition.debitAmount = hourGlobalPositionDebitAmount + debitAmount
-    await _hourGlobalPosition.save();
-  } else {
-    const newHourGlobalPosition = new HourGlobalPosition(globalPositionId);
-    newHourGlobalPosition.collateralAmount = collateralAmount;
-    newHourGlobalPosition.debitAmount = debitAmount;
-    newHourGlobalPosition.tokenId = token;
-    await newHourGlobalPosition.save();
-  }
-}
+  const dailyGlobalPositionCollateralAmount = dailyGlobalPosition.collateralAmount;
+  const dailyGlobalPositionDebitAmount = dailyGlobalPosition.debitAmount;
+  dailyGlobalPosition.collateralAmount = dailyGlobalPositionCollateralAmount + collateralAmount
+  dailyGlobalPosition.debitAmount = dailyGlobalPositionDebitAmount + debitAmount
+  dailyGlobalPosition.collateralId = token;
+  dailyGlobalPosition.timestamp = event.block.timestamp;
 
-export const updateDailyLoanPosition = async (owner: string, token: string, collateralAmount: bigint, debitAmount: bigint, timestamp: Date, exchangeRate: bigint) => {
-  const timeKey = getDailyTimeString(timestamp);
-
-  // personal part
-  const positionId = `${owner}-${token}-${timeKey}`;
-  const _dailyPosition = await DailyLoanPosition.get(positionId);
-
-  if(_dailyPosition) {
-    const positionCollateralAmount = _dailyPosition.collateralAmount;
-    const positionDebitAmount = _dailyPosition.debitAmount;
-    _dailyPosition.collateralAmount = positionCollateralAmount + collateralAmount
-    _dailyPosition.debitAmount = positionDebitAmount + debitAmount
-    await _dailyPosition.save();
-
-  } else {
-    const newDailyPosition = new DailyLoanPosition(positionId);
-    newDailyPosition.ownerId = owner;
-    newDailyPosition.timestamp = timeKey;
-    newDailyPosition.debitExchangeRate = exchangeRate;
-    newDailyPosition.debitAmount = debitAmount;
-    newDailyPosition.collateralId = token;
-    newDailyPosition.collateralAmount = collateralAmount;
-    await newDailyPosition.save();
-  }
-
-  // global part
-  const globalPositionId = `${owner}-${token}-${timeKey}`;
-  const _dailyGlobalPosition = await DailyGlobalPosition.get(globalPositionId);
-
-  if(_dailyGlobalPosition) {
-    const dailyGlobalPositionCollateralAmount = _dailyGlobalPosition.collateralAmount;
-    const dailyGlobalPositionDebitAmount = _dailyGlobalPosition.debitAmount;
-    _dailyGlobalPosition.collateralAmount = dailyGlobalPositionCollateralAmount + collateralAmount
-    _dailyGlobalPosition.debitAmount = dailyGlobalPositionDebitAmount + debitAmount
-    await _dailyGlobalPosition.save();
-  } else {
-    const newDailyGlobalPosition = new DailyGlobalPosition(globalPositionId);
-    newDailyGlobalPosition.collateralAmount = collateralAmount;
-    newDailyGlobalPosition.debitAmount = debitAmount;
-    newDailyGlobalPosition.tokenId = token;
-    await newDailyGlobalPosition.save();
-  }
+  await position.save();
+  await globalPosition.save();
+  await hourPosition.save();
+  await hourGlobalPosition.save();
+  await dailyPosition.save();
+  await dailyGlobalPosition.save();
 }

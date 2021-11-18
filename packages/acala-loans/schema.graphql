@@ -1,5 +1,5 @@
 type Account @entity {
-  id: ID!
+  id: ID! # user address
   address: String
   positions: [LoanPosition] @derivedFrom(field: "owner")
   hourLoanPositions: [HourLoanPosition] @derivedFrom(field: "owner")
@@ -7,13 +7,13 @@ type Account @entity {
  }
 
 type Collateral @entity {
-  id: ID!
+  id: ID! # token name
   token: String
   positions: [LoanPosition] @derivedFrom(field: "collateral")
  }
 
 type LoanPosition @entity {
-  id: ID!
+  id: ID! # `${ownerId}-${tokenname}`
   owner: Account
   collateral: Collateral
   debitAmount: BigInt
@@ -21,58 +21,68 @@ type LoanPosition @entity {
 }
 
 type HourLoanPosition @entity {
-  id: ID!
+  id: ID! # `${ownerId}-${tokenname}-${YYYY-MM-DD-dd-hh}`
   owner: Account
   collateral: Collateral
   debitAmount: BigInt
   collateralAmount: BigInt
   debitExchangeRate: BigInt
-  timestamp: String
+  timestamp: Date
 }
 
 type DailyLoanPosition @entity {
-  id: ID!
+  id: ID! # `${ownerId}-${tokenname}-${YYYY-MM-DD-dd}`
   owner: Account
   collateral: Collateral
   debitAmount: BigInt
   collateralAmount: BigInt
   debitExchangeRate: BigInt
-  timestamp: String
+  timestamp: Date
 }
 
 type GlobalPosition @entity {
-  id: ID!
-  token: Collateral
+  id: ID! # tokenname
+  collateral: Collateral
   debitAmount: BigInt
   collateralAmount: BigInt
 }
 
 type HourGlobalPosition @entity {
-  id: ID!
-  token: Collateral
+  id: ID! # `${tokenname}-${YYYY-MM-DD-dd}`
+  collateral: Collateral
   debitAmount: BigInt
   collateralAmount: BigInt
+  debitExchangeRate: BigInt
+  timestamp: Date
 }
 
 type DailyGlobalPosition @entity {
-  id: ID!
-  token: Collateral
+  id: ID! # `${tokenname}-${YYYY-MM-DD-dd}`
+  collateral: Collateral
   debitAmount: BigInt
   collateralAmount: BigInt
+  debitExchangeRate: BigInt
+  timestamp: Date
 }
 
 type DailyLoanReport @entity {
-  id: ID!
+  id: ID! # `${YYYY-MM-DD-dd}`
   actionCount: BigInt
   debitChange: BigInt
   collateralChange: BigInt
-  timestamp: String
+  timestamp: Date
 }
 
 type HourLoanReport @entity {
-  id: ID!
+  id: ID! # `${YYYY-MM-DD-dd}`
   actionCount: BigInt
   debitChange: BigInt
   collateralChange: BigInt
-  timestamp: String
+  timestamp: Date
+}
+
+type ExchangeRate @entity {
+  id: ID! # block height
+  block: BigInt
+  debitExchangeRate: BigInt
 }
