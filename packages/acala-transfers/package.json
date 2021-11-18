@@ -1,6 +1,6 @@
 {
   "name": "@acala-network/acala-transfers-subql",
-  "version": "0.1.4-alpha.0",
+  "version": "0.1.5-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "dependencies": {
     "@acala-network/sdk-core": "^3.0.2",
     "@acala-network/sdk-wallet": "^3.0.2",
-    "@acala-network/subql-utils": "^0.1.4-alpha.0"
+    "@acala-network/subql-utils": "^0.1.5-alpha.0"
   },
   "publishConfig": {
     "access": "public"
