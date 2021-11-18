@@ -170,16 +170,24 @@ export const getDailyPositionReport = async (id: string) => {
   }
 }
 
-export const getExchangeRate = async (id: string | number) => {
-  const record = await ExchangeRate.get(id.toString());
+export const getExchangeRate = async (id: string) => {
+  const record = await ExchangeRate.get(id);
 
   if (!record) {
-    const newRecord = new ExchangeRate(id.toString());
+    const newRecord = new ExchangeRate(id);
     
+    newRecord.block = BigInt(0);
+    newRecord.collateralId = '';
     newRecord.debitExchangeRate = BigInt(0);
 
-    return newRecord;
+    return {
+      isExist: false,
+      record: newRecord
+    };
   } else {
-    return record;
+    return {
+      isExist: true,
+      record: record
+    };
   }
 }

@@ -82,7 +82,8 @@ type HourLoanReport @entity {
 }
 
 type ExchangeRate @entity {
-  id: ID! # block height
+  id: ID! # `${block-height}-${tokenname}`
   block: BigInt
+  collateral: Collateral
   debitExchangeRate: BigInt
 }

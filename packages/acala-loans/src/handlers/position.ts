@@ -1,8 +1,8 @@
 import { forceToCurrencyIdName } from "@acala-network/sdk-core";
-import { Rate, OptionRate } from "@acala-network/types/interfaces";
 import { SubstrateEvent } from "@subql/types"
 import { getDateEndOfDay, getDateEndOfHour } from '@acala-network/subql-utils';
 import { getAccount, getCollateral, getDailyGlobalPosition, getDailyLoanPosition, getGlobalLoanPosition, getHourGolbalPosition, getHourLoanPosition, getLoanPosition } from "../utils/record";
+import { getExchangeRateFromDb } from "../utils";
 
 export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton = false) => {
   const [account, collateral, collateral_amount, debit_amount] = event.event.data;
@@ -15,9 +15,7 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   const collateralAmount = isLiquidatiton ? -BigInt(collateral_amount.toString()) : BigInt(collateral_amount.toString());
   const debitAmount = isLiquidatiton ? -BigInt(debit_amount.toString()) : BigInt(debit_amount.toString());
 
-  const debitExchangeRate = (await api.query.cdpEngine.debitExchangeRate(collateral)) as unknown as OptionRate;
-  const globalExchangeRate = api.consts.cdpEngine.defaultDebitExchangeRate as unknown as Rate;
-  const exchangeRate = debitExchangeRate.isNone ? BigInt(globalExchangeRate.toString()) : BigInt(debitExchangeRate.unwrapOrDefault().toString());
+  const exchangeRate = await getExchangeRateFromDb(BigInt(event.block.block.header.number.toString()), collateral);
 
   // loanposition personal part
   const positionId = `${owner}-${token}`;
@@ -63,6 +61,7 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   hourGlobalPosition.collateralAmount = hourGlobalPositionCollateralAmount + collateralAmount
   hourGlobalPosition.debitAmount = hourGlobalPositionDebitAmount + debitAmount
   hourGlobalPosition.timestamp = event.block.timestamp;
+  hourGlobalPosition.debitExchangeRate = exchangeRate;
   hourGlobalPosition.collateralId = token;
 
 
@@ -89,6 +88,7 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   dailyGlobalPosition.collateralAmount = dailyGlobalPositionCollateralAmount + collateralAmount
   dailyGlobalPosition.debitAmount = dailyGlobalPositionDebitAmount + debitAmount
   dailyGlobalPosition.collateralId = token;
+  dailyGlobalPosition.debitExchangeRate = exchangeRate;
   dailyGlobalPosition.timestamp = event.block.timestamp;
 
   await position.save();
