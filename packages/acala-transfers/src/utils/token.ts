@@ -13,3 +13,7 @@ export function isTokenEqual (t1: any, t2: any) {
 export function getTokenName (token: any) {
   return forceToCurrencyIdName(token);
 }
+
+export function getTokenDecimal (token: any) {
+  return wallet.getToken(token).decimal
+}

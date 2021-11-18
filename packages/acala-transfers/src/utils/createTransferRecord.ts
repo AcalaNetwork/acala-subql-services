@@ -1,9 +1,17 @@
 import { SubstrateEvent } from "@subql/types";
 import { getAccount, getToken, getTokenDailyRecprod, getTransfer, getUserDailyReport, getUserDailyReportGroup } from "./record";
 import { getDateEndOfDay, isSystemAccount } from "@acala-network/subql-utils";
+import { getTokenDecimal } from "./token";
+import { FixedPointNumber } from "@acala-network/sdk-core";
 
 function isDispatchedBySystem (from: string, to: string) {
   return !!(isSystemAccount(from) || isSystemAccount(to));
+}
+
+function getDisplayMessage (fromId: string, toId: string, amount: bigint, tokenName: string) {
+  const displayAmount = FixedPointNumber.fromInner(amount.toString(), getTokenDecimal(tokenName)).toString(6);
+
+  return `Transfer ${displayAmount} ${tokenName} from ${fromId} to ${toId}`;
 }
 
 export async function createTransfer (
@@ -34,6 +42,7 @@ export async function createTransfer (
   transfer.atExtrinsicHash = extrinsic.extrinsic.hash.toString();
   transfer.timestamp = block.timestamp;
   transfer.isDispatchedBySystem = dispatchedBySystem;
+  transfer.displayMessage = getDisplayMessage(fromId, toId, amount, tokenName);
 
   const fromAccountDailyReportGroup = await getUserDailyReportGroup(`${fromId}-${dateEndOfDay.getTime()}`)
   const fromAccountDailyReport = await getUserDailyReport(`${fromId}-${tokenName}-${dateEndOfDay.getTime()}`);
