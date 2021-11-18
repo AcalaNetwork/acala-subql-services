@@ -4,18 +4,10 @@
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "build": "yarn workspaces run build",
     "codegen": "yarn workspaces run codegen",
     "eslint": "npx eslint "
-  },
-  "dependencies": {
-    "@acala-network/api": "^3.0.2",
-    "@polkadot/api": "^6.7.2",
-    "lerna": "^4.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",
