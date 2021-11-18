@@ -1,6 +1,10 @@
 import { SubstrateEvent } from "@subql/types";
 import { getAccount, getToken, getTransfer } from "./record";
-import { getDateEndOfHour, getDateEndOfDay } from "@acala-subql/utils";
+import { getDateEndOfHour, getDateEndOfDay, isSystemAccount } from "@acala-subql/utils";
+
+function isDispatchedBySystem (from: string, to: string) {
+  return !!(isSystemAccount(from) || isSystemAccount(to));
+}
 
 export async function createTransfer (
   fromId: string,
@@ -19,6 +23,7 @@ export async function createTransfer (
   const transfer = await getTransfer(`${txHash}-${idx}`);
   const dateEndOfDay = getDateEndOfDay(block.timestamp);
   const dateEndOfHour = getDateEndOfHour(block.timestamp);
+  const dispatchedBySystem = isDispatchedBySystem(fromId, toId);
 
   transfer.fromId = fromAccount.id;
   transfer.toId = toAccount.id;
@@ -29,6 +34,8 @@ export async function createTransfer (
   transfer.atBlockHash = block.block.hash.toString();
   transfer.atExtrinsicHash = extrinsic.extrinsic.hash.toString();
   transfer.timestamp = block.timestamp;
+  transfer.isDispatchedBySystem = dispatchedBySystem;
+  // transfer. = dispatchedBySystem;
 
   tokenRecord.transferCount = tokenRecord.transferCount + 1;
   // only increase the from account transfer count

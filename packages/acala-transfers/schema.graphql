@@ -1,6 +1,8 @@
 type Account @entity {
   id: ID!
-  transferCount: Int # all transfer count
+  isSystemAccount: Boolean
+  transferCount: Int # all user transfer count
+  _transferCount: Int # all transfer count
   in: [Transfer] @derivedFrom(field: "to") # all transfer-in record
   out: [Transfer] @derivedFrom(field: "from") # all tranfser-out record
   daily: [UserDailyReportGroup] @derivedFrom(field: "account") # user daily transfer reports
@@ -8,7 +10,8 @@ type Account @entity {
 
 type Token @entity {
   id: ID!
-  transferCount: Int # all transfer count
+  transferCount: Int # all user transfer count
+  _transferCount: Int # all transfer count
   transfers: [Transfer] @derivedFrom(field: "token") # all transfers relate to `token`
   daily: [TokenDailyReport] @derivedFrom(field: "token") # the daily transfer reports
 }
@@ -24,12 +27,14 @@ type Transfer @entity {
   atBlockHash: String!
   atExtrinsicHash: String!
   timestamp: Date!
+  isDispatchedBySystem: Boolean # from/to address is system account, used to filter user transfer
 }
 
 type UserDailyReportGroup @entity {
   id: ID! # `account`-`timstamp`
   account: Account!
   transferCount: Int # count user daily transfer tx relate to `token`
+  _transferCount: Int # count user daily transfer tx relate to `token`
   items: [UserDailyReport] @derivedFrom(field: "group")
   timestmap: Date!
 }
@@ -40,6 +45,7 @@ type UserDailyReport @entity {
   account: Account!
   token: Token!
   transferCount: Int # count user daily transfer
+  _transferCount: Int # count all daily transfer
   abs: BigInt # transfer amount abs
   in: BigInt # transfer in amount
   out: BigInt # transfer out amount
@@ -52,6 +58,7 @@ type TokenDailyReport @entity {
   account: Account!
   token: Token!
   transferCount: Int # count token daily transfer
+  _transferCount: Int # count all token daily transfer
   abs: BigInt # transfer amount abs
   in: BigInt # transfer in amount
   out: BigInt # transfer out amount
