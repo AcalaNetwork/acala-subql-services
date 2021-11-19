@@ -3,6 +3,7 @@ import { SubstrateEvent } from "@subql/types"
 import { getDateEndOfDay, getDateEndOfHour } from '@acala-network/subql-utils';
 import { getAccount, getCollateral, getDailyGlobalPosition, getDailyLoanPosition, getGlobalLoanPosition, getHourGolbalPosition, getHourLoanPosition, getLoanHistory, getLoanPosition } from "../utils/record";
 import { getExchangeRateFromDb } from "../utils";
+import { createParams } from "./params";
 
 const getLoanMessage = (_collateral: bigint, _debit: bigint) => {
   const collateral = FixedPointNumber.fromInner(_collateral.toString());
@@ -144,4 +145,5 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   await dailyPosition.save();
   await dailyGlobalPosition.save();
   await history.save();
+  await createParams(token);
 }

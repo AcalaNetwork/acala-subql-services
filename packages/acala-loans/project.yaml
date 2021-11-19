@@ -4161,6 +4161,31 @@ dataSources:
     startBlock: 0
     mapping:
       handlers:
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: InterestRatePerSecUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: LiquidationRatioUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: LiquidationPenaltyUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: RequiredCollateralRatioUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: MaximumTotalDebitValueUpdated
         - handler: handlePositionUpdated
           kind: substrate/EventHandler
           filter:

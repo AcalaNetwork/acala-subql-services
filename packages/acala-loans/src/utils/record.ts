@@ -1,4 +1,6 @@
 import { Account, Collateral, DailyGlobalPosition, DailyLoanPosition, DailyLoanReport, GlobalPosition, HourGlobalPosition, HourLoanPosition, HourLoanReport, LoanPosition } from "../types"
+import { CollateralParams } from "../types/models/CollateralParams";
+import { CollateralParamsHistory } from "../types/models/CollateralParamsHistory";
 import { ExchangeRate } from "../types/models/ExchangeRate";
 import { LoanHistory } from "../types/models/LoanHistory";
 
@@ -210,6 +212,51 @@ export const getLoanHistory = async (id: string) => {
     newRecord.atBlockHash = '';
     newRecord.atExtrinsicHash = '';
     newRecord.timestamp = new Date();
+
+    return newRecord;
+  } else {
+    return record;
+  }
+}
+
+export const getCollateralParams = async (id: string) => {
+  const record = await CollateralParams.get(id);
+
+  if(!record) {
+    const newRecord = new CollateralParams(id);
+
+    newRecord.collateralId = '';
+    newRecord.interestRatePerSec = BigInt(0);
+    newRecord.liquidationPenalty = BigInt(0);
+    newRecord.liquidationRatio = BigInt(0);
+    newRecord.maximumTotalDebitValue = BigInt(0);
+    newRecord.requiredCollateralRatio = BigInt(0);
+
+    return {
+      isExist: false,
+      record: newRecord
+    };
+  } else {
+    return {
+      isExist: true,
+      record: record
+    };
+  }
+}
+
+export const getCollateralParamsHistory = async (id: string) => {
+  const record = await CollateralParamsHistory.get(id);
+
+  if(!record) {
+    const newRecord = new CollateralParamsHistory(id);
+
+    newRecord.collateralId = '';
+    newRecord.interestRatePerSec = BigInt(0);
+    newRecord.liquidationPenalty = BigInt(0);
+    newRecord.liquidationRatio = BigInt(0);
+    newRecord.maximumTotalDebitValue = BigInt(0);
+    newRecord.requiredCollateralRatio = BigInt(0);
+    newRecord.endAtBlock = BigInt(0);
 
     return newRecord;
   } else {

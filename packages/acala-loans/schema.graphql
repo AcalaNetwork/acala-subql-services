@@ -103,3 +103,24 @@ type LoanHistory @entity {
   atExtrinsicHash: String
   timestamp: Date
 }
+
+type CollateralParams @entity {
+  id: ID! # `tokenname`
+  collateral: Collateral
+  maximumTotalDebitValue: BigInt
+  interestRatePerSec: BigInt
+  liquidationRatio: BigInt
+  liquidationPenalty: BigInt
+  requiredCollateralRatio: BigInt
+}
+
+type CollateralParamsHistory @entity {
+  id: ID! # `${block}-${tokenname}`
+  endAtBlock: BigInt
+  collateral: Collateral
+  maximumTotalDebitValue: BigInt
+  interestRatePerSec: BigInt
+  liquidationRatio: BigInt
+  liquidationPenalty: BigInt
+  requiredCollateralRatio: BigInt
+}
