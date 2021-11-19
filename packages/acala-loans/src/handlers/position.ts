@@ -69,28 +69,28 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   globalPosition.collateralId = token;
 
 
-  const hourTimeKey = getDateEndOfHour(event.block.timestamp).toDate().getTime();
+  const hourTimeKey = getDateEndOfHour(event.block.timestamp).toDate();
   // hourloanposition personal part
-  const hourPositionId = `${owner}-${token}-${hourTimeKey}`;
+  const hourPositionId = `${owner}-${token}-${hourTimeKey.getTime()}`;
   const hourPosition = await getHourLoanPosition(hourPositionId);
   const hourPositionCollateralAmount = hourPosition.collateralAmount;
   const hourPositionDebitAmount = hourPosition.debitAmount;
   hourPosition.collateralAmount = hourPositionCollateralAmount + collateralAmount
   hourPosition.debitAmount = hourPositionDebitAmount + debitAmount
   hourPosition.ownerId = owner;
-  hourPosition.timestamp = event.block.timestamp;
+  hourPosition.timestamp = hourTimeKey;
   hourPosition.debitExchangeRate = exchangeRate;
   hourPosition.collateralId = token;
 
   // hourloanposition global part
-  const globalHourPositionId = `${token}-${hourTimeKey}`;
+  const globalHourPositionId = `${token}-${hourTimeKey.getTime()}`;
   const hourGlobalPosition = await getHourGolbalPosition(globalHourPositionId);
 
   const hourGlobalPositionCollateralAmount = hourGlobalPosition.collateralAmount;
   const hourGlobalPositionDebitAmount = hourGlobalPosition.debitAmount;
   hourGlobalPosition.collateralAmount = hourGlobalPositionCollateralAmount + collateralAmount
   hourGlobalPosition.debitAmount = hourGlobalPositionDebitAmount + debitAmount
-  hourGlobalPosition.timestamp = event.block.timestamp;
+  hourGlobalPosition.timestamp = hourTimeKey;
   hourGlobalPosition.debitExchangeRate = exchangeRate;
   hourGlobalPosition.collateralId = token;
 
