@@ -1,6 +1,6 @@
 {
     "name": "@acala-network/subql-utils",
-    "version": "0.1.5-alpha.0",
+    "version": "0.1.6-alpha.1",
     "description": "",
     "main": "dist/index.js",
     "scripts": {
@@ -15,7 +15,9 @@
     ],
     "author": "qwer951123",
     "license": "Apache-2.0",
+    "type": "module",
     "dependencies": {
+        "@subql/types": "^0.10.0",
         "dayjs": "^1.10.7"
     },
     "publishConfig": {
