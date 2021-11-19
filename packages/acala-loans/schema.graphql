@@ -4,13 +4,13 @@ type Account @entity {
   positions: [LoanPosition] @derivedFrom(field: "owner")
   hourLoanPositions: [HourLoanPosition] @derivedFrom(field: "owner")
   dailyLoanPositions: [DailyLoanPosition] @derivedFrom(field: "owner")
- }
+}
 
 type Collateral @entity {
   id: ID! # token name
   token: String
   positions: [LoanPosition] @derivedFrom(field: "collateral")
- }
+}
 
 type LoanPosition @entity {
   id: ID! # `${ownerId}-${tokenname}`
@@ -86,4 +86,20 @@ type ExchangeRate @entity {
   block: BigInt
   collateral: Collateral
   debitExchangeRate: BigInt
+}
+
+type LoanHistory @entity {
+  id: ID! # `extrinshcHash`-`event idx`
+  owner: Account
+  collateral: Collateral
+  type: String # event name
+  collateralAmount: BigInt
+  debitAmount: BigInt
+  exchangeRate: BigInt
+  displayMessage: String
+
+  atBlock: BigInt
+  atBlockHash: String
+  atExtrinsicHash: String
+  timestamp: Date
 }

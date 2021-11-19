@@ -1,5 +1,6 @@
 import { Account, Collateral, DailyGlobalPosition, DailyLoanPosition, DailyLoanReport, GlobalPosition, HourGlobalPosition, HourLoanPosition, HourLoanReport, LoanPosition } from "../types"
 import { ExchangeRate } from "../types/models/ExchangeRate";
+import { LoanHistory } from "../types/models/LoanHistory";
 
 export const getAccount = async (address: string) => {
   const _account = await Account.get(address);
@@ -189,5 +190,29 @@ export const getExchangeRate = async (id: string) => {
       isExist: true,
       record: record
     };
+  }
+}
+
+export const getLoanHistory = async (id: string) => {
+  const record = await LoanHistory.get(id);
+
+  if(!record) {
+    const newRecord = new LoanHistory(id);
+
+    newRecord.ownerId = '';
+    newRecord.collateralId = '';
+    newRecord.type = '';
+    newRecord.collateralAmount = BigInt(0);
+    newRecord.debitAmount = BigInt(0);
+    newRecord.exchangeRate = BigInt(0);
+    newRecord.displayMessage = '';
+    newRecord.atBlock = BigInt(0);
+    newRecord.atBlockHash = '';
+    newRecord.atExtrinsicHash = '';
+    newRecord.timestamp = new Date();
+
+    return newRecord;
+  } else {
+    return record;
   }
 }
