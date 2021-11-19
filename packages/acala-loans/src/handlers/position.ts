@@ -121,7 +121,7 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   dailyGlobalPosition.debitExchangeRate = exchangeRate;
   dailyGlobalPosition.timestamp = DailyTimeKey;
 
-  const historyId = `${event.block.block.hash.toString()}-${event.event.index.toString()}`
+  const historyId = `${event.block.block.hash.toString()}-${event.idx.toString()}`
   const history = await getLoanHistory(historyId);
   const { type, amount } = getLoanMessage(collateralAmount, debitAmount);
 
