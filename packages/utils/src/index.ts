@@ -1,3 +1,2 @@
-export * from "./getDateEndOfDay";
-export * from "./getDateEndOfHour";
-export * from "./isSystemAccount";
+export * from './date'
+export * from './isSystemAccount'

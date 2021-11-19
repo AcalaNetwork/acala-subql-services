@@ -1,5 +1,5 @@
 {
-    "name": "@acala-network/acala-transfers-subql",
+    "name": "@acala-network/acala-tokens-subql",
     "version": "0.1.5-alpha.0",
     "description": "",
     "main": "dist/index.js",

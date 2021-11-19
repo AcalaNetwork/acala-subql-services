@@ -1,7 +1,0 @@
-{
-  endOfLine: "lf",
-  printWidth: 256,
-  tabWidth: 4,
-  singleQuote: true,
-  semi: false,
-}
