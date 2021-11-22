@@ -49,7 +49,7 @@ type UserDailyReport @entity {
     abs: BigInt # transfer amount abs
     in: BigInt # transfer in amount
     out: BigInt # transfer out amount
-    volumn: BigInt # total transfer volumn
+    volume: BigInt # total transfer volume
     timestamp: Date!
 }
 
@@ -58,6 +58,6 @@ type TokenDailyReport @entity {
     token: Token!
     transferCount: Int # count token daily transfer
     _transferCount: Int # count all token daily transfer
-    volumn: BigInt # total tranfser volumn
+    volume: BigInt # total tranfser volume
     timestamp: Date!
 }

@@ -1,11 +1,73 @@
-type StarterEntity @entity {
-    id: ID! #id is a required field
-    field1: Int!
+type Token @entity {
+    id: ID! # token symbol
+    decimal: Int!
 
-    field2: String #filed2 is an optional field
-    field3: BigInt
+    volume: BigInt! # total trade volume, sum of transfer, deposit, withdrawn, reserved, frozen
+    issuance: BigInt! # total issuance amount
+    reserved: BigInt! # reserved amount
+    frozen: BigInt! # frozen balance
+}
 
-    field4: Date
+type HourToken @entity {
+    id: ID! # token symbol
+    token: Token!
 
-    field5: Boolean
+    volume: BigInt! # total trade volume
+    issuance: BigInt! # total issuance amount
+    reserved: BigInt! # reserved amount
+    frozen: BigInt! # frozen balance
+    timestmap: Date
+}
+
+type DailyToken @entity {
+    id: ID! # token symbol
+    token: Token!
+
+    volume: BigInt! # total trade volume
+    issuance: BigInt! # total issuance amount
+    reserved: BigInt! # reserved amount
+    frozen: BigInt! # frozen balance
+    timestmap: Date
+}
+
+type Account @entity {
+    id: ID! # account address
+    address: String!
+    mark: String # mark system account
+    tokens: [AccountBalance] @derivedFrom(field: "account") # group all tokens belong to the account
+}
+
+type AccountBalance @entity {
+    id: ID! #`account`-`token`
+    account: Account!
+    token: Token!
+
+    total: BigInt! # total balance
+    free: BigInt! # free balance
+    reserved: BigInt! #revert balance
+    frozen: BigInt! # locked balance
+}
+
+type HourAccountBalance @entity {
+    id: ID! #`account`-`token`
+    account: Account!
+    token: Token!
+
+    total: BigInt! # total balance
+    free: BigInt! # free balance
+    reserved: BigInt! #revert balance
+    frozen: BigInt! # locked balance
+    timestamp: Date
+}
+
+type DailyAccountBalance @entity {
+    id: ID! #`account`-`token`
+    account: Account!
+    token: Token!
+
+    total: BigInt! # total balance
+    free: BigInt! # free balance
+    reserved: BigInt! #revert balance
+    frozen: BigInt! # locked balance
+    timestamp: Date
 }

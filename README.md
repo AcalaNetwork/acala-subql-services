@@ -5,7 +5,7 @@ a collection of acala/karura sub-query services.
 #### 1. acala-transfers
 
 1. build all the user transfer records.
-2. statistics of daily transfer volumn.
+2. statistics of daily transfer volume.
 
 ### How To Add A Service
 
