@@ -21,7 +21,7 @@ export const getCollateral = async (token: string) => {
   if (!_collateral) {
     const newCollateral = new Collateral(token);
     newCollateral.token = token;
-    newCollateral.save();
+    await newCollateral.save();
     return newCollateral;
   } else {
     return _collateral;

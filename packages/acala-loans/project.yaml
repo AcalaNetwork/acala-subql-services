@@ -4165,6 +4165,27 @@ dataSources:
           kind: substrate/EventHandler
           filter:
             module: cdpEngine
+            method: InterestRatePerSecUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpEngine
+            method: LiquidationRatioUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpEngine
+            method: LiquidationPenaltyUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpEngine
+            method: RequiredCollateralRatioUpdated
+        - handler: handleParamsUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: cdpEngine
+            method: MaximumTotalDebitValueUpdated
         - handler: handleLiquidateUnsafeCDP
           kind: substrate/EventHandler
           filter:

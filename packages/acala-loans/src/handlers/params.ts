@@ -1,10 +1,9 @@
-import { forceToCurrencyIdName } from "@acala-network/sdk-core";
-import { SubstrateBlock, SubstrateEvent } from "@subql/types";
 import { CollateralParamsHistory } from "../types/models/CollateralParamsHistory";
-import { getCollateralParams } from "../utils/record";
+import { getCollateral, getCollateralParams } from "../utils/record";
 
 export const createParams = async (token: string) => {
   const record = await getCollateralParams(token);
+  await getCollateral(token);
 
   if (!record.isExist) {
     const params = await api.query.cdpEngine.collateralParams({ Token: token });
@@ -22,29 +21,27 @@ export const createParams = async (token: string) => {
   }
 }
 
-export const updateParams = async (event: SubstrateEvent) => {
-  const [token, data] = event.event.data;
-  const tokenName = forceToCurrencyIdName(token.toString());
-  const value = data.toString();
+export const updateParams = async (method: string, height: string, tokenName: string, value: bigint) => {
+  await getCollateral(tokenName);
 
   const params = await getCollateralParams(tokenName);
   let field = '';
-  if (event.event.method === 'InterestRatePerSecUpdated') {
+  if (method === 'InterestRatePerSecUpdated') {
     field = 'interestRatePerSec'
-  } else if (event.event.method === 'LiquidationRatioUpdated') {
+  } else if (method === 'LiquidationRatioUpdated') {
     field = 'liquidationRatio'
-  } else if (event.event.method === 'LiquidationPenaltyUpdated') {
+  } else if (method === 'LiquidationPenaltyUpdated') {
     field = 'liquidationPenalty'
-  } else if (event.event.method === 'RequiredCollateralRatioUpdated') {
+  } else if (method === 'RequiredCollateralRatioUpdated') {
     field = 'requiredCollateralRatio'
-  } else if (event.event.method === 'MaximumTotalDebitValueUpdated') {
+  } else if (method === 'MaximumTotalDebitValueUpdated') {
     field = 'maximumTotalDebitValue'
   } else {
     return;
   }
 
-  const newParams = new CollateralParamsHistory(params.record.id);
-  newParams.endAtBlock = BigInt(event.block.block.header.number.toString());
+  const newParams = new CollateralParamsHistory(`${height}-${tokenName}`);
+  newParams.endAtBlock = BigInt(height);
   newParams.collateralId = params.record.collateralId;
   newParams.maximumTotalDebitValue = params.record.maximumTotalDebitValue;
   newParams.interestRatePerSec = params.record.interestRatePerSec;
