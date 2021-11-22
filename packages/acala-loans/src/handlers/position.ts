@@ -5,36 +5,6 @@ import { getAccount, getCollateral, getDailyGlobalPosition, getDailyLoanPosition
 import { getExchangeRateFromDb } from "../utils";
 import { createParams } from "./params";
 
-const getLoanMessage = (_collateral: bigint, _debit: bigint) => {
-  const collateral = FixedPointNumber.fromInner(_collateral.toString());
-  const debit = FixedPointNumber.fromInner(_debit.toString());
-
-  let type = '';
-  let amount = '';
-
-  if (collateral.lt(FixedPointNumber.ZERO)) {
-    type = 'Withdraw';
-    amount = FixedPointNumber.ZERO.minus(collateral).toString();
-  }
-
-  if (collateral.isGreaterThan(FixedPointNumber.ZERO)) {
-    type = 'Deposit';
-    amount = collateral.toString();
-  }
-
-  if (debit.isGreaterThan(FixedPointNumber.ZERO)) {
-    type = 'Mint';
-    amount = debit.toString();
-  }
-
-  if (debit.lt(FixedPointNumber.ZERO)) {
-    type = 'Payback';
-    amount = FixedPointNumber.ZERO.minus(debit).toString();
-  }
-
-  return { type, amount }
-}
-
 export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton = false) => {
   const [account, collateral, collateral_amount, debit_amount] = event.event.data;
 
@@ -124,15 +94,12 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
 
   const historyId = `${event.block.block.hash.toString()}-${event.idx.toString()}`
   const history = await getLoanHistory(historyId);
-  const { type, amount } = getLoanMessage(collateralAmount, debitAmount);
 
   history.ownerId = owner;
   history.collateralId = token;
-  history.type = type;
-  history.collateralAmount = collateralAmount;
-  history.debitAmount = debitAmount;
-  history.exchangeRate = exchangeRate;
-  history.displayMessage = `${type} ${amount} ${token}`;
+  history.type = event.event.method.toString();
+  history.collateralAjustment = collateralAmount;
+  history.debitAjustment = debitAmount;
   history.atBlock = BigInt(event.block.block.header.number.toString());
   history.atBlockHash = event.block.block.hash.toString();
   history.atExtrinsicHash = event.extrinsic.extrinsic.hash.toString();

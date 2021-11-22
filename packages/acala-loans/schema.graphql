@@ -93,15 +93,25 @@ type LoanHistory @entity {
   owner: Account
   collateral: Collateral
   type: String # event name
-  collateralAmount: BigInt
-  debitAmount: BigInt
-  exchangeRate: BigInt
-  displayMessage: String
 
   atBlock: BigInt
   atBlockHash: String
   atExtrinsicHash: String
   timestamp: Date
+  
+  # loanupdated 
+  collateralAjustment: BigInt
+  debitAjustment: BigInt
+
+  # closeCDPinDebitByDEX
+  soldCollateralAmount: BigInt
+  refundCollateralAmount: BigInt
+  debitValue: BigInt
+
+  # liquidUnsafeCDP
+  collateralAmount: BigInt
+  badDebitValue: BigInt
+  liquidationStrategy: BigInt
 }
 
 type CollateralParams @entity {

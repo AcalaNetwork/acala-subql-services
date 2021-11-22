@@ -203,15 +203,19 @@ export const getLoanHistory = async (id: string) => {
 
     newRecord.ownerId = '';
     newRecord.collateralId = '';
-    newRecord.type = '';
-    newRecord.collateralAmount = BigInt(0);
-    newRecord.debitAmount = BigInt(0);
-    newRecord.exchangeRate = BigInt(0);
-    newRecord.displayMessage = '';
     newRecord.atBlock = BigInt(0);
     newRecord.atBlockHash = '';
     newRecord.atExtrinsicHash = '';
     newRecord.timestamp = new Date();
+
+    newRecord.collateralAjustment = BigInt(0);
+    newRecord.debitAjustment = BigInt(0);
+    newRecord.soldCollateralAmount = BigInt(0);
+    newRecord.refundCollateralAmount = BigInt(0);
+    newRecord.debitValue = BigInt(0);
+    newRecord.collateralAmount = BigInt(0);
+    newRecord.badDebitValue = BigInt(0);
+    newRecord.liquidationStrategy = BigInt(0);
 
     return newRecord;
   } else {

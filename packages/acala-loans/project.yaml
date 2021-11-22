@@ -4186,6 +4186,16 @@ dataSources:
           filter:
             module: cdpengine
             method: MaximumTotalDebitValueUpdated
+        - handler: handleLiquidateUnsafeCDP
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: LiquidateUnsafeCDP
+        - handler: handleCloseCDPInDebitByDEX
+          kind: substrate/EventHandler
+          filter:
+            module: cdpengine
+            method: CloseCDPInDebitByDEX
         - handler: handlePositionUpdated
           kind: substrate/EventHandler
           filter:
