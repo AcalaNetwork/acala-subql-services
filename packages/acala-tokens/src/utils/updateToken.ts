@@ -14,12 +14,12 @@ export function updateTokenHistoryRecord(source: Token, target: HourToken | Dail
 
 /**
  * @name updateToken
- * @param tokenName 
- * @param issuanceChanged 
- * @param volumeChanged 
- * @param reservedChanged 
- * @param frozenChanged 
- * @param timestamp 
+ * @param tokenName
+ * @param issuanceChanged
+ * @param volumeChanged
+ * @param reservedChanged
+ * @param frozenChanged
+ * @param timestamp
  */
 export async function updateToken(tokenName: string, issuanceChanged: bigint, volumeChanged: bigint, reservedChanged: bigint, frozenChanged: bigint, timestamp: Date) {
     const token = await getToken(tokenName)
@@ -29,7 +29,7 @@ export async function updateToken(tokenName: string, issuanceChanged: bigint, vo
     const hourToken = await getHourToken(tokenName, hourDate)
     const dailyToken = await getDailyToken(tokenName, dayDate)
 
-    token.volume = token.volume + absBN(volumeChanged) 
+    token.volume = token.volume + absBN(volumeChanged)
     token.issuance = token.issuance + issuanceChanged
     token.reserved = token.reserved + reservedChanged
     token.frozen = token.frozen + frozenChanged

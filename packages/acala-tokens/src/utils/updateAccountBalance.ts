@@ -11,12 +11,12 @@ export function updateAccountBalanceHistoryRecord(source: AccountBalance, target
 
 /**
  * @name updateAccountBalance
- * @param address 
- * @param tokenName 
- * @param freeChanged 
- * @param reservedChanged 
- * @param frozenChanged 
- * @param timestamp 
+ * @param address
+ * @param tokenName
+ * @param freeChanged
+ * @param reservedChanged
+ * @param frozenChanged
+ * @param timestamp
  */
 export async function updateAccountBalance(address: string, tokenName: string, freeChanged: bigint, reservedChanged: bigint, frozenChanged: bigint, timestamp: Date) {
     const account = await getAccount(address)

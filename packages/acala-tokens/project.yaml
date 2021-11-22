@@ -4082,7 +4082,7 @@ dataSources:
       startBlock: 1
       mapping:
           handlers:
-              - handler: handleBalancesTransfer 
+              - handler: handleBalancesTransfer
                 kind: substrate/EventHandler
                 filter:
                     module: blances
@@ -4132,6 +4132,3 @@ dataSources:
                 filter:
                     module: currencies
                     method: BalanceUpdated
-
-
-
