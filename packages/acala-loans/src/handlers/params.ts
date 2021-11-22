@@ -39,6 +39,8 @@ export const updateParams = async (event: SubstrateEvent) => {
     field = 'requiredCollateralRatio'
   } else if (event.event.method === 'MaximumTotalDebitValueUpdated') {
     field = 'maximumTotalDebitValue'
+  } else {
+    return;
   }
 
   const newParams = new CollateralParamsHistory(params.record.id);

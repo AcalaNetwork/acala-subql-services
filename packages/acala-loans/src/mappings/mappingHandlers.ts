@@ -65,6 +65,6 @@ export async function handleCloseCDPInDebitByDEX(event: SubstrateEvent): Promise
 	history.atBlockHash = event.block.block.hash.toString();
 	history.atExtrinsicHash = event.extrinsic.extrinsic.hash.toString();
 	history.timestamp = event.block.timestamp;
-	
+
 	await history.save()
 }
