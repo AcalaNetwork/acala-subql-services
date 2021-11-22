@@ -24,7 +24,6 @@ export async function handleParamsUpdated(event: SubstrateEvent): Promise<void> 
 	const tokenName = (token.toJSON() as any).token;
 	const value = BigInt(amount.toString())
 
-	logger.info(event.event.method)
 	await createParams(tokenName)
 	await updateParams(event.event.method, event.block.block.header.number.toString(), tokenName, value);
 }

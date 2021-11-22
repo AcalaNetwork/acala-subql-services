@@ -3,7 +3,7 @@ description: ""
 repository: ""
 schema: ./schema.graphql
 network:
-  endpoint: wss://karura.api.onfinality.io/public-ws
+  endpoint: wss://karura-rpc-1.aca-api.network/
   dictionary: https://api.subquery.network/sq/AcalaNetwork/karura-dictionary
   typesBundle:
     spec:
