@@ -8,6 +8,7 @@ type Account @entity {
 
 type Collateral @entity {
   id: ID! # token name
+  decimal: Int
   token: String
   positions: [LoanPosition] @derivedFrom(field: "collateral")
 }
@@ -67,17 +68,17 @@ type DailyGlobalPosition @entity {
 
 type DailyLoanReport @entity {
   id: ID! # `${YYYY-MM-DD-dd}`
-  actionCount: BigInt
-  debitChange: BigInt
-  collateralChange: BigInt
+  txCount: BigInt
+  debitVolume: BigInt
+  collateralVolume: BigInt
   timestamp: Date
 }
 
 type HourLoanReport @entity {
   id: ID! # `${YYYY-MM-DD-dd}`
-  actionCount: BigInt
-  debitChange: BigInt
-  collateralChange: BigInt
+  txCount: BigInt
+  debitVolume: BigInt
+  collateralVolume: BigInt
   timestamp: Date
 }
 

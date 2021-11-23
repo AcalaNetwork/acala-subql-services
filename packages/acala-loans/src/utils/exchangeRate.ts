@@ -15,7 +15,7 @@ export const getExchangeRateFromDb = async (block: bigint, token: any) => {
 
     record.collateralId = forceToCurrencyIdName(token);
     record.debitExchangeRate = exchangeRate;
-    record.block = BigInt(block.toString());
+    record.block = block;
     await record.save();
 
     return exchangeRate;

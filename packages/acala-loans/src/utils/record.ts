@@ -1,3 +1,4 @@
+import { getTokenDecimal } from "@acala-network/subql-utils";
 import { Account, Collateral, DailyGlobalPosition, DailyLoanPosition, DailyLoanReport, GlobalPosition, HourGlobalPosition, HourLoanPosition, HourLoanReport, LoanPosition } from "../types"
 import { CollateralParams } from "../types/models/CollateralParams";
 import { CollateralParamsHistory } from "../types/models/CollateralParamsHistory";
@@ -21,6 +22,7 @@ export const getCollateral = async (token: string) => {
   if (!_collateral) {
     const newCollateral = new Collateral(token);
     newCollateral.token = token;
+    newCollateral.decimal = getTokenDecimal(token);
     await newCollateral.save();
     return newCollateral;
   } else {
@@ -145,9 +147,9 @@ export const getHourPositionReport = async (id: string) => {
   if (!record) {
     const newRecord = new HourLoanReport(id);
 
-    newRecord.actionCount = BigInt(0);
-    newRecord.collateralChange = BigInt(0);
-    newRecord.debitChange = BigInt(0);
+    newRecord.txCount = BigInt(0);
+    newRecord.collateralVolume = BigInt(0);
+    newRecord.debitVolume = BigInt(0);
     newRecord.timestamp = new Date();
 
     return newRecord;
@@ -162,9 +164,9 @@ export const getDailyPositionReport = async (id: string) => {
   if (!record) {
     const newRecord = new DailyLoanReport(id);
 
-    newRecord.actionCount = BigInt(0);
-    newRecord.collateralChange = BigInt(0);
-    newRecord.debitChange = BigInt(0);
+    newRecord.txCount = BigInt(0);
+    newRecord.collateralVolume = BigInt(0);
+    newRecord.debitVolume = BigInt(0);
     newRecord.timestamp = new Date();
 
     return newRecord;
