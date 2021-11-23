@@ -111,7 +111,7 @@ type LoanHistory @entity {
   # liquidUnsafeCDP
   collateralAmount: BigInt
   badDebitValue: BigInt
-  liquidationStrategy: BigInt
+  liquidationStrategy: String
 }
 
 type CollateralParams @entity {

@@ -42,7 +42,7 @@ export async function handleLiquidateUnsafeCDP(event: SubstrateEvent): Promise<v
 	history.type = event.event.method.toString();
 	history.collateralAjustment = BigInt(collateral_amount.toString());
 	history.debitAjustment = BigInt(bad_debt_value.toString());
-	history.liquidationStrategy = BigInt(liquidation_strategy.toString());
+	history.liquidationStrategy = liquidation_strategy.toString();
 	history.atBlock = BigInt(event.block.block.header.number.toString());
 	history.atBlockHash = event.block.block.hash.toString();
 	history.atExtrinsicHash = event.extrinsic.extrinsic.hash.toString();

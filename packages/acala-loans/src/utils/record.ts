@@ -215,7 +215,7 @@ export const getLoanHistory = async (id: string) => {
     newRecord.debitValue = BigInt(0);
     newRecord.collateralAmount = BigInt(0);
     newRecord.badDebitValue = BigInt(0);
-    newRecord.liquidationStrategy = BigInt(0);
+    newRecord.liquidationStrategy = '';
 
     return newRecord;
   } else {
