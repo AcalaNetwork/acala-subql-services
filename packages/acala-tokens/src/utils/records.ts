@@ -1,3 +1,4 @@
+import { WalletPromise } from '@acala-network/sdk-wallet'
 import { nativeToken, isTokenEqual, getTokenDecimal, isSystemAccount } from '@acala-network/subql-utils'
 import { Token, Account, AccountBalance, DailyAccountBalance, HourAccountBalance, HourToken, DailyToken } from '../types/models'
 
@@ -28,7 +29,7 @@ export async function getToken(id: string) {
 }
 
 export async function getHourToken(tokenName: string, timestamp: Date) {
-    const id = `${tokenName}-${timestamp}`
+    const id = `${tokenName}-${timestamp.getTime()}`
 
     let record = await HourToken.get(id)
 
@@ -46,7 +47,7 @@ export async function getHourToken(tokenName: string, timestamp: Date) {
 }
 
 export async function getDailyToken(tokenName: string, timestamp: Date) {
-    const id = `${tokenName}-${timestamp}`
+    const id = `${tokenName}-${timestamp.getTime()}`
 
     let record = await DailyToken.get(id)
 
