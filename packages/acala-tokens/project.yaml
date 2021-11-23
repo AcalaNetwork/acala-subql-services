@@ -4082,13 +4082,53 @@ dataSources:
       startBlock: 1
       mapping:
           handlers:
-              - handler: handleNonNativeTokenTransfer
+              - handler: handleBalancesTransfer
+                kind: substrate/EventHandler
+                filter:
+                    module: blances
+                    method: Transfer
+              - handler: handleBalancesReserved
+                kind: substrate/EventHandler
+                filter:
+                    module: balances
+                    method: Reserved
+              - handler: handleBalancesUnreserved
+                kind: substrate/EventHandler
+                filter:
+                    module: balances
+                    method: Unreserved
+              - handler: handleTreasuryDepositEvent
+                kind: substrate/EventHandler
+                filter:
+                    module: treasury
+                    method: Deposit
+              - handler: handleBalancesReserveRepatriated
+                kind: substrate/EventHandler
+                filter:
+                    module: balances
+                    method: ReserveRepatriated
+              - handler: handleCurrenciesTransfer
                 kind: substrate/EventHandler
                 filter:
                     module: currencies
                     method: Transferred
-              - handler: handleNativeTokenTransfer
+              - handler: handleCurrenciesDeposite
                 kind: substrate/EventHandler
                 filter:
-                    module: balances
-                    method: Transfer
+                    module: currencies
+                    method: Deposited
+              - handler: handleCurrenciesWithdrawn
+                kind: substrate/EventHandler
+                filter:
+                    module: currencies
+                    method: Withdrawn
+              - handler: handleDustSwept
+                kind: substrate/EventHandler
+                filter:
+                    module: currencies
+                    method: DustSwept
+              - handler: handleBalanceUpdatedEvent
+                kind: substrate/EventHandler
+                filter:
+                    module: currencies
+                    method: BalanceUpdated

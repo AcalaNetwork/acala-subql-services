@@ -1,11 +1,14 @@
 import { u8aToU8a, stringToU8a } from '@polkadot/util'
 import { encodeAddress } from '@polkadot/util-crypto'
 import { defaults } from '@polkadot/util-crypto/address/defaults'
+import { SystemAccountNotFound } from './errors'
 
 interface SystemAccountData {
     name: string
     value: string
 }
+
+const DEFAULT_PREFIX = api.registry.chainSS58 || defaults.prefix
 
 const PALLET_IDS = {
     TreasuryPalletId: 'aca/trsy',
@@ -23,9 +26,9 @@ const PALLET_IDS = {
 
 const getPalletAddress = (value: string, ss58: number) => encodeAddress(u8aToU8a(stringToU8a(`modl${value}`.padEnd(32, '\0'))), ss58)
 
-const PALLET_ADDRESS = Object.fromEntries(
+export const PALLET_ADDRESS = Object.fromEntries(
     Object.entries(PALLET_IDS).map(([k, v]) => [
-        getPalletAddress(v, defaults.prefix),
+        getPalletAddress(v, DEFAULT_PREFIX),
         {
             value: v,
             name: k,
@@ -35,7 +38,19 @@ const PALLET_ADDRESS = Object.fromEntries(
 
 export function isSystemAccount(address: string) {
     // format address with 42 as ss58
-    const temp = encodeAddress(address, defaults.prefix)
+    const temp = encodeAddress(address, DEFAULT_PREFIX)
 
     return PALLET_ADDRESS[temp] ?? false
+}
+
+export function getTreasuryAccount(prefix = DEFAULT_PREFIX): string {
+    return getPalletAddress(PALLET_IDS['TreasuryPalletId'], prefix)
+}
+
+export function getSystemAccount(target: string, prefix = DEFAULT_PREFIX): string {
+    const searchResult = PALLET_IDS[target] || Object.entries(PALLET_IDS).find(([k, v]) => k === target || v === target)?.[1]
+
+    if (!searchResult) throw new SystemAccountNotFound(target)
+
+    return getPalletAddress(searchResult, prefix)
 }

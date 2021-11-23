@@ -1,5 +1,3 @@
-import { SubstrateEvent } from '@subql/types'
-import { Balance } from '@acala-network/types/interfaces'
 import { Account, Transfer, Token, UserDailyReport, UserDailyReportGroup, TokenDailyReport } from '../types'
 import { isSystemAccount } from '@acala-network/subql-utils'
 
@@ -64,7 +62,7 @@ export async function getUserDailyReport(id: string) {
         record.abs = BigInt(0)
         record.in = BigInt(0)
         record.out = BigInt(0)
-        record.volumn = BigInt(0)
+        record.volume = BigInt(0)
     }
 
     return record
@@ -78,7 +76,7 @@ export async function getTokenDailyRecprod(id: string) {
 
         record.transferCount = 0
         record._transferCount = 0
-        record.volumn = BigInt(0)
+        record.volume = BigInt(0)
     }
 
     return record

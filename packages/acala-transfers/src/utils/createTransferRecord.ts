@@ -58,7 +58,7 @@ export async function createTransfer(fromId: string, toId: string, tokenName: st
     if (!dispatchedBySystem) {
         fromAccountDailyReport.transferCount += 1
         fromAccountDailyReport.out = fromAccountDailyReport.out + transfer.amount
-        fromAccountDailyReport.volumn = fromAccountDailyReport.volumn + transfer.amount
+        fromAccountDailyReport.volume = fromAccountDailyReport.volume + transfer.amount
         fromAccountDailyReport.abs = fromAccountDailyReport.abs - transfer.amount
     }
 
@@ -78,7 +78,7 @@ export async function createTransfer(fromId: string, toId: string, tokenName: st
 
     if (!dispatchedBySystem) {
         toAccountDailyReport.in = toAccountDailyReport.in + transfer.amount
-        toAccountDailyReport.volumn = toAccountDailyReport.volumn + transfer.amount
+        toAccountDailyReport.volume = toAccountDailyReport.volume + transfer.amount
         toAccountDailyReport.abs = toAccountDailyReport.abs + transfer.amount
     }
 
@@ -90,7 +90,7 @@ export async function createTransfer(fromId: string, toId: string, tokenName: st
     tokenDailyReport.timestamp = dateEndOfDay
 
     if (!dispatchedBySystem) {
-        tokenDailyReport.volumn = tokenDailyReport.volumn + transfer.amount
+        tokenDailyReport.volume = tokenDailyReport.volume + transfer.amount
         tokenDailyReport.transferCount += 1
     }
 
