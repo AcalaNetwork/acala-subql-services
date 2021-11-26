@@ -56,7 +56,10 @@ export const updateParams = async (event: SubstrateEvent, module: 'cdp' | 'loans
     newParams.liquidationPenalty = record.record.liquidationPenalty;
     newParams.requiredCollateralRatio = record.record.requiredCollateralRatio;
     newParams[field] = BigInt(value);
+
+    record.record[field] = BigInt(value);
   
+    await record.record.save();
     await newParams.save();
   }
 }
