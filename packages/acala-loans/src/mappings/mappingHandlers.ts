@@ -1,19 +1,15 @@
 import { forceToCurrencyIdName } from "@acala-network/sdk-core";
 import { SubstrateEvent } from "@subql/types";
-import { updateDailyLoanReport, updateHourLoanReport, updateLoanPosition } from "../handlers";
+import { updateLoanPosition } from "../handlers";
 import { updateParams } from "../handlers/params";
 import { getLoanHistory } from "../utils/record";
 
 export async function handlePositionUpdated(event: SubstrateEvent): Promise<void> {
 	await updateLoanPosition(event, false);
-	await updateHourLoanReport(event);
-	await updateDailyLoanReport(event);
 }
 
 export async function handleConfiscateCollateralAndDebit(event: SubstrateEvent): Promise<void> {
 	await updateLoanPosition(event, true);
-	await updateHourLoanReport(event);
-	await updateDailyLoanReport(event);
 }
 
 export async function handleTransferLoan(event: SubstrateEvent): Promise<void> {
@@ -36,8 +32,8 @@ export async function handleLiquidateUnsafeCDP(event: SubstrateEvent): Promise<v
 	history.ownerId = owner;
 	history.collateralId = token;
 	history.type = event.event.method.toString();
-	history.collateralAjustment = BigInt(collateral_amount.toString());
-	history.debitAjustment = BigInt(bad_debt_value.toString());
+	history.collateralAmount = BigInt(collateral_amount.toString());
+	history.badDebitValue = BigInt(bad_debt_value.toString());
 	history.liquidationStrategy = liquidation_strategy.toString();
 	history.atBlock = BigInt(event.block.block.header.number.toString());
 	history.atBlockHash = event.block.block.hash.toString();

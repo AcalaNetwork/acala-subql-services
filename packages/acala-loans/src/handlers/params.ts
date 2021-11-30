@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { forceToCurrencyIdName } from "@acala-network/sdk-core";
 import { SubstrateEvent } from "@subql/types";
-import { CollateralParamsHistory } from "../types/models/CollateralParamsHistory";
-import { getCollateral, getCollateralParams } from "../utils/record";
+import { getCollateral, getCollateralParams, getCollateralParamsHistory } from "../utils/record";
 
 const fieldMap = new Map([
   ['InterestRatePerSecUpdated', 'interestRatePerSec'],
@@ -47,7 +47,7 @@ export const updateParams = async (event: SubstrateEvent, module: 'cdp' | 'loans
     const field = fieldMap.get(method);
     if(!field) return;
   
-    const newParams = new CollateralParamsHistory(`${height}-${tokenName}`);
+    const newParams = await getCollateralParamsHistory(`${height}-${tokenName}-${field}`);
     newParams.endAtBlock = BigInt(height);
     newParams.collateralId = record.record.collateralId;
     newParams.maximumTotalDebitValue = record.record.maximumTotalDebitValue;

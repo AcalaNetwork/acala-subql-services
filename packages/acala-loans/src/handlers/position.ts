@@ -11,12 +11,12 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   const accountData = await getAccount(account.toString());
   const tokenData = await getCollateral(forceToCurrencyIdName(collateral));
 
-
   const owner = accountData.id;
   const token = tokenData.id;
   const collateralAmount = isLiquidatiton ? -BigInt(collateral_amount.toString()) : BigInt(collateral_amount.toString());
   const debitAmount = isLiquidatiton ? -BigInt(debit_amount.toString()) : BigInt(debit_amount.toString());
-
+  const collateralVolume = collateralAmount.toString() !== '0';
+  const debitVolume = debitAmount.toString() !== '0';
   const exchangeRate = await getExchangeRateFromDb(BigInt(event.block.block.header.number.toString()), collateral);
 
   // loanposition personal part
@@ -41,8 +41,8 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   // hourloanposition personal part
   const hourPositionId = `${owner}-${token}-${hourTimeKey.getTime()}`;
   const hourPosition = await getHourLoanPosition(hourPositionId);
-  hourPosition.collateralAmount = hourPosition.collateralAmount + collateralAmount
-  hourPosition.debitAmount = hourPosition.debitAmount + debitAmount
+  hourPosition.collateralAmount = position.collateralAmount;
+  hourPosition.debitAmount = position.debitAmount;
   hourPosition.ownerId = owner;
   hourPosition.timestamp = hourTimeKey;
   hourPosition.debitExchangeRate = exchangeRate;
@@ -52,11 +52,14 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   const globalHourPositionId = `${token}-${hourTimeKey.getTime()}`;
   const hourGlobalPosition = await getHourGolbalPosition(globalHourPositionId);
 
-  hourGlobalPosition.collateralAmount = hourGlobalPosition.collateralAmount + collateralAmount
-  hourGlobalPosition.debitAmount = hourGlobalPosition.debitAmount + debitAmount
+  hourGlobalPosition.collateralAmount = globalPosition.collateralAmount;
+  hourGlobalPosition.debitAmount = globalPosition.debitAmount;
   hourGlobalPosition.timestamp = hourTimeKey;
   hourGlobalPosition.debitExchangeRate = exchangeRate;
   hourGlobalPosition.collateralId = token;
+  hourGlobalPosition.txCount = hourGlobalPosition.txCount + BigInt(1);
+  hourGlobalPosition.collateralVolume = hourGlobalPosition.collateralVolume + BigInt(collateralVolume);
+  hourGlobalPosition.debitVolume = hourGlobalPosition.debitVolume + BigInt(debitVolume);
 
 
   const dailyTimeKey = getDateStartOfDay(event.block.timestamp).toDate();
@@ -64,8 +67,8 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   const dailyPositionId = `${owner}-${token}-${dailyTimeKey.getTime()}`;
   const dailyPosition = await getDailyLoanPosition(dailyPositionId);
 
-  dailyPosition.collateralAmount = dailyPosition.collateralAmount + collateralAmount
-  dailyPosition.debitAmount = dailyPosition.debitAmount + debitAmount
+  dailyPosition.collateralAmount = position.collateralAmount
+  dailyPosition.debitAmount = position.debitAmount;
   dailyPosition.ownerId = owner;
   dailyPosition.timestamp = dailyTimeKey;
   dailyPosition.debitExchangeRate = exchangeRate;
@@ -75,11 +78,14 @@ export const updateLoanPosition = async (event: SubstrateEvent, isLiquidatiton =
   const dailyGlobalPositionId = `${token}-${dailyTimeKey.getTime()}`;
   const dailyGlobalPosition = await getDailyGlobalPosition(dailyGlobalPositionId)
 
-  dailyGlobalPosition.collateralAmount = dailyGlobalPosition.collateralAmount + collateralAmount
-  dailyGlobalPosition.debitAmount = dailyGlobalPosition.debitAmount + debitAmount
+  dailyGlobalPosition.collateralAmount = globalPosition.collateralAmount
+  dailyGlobalPosition.debitAmount = globalPosition.debitAmount
   dailyGlobalPosition.collateralId = token;
   dailyGlobalPosition.debitExchangeRate = exchangeRate;
   dailyGlobalPosition.timestamp = dailyTimeKey;
+  dailyGlobalPosition.txCount = dailyGlobalPosition.txCount + BigInt(1);
+  dailyGlobalPosition.collateralVolume = dailyGlobalPosition.collateralVolume + BigInt(collateralVolume);
+  dailyGlobalPosition.debitVolume = dailyGlobalPosition.debitVolume + BigInt(debitVolume);
 
   const historyId = `${event.block.block.hash.toString()}-${event.idx.toString()}`
   const history = await getLoanHistory(historyId);

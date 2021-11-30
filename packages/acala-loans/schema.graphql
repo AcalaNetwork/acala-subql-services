@@ -55,6 +55,9 @@ type HourGlobalPosition @entity {
   collateralAmount: BigInt
   debitExchangeRate: BigInt
   timestamp: Date
+  txCount: BigInt
+  debitVolume: BigInt
+  collateralVolume: BigInt
 }
 
 type DailyGlobalPosition @entity {
@@ -64,22 +67,9 @@ type DailyGlobalPosition @entity {
   collateralAmount: BigInt
   debitExchangeRate: BigInt
   timestamp: Date
-}
-
-type DailyLoanReport @entity {
-  id: ID! # `${YYYY-MM-DD-dd}`
   txCount: BigInt
   debitVolume: BigInt
   collateralVolume: BigInt
-  timestamp: Date
-}
-
-type HourLoanReport @entity {
-  id: ID! # `${YYYY-MM-DD-dd}`
-  txCount: BigInt
-  debitVolume: BigInt
-  collateralVolume: BigInt
-  timestamp: Date
 }
 
 type ExchangeRate @entity {

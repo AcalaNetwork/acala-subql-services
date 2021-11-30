@@ -1,5 +1,5 @@
 import { getTokenDecimal } from "@acala-network/subql-utils";
-import { Account, Collateral, DailyGlobalPosition, DailyLoanPosition, DailyLoanReport, GlobalPosition, HourGlobalPosition, HourLoanPosition, HourLoanReport, LoanPosition } from "../types"
+import { Account, Collateral, DailyGlobalPosition, DailyLoanPosition, GlobalPosition, HourGlobalPosition, HourLoanPosition, LoanPosition } from "../types"
 import { CollateralParams } from "../types/models/CollateralParams";
 import { CollateralParamsHistory } from "../types/models/CollateralParamsHistory";
 import { ExchangeRate } from "../types/models/ExchangeRate";
@@ -63,8 +63,6 @@ export const getGlobalLoanPosition = async (id: string) => {
   } {
     return record;
   }
-
-  
 }
 
 export const getHourLoanPosition = async (id: string) => {
@@ -97,6 +95,9 @@ export const getHourGolbalPosition = async (id: string) => {
     newRecord.timestamp = new Date();
     newRecord.collateralId = '';
     newRecord.debitExchangeRate = BigInt(0);
+    newRecord.txCount = BigInt(0);
+    newRecord.debitVolume = BigInt(0);
+    newRecord.collateralVolume = BigInt(0);
 
     return newRecord;
   }else {
@@ -134,40 +135,9 @@ export const getDailyGlobalPosition = async (id: string) => {
     newRecord.timestamp = new Date();
     newRecord.collateralId = '';
     newRecord.debitExchangeRate = BigInt(0);
-
-    return newRecord;
-  } else {
-    return record;
-  }
-}
-
-export const getHourPositionReport = async (id: string) => {
-  const record = await HourLoanReport.get(id);
-
-  if (!record) {
-    const newRecord = new HourLoanReport(id);
-
     newRecord.txCount = BigInt(0);
-    newRecord.collateralVolume = BigInt(0);
     newRecord.debitVolume = BigInt(0);
-    newRecord.timestamp = new Date();
-
-    return newRecord;
-  } else {
-    return record;
-  }
-}
-
-export const getDailyPositionReport = async (id: string) => {
-  const record = await DailyLoanReport.get(id);
-
-  if (!record) {
-    const newRecord = new DailyLoanReport(id);
-
-    newRecord.txCount = BigInt(0);
     newRecord.collateralVolume = BigInt(0);
-    newRecord.debitVolume = BigInt(0);
-    newRecord.timestamp = new Date();
 
     return newRecord;
   } else {
