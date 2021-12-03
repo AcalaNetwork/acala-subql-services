@@ -24,8 +24,9 @@ services:
     volumes:
       - ./:/app
     command:
-      - -f=/app
       - --local
+      - --subquery=/app
+      - --subquery-name=acala-loans
 
   graphql-engine:
     image: onfinality/subql-query:latest
@@ -42,6 +43,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=app
+      - --name=acala-loans
       - --playground
       - --indexer=http://subquery-node:3000
