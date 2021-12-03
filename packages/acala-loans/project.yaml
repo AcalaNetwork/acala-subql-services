@@ -42,3 +42,28 @@ dataSources:
           filter:
             module: cdpEngine
             method: MaximumTotalDebitValueUpdated
+        - handler: handleLiquidateUnsafeCDP
+          kind: substrate/EventHandler
+          filter:
+            module: cdpEngine
+            method: LiquidateUnsafeCDP
+        - handler: handleCloseCDPInDebitByDEX
+          kind: substrate/EventHandler
+          filter:
+            module: cdpEngine
+            method: CloseCDPInDebitByDEX
+        - handler: handlePositionUpdated
+          kind: substrate/EventHandler
+          filter:
+            module: loans
+            method: PositionUpdated
+        - handler: handleConfiscateCollateralAndDebit
+          kind: substrate/EventHandler
+          filter:
+            module: loans
+            method: ConfiscateCollateralAndDebit
+        - handler: handleTransferLoan
+          kind: substrate/EventHandler
+          filter:
+            module: loans
+            method: TransferLoan
