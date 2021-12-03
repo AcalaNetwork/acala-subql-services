@@ -22,7 +22,7 @@ export const getCollateral = async (token: string) => {
   if (!_collateral) {
     const newCollateral = new Collateral(token);
     newCollateral.token = token;
-    newCollateral.decimal = getTokenDecimal(token);
+    newCollateral.decimal = 12;
     await newCollateral.save();
     return newCollateral;
   } else {
