@@ -1,6 +1,6 @@
 import { forceToCurrencyIdName } from "@acala-network/sdk-core";
 import { SubstrateEvent } from "@subql/types"
-import { getDateStartOfDay, getDateStartOfHour } from '@acala-network/subql-utils';
+import { getDateStartOfDay, getDateStartOfHour } from '../utils/date';
 import { getAccount, getCollateral, getDailyGlobalPosition, getDailyLoanPosition, getGlobalLoanPosition, getHourGolbalPosition, getHourLoanPosition, getLoanHistory, getLoanPosition } from "../utils/record";
 import { getExchangeRateFromDb } from "../utils";
 import { updateParams } from "./params";

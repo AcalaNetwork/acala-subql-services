@@ -30,6 +30,7 @@
     "@acala-network/sdk-wallet": "^3.0.2",
     "@acala-network/subql-utils": "^0.1.6-alpha.2",
     "@acala-network/types": "^3.0.2",
-    "@subql/node": "^0.24.0"
+    "@subql/node": "^0.24.0",
+    "dayjs": "^1.10.7"
   }
 }
