@@ -2,67 +2,105 @@
 
 a collection of acala/karura sub-query services.
 
-## Services
+## 1. Acala-subql
 
-1. Acala-subql: [link](https://github.com/AcalaNetwork/acala-subql)
-2. Acala-tokens: [link](https://github.com/AcalaNetwork/acala-tokens-subql)
-3. Acala-loans: [link](https://github.com/AcalaNetwork/acala-loan-subql)
-4. Acala-Vesting: [link](https://github.com/AcalaNetwork/acala-vesting-subql)
-5. Acala-homa: [link](https://github.com/AcalaNetwork/acala-homa-subql)
-6. Subql-dictionary: [link](https://github.com/AcalaNetwork/subql-dictionary)
+  - 1.1 Github page: 
+    > https://github.com/AcalaNetwork/acala-subql
+
+  - 1.2 Graphql workground:
+
+  |  Chain   | Link  |
+  |  ----  | ----  |
+  | Acala | https://explorer.subquery.network/subquery/AcalaNetwork/acala |
+  | Karura | https://explorer.subquery.network/subquery/AcalaNetwork/karura |
+  
+  - 1.3 includes: 
+
+  |  Extrinsic   | events  |
+  |  ----  | ----  |
+  | currencies  | Transferred |
+  | nft  | TransferredToken、BurnedToken、BurnedTokenWithRemark |
+  | loans | PositionUpdated、PositionUpdated、ConfiscateCollateralAndDebit、transferLoan |
+  |cdpEngine| InterestRatePerSecUpdated、LiquidationRatioUpdated、LiquidationPenaltyUpdated、RequiredCollateralRatioUpdated、MaximumTotalDebitValueUpdated、GlobalInterestRatePerSecUpdated、LiquidateUnsafeCDP、LiquidateUnsafeCDP|
+  |dex|ProvisioningToEnabled、AddLiquidity、RemoveLiquidity、Swap、ListProvision、ProvisioningToEnabled、AddProvision|
+  |incentives|DepositDexShare、WithdrawDexShare、PayoutRewards、ClaimRewards|
+  |homaLite|Minted、RedeemRequestCancelled、RedeemRequested、Redeemed|
+  |homa|Minted、RequestedRedeem、RedeemRequestCancelled、RedeemedByFastMatch、RedeemedByUnbond|
 
 
-## How To Add A Service
+## 2. Acala-tokens
 
--   install @subql/cli
+  - 1.1 Github page: 
+    > https://github.com/AcalaNetwork/acala-tokens-subql
 
-    ```bash
-      yarn global add @subql/cli
-    ```
+  - 1.2 Graphql workground:
 
--   create a service
+  |  Chain   | Link  |
+  |  ----  | ----  |
+  | Acala | https://explorer.subquery.network/subquery/AcalaNetwork/acala-tokens |
+  | Karura | https://explorer.subquery.network/subquery/AcalaNetwork/karura-tokens |
+  
+  - 1.3 includes: 
 
-    ```bash
-    cd packages && npx subql init --starter PROJECT_NAME
-    ```
+  |  Extrinsic   | events  |
+  |  ----  | ----  |
+  | treasury | Deposit |
+  | balances  | Transfer、Reserved、Unreserved、ReserveRepatriated |
+  | currencies | Transferred、 Deposited、 Withdrawn、DustSwept、BalanceUpdated ｜
 
--   patch types of acala/karura
-    ```bash
-    cd SERVICE_DIR && node ../../scripts/patch-acala-types.js
-    ```
 
-## Use Acala/Karura Dictionary
+## 3. Acala-loans
 
-edit project.yaml in target service folder
+  - 1.1 Github page: 
+    > https://github.com/AcalaNetwork/acala-loan-subql
+  
+  - 1.2 Graphql workground:
 
-```yaml
----
-network:
-    endpoint: wss://polkadot.api.onfinality.io/public-ws
-    dictionary: https://api.subquery.network/sq/AcalaNetwork/karura-dictionary
-```
+  |  Chain   | Link  |
+  |  ----  | ----  |
+  | Acala | ---- |
+  | Karura | https://explorer.subquery.network/subquery/AcalaNetwork/karura-loan |
+  
+  - 1.3 includes: 
 
-## Start Local Test Service
+  |  Extrinsic   | events  |
+  |  ----  | ----  |
+  | cdpEngine | InterestRatePerSecUpdated、LiquidationRatioUpdated、LiquidationPenaltyUpdated、RequiredCollateralRatioUpdated、MaximumTotalDebitValueUpdated、LiquidateUnsafeCDP、CloseCDPInDebitByDEX |
+  | loans | PositionUpdated、ConfiscateCollateralAndDebit、TransferLoan ｜
 
--   install @subql/node service
+## 4. Acala-vesting
 
-```bash
-cd SERVICE_DIR && yarn add @subql/node
-```
+  - 1.1 Github page: 
+    > https://github.com/AcalaNetwork/acala-vesting-subql
+  
+  - 1.2 Graphql workground:
 
--   edit package.json
+  |  Chain   | Link  |
+  |  ----  | ----  |
+  | Acala | ---- |
+  | Karura | https://explorer.subquery.network/subquery/AcalaNetwork/acala-vesting |
+  
+  - 1.3 includes: 
 
-```json
-...
-scripts: {
-  "start": "./node_modules/.bin/subql-node -f . --local --timeout=512 --batch-size=100 --port=3123"
-}
-...
-```
+  |  Extrinsic   | events  |
+  |  ----  | ----  |
+  | vesting | VestingSchedulesUpdated、Claimed、VestingScheduleAdded |
 
--   start dev server
-    > please ensure that postgres db is connectable.
 
-```bash
-yarn run start
-```
+## 5. Acala-homa
+
+  - 1.1 Github page: 
+    > https://github.com/AcalaNetwork/acala-vesting-subql
+  
+  - 1.2 Graphql workground:
+
+  |  Chain   | Link  |
+  |  ----  | ----  |
+  | Acala | ---- |
+  | Karura | ---- |
+  
+  - 1.3 includes: 
+
+  |  Extrinsic   | events  |
+  |  ----  | ----  |
+  | homa | Minted、RequestedRedeem、RequestedCancelled、RedeemedByFastMatch、RedeemedByUnbond、WithdrawRedemption |
