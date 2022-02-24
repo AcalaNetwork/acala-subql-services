@@ -29,7 +29,6 @@ a collection of acala/karura sub-query services.
 
 
 ## 2. Acala-tokens
-
   - 1.1 Github page: 
     > https://github.com/AcalaNetwork/acala-tokens-subql
 
