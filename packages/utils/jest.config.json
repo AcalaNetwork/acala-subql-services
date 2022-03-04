@@ -1,0 +1,6 @@
+{
+    "transform": {
+        "^.+\\.[tj]s?$": "babel-jest"
+    },
+    "transformIgnorePatterns": ["node_modules/(?!@polkadot)"]
+}

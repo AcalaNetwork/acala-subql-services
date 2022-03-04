@@ -1,17 +1,17 @@
 import dayjs from 'dayjs'
 
-export function getDateEndOfDay(date: Date) {
-    return dayjs(date).endOf('day')
+export function getEndOfDay(date: Date): Date {
+    return dayjs(date).endOf('day').toDate()
 }
 
-export function getDateEndOfHour(date: Date) {
-    return dayjs(date).endOf('hour')
+export function getEndOfHour(date: Date): Date {
+    return dayjs(date).endOf('hour').toDate()
 }
 
-export function getDateStartOfDay(date: Date) {
-    return dayjs(date).startOf('day')
+export function getStartOfDay(date: Date): Date {
+    return dayjs(date).startOf('d').toDate()
 }
 
-export function getDateStartOfHour(date: Date) {
-    return dayjs(date).startOf('hour')
+export function getStartOfHour(date: Date): Date {
+    return dayjs(date).startOf('hour').toDate()
 }

@@ -1,11 +1,107 @@
 # `@acala-subql/utils`
 
-> TODO: description
+support some helpful functions
 
-## Usage
+## Token
 
+1. isTokenEqual
+
+```javascript
+/**
+ * @name isTokenEqual
+ * @param token1 {any}
+ * @param token2 {any}
+ * @return boolean
+ **/
+
+const isEqual = isTokenEqual('KAR', 'KUSD')
 ```
-const utils = require('@acala-subql/utils');
 
-// TODO: DEMONSTRATE API
+2. getTokenName
+
+```javascript
+/**
+ * @name getTokenName
+ * @descriptions get string token name, { LiquidCrowdloan: 13 } will be lc://13
+ * @param token {any}
+ * @return string
+ **/
+const name = getTokenName(token)
+```
+
+3. getTokenDecimals
+
+```javascript
+/**
+ * @name getTokenDecimals
+ * @descriptions get token decimals support Token, DexShare, ForeignAssets, LiquidCrowdloanToken
+ * @param api {[ApiPromise,ApiAt]}
+ * @param token {any}
+ * @return number
+ **/
+const decimals = await getTokenDecimals(api, token)
+```
+
+## Date
+
+1. getEndOfDay
+
+```javascript
+/**
+ * @name getEndOfDay
+ * @descriptions get end date of params
+ * @param date {Date}
+ * @return Date
+ **/
+const endOfDay = getEndOfDay(date)
+```
+
+2. getStartOfDay
+
+```javascript
+/**
+ * @name getStartOfDay
+ * @descriptions get start date of params
+ * @param date {Date}
+ * @return Date
+ **/
+const startOfDay = getStartOfDay(date)
+```
+
+3. getEndOfHour
+
+```javascript
+/**
+ * @name getEndOfHour
+ * @descriptions get end hour date of params
+ * @param date {Date}
+ * @return Date
+ **/
+const endOfHour = getEndOfHour(date)
+```
+
+2. getStartOfHour
+
+```javascript
+/**
+ * @name getStartOfHour
+ * @descriptions get end hour date of params
+ * @param date {Date}
+ * @return Date
+ **/
+const startOfHour = getStartOfHour(date)
+```
+
+## Price
+
+1. getOraclePrice
+
+```javascript
+/**
+ * @name getOraclePrice
+ * @descriptions get price form oracle, support normal oracle token, liquid token, liquidcrowdloan token
+ * @param api {[ApiPromise,ApiAt]}
+ * @return FixedPointNumber (include decimals information)
+ **/
+const price = await getOraclePrice(api, token)
 ```
