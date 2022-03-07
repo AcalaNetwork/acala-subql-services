@@ -98,10 +98,12 @@ const startOfHour = getStartOfHour(date)
 
 ```javascript
 /**
- * @name getOraclePrice
+ * @name queryPriceFromOracle
  * @descriptions get price form oracle, support normal oracle token, liquid token, liquidcrowdloan token
  * @param api {[ApiPromise,ApiAt]}
+ * @params block {SubstrateBlock}
+ * @params token {string | CurrencyId | Token}
  * @return FixedPointNumber (include decimals information)
  **/
-const price = await getOraclePrice(api, token)
+const price = await queryPriceFromOracle(api, block, token)
 ```
