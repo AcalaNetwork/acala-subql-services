@@ -21,7 +21,7 @@ export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
     }
 
     const name = getTokenName(token)
-    const stakingTokenName = getTokenName(api.consts?.homaLite?.stakingCurrencyId || api.consts?.homa?.stakingCurrencyId)
+    const stakingTokenName = getTokenName(api.consts?.homaLite?.stakingCurrencyId || api.consts?.homa?.stakingCurrencyId || api.consts?.prices?.getStakingCurrencyId)
 
     if (isDexShareName(name)) {
         const [token0] = unzipDexShareName(name)
