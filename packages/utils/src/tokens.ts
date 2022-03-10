@@ -37,7 +37,7 @@ export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ ForeignAssetId: getForeignAssetIdFromName(name) })) as any
 
-        tokensDecimals[name] = metadata?.decimals?.toNumber()
+        tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
     }
 
     return tokensDecimals[name]
