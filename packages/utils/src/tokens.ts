@@ -50,11 +50,12 @@ export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
 }
 
 export function getStakingCurrency(api: AnyApi) {
-    return api.consts?.homa.stakingCurrencyId || api.consts?.homaLite.stakingCurrencyId
+    return api.consts?.homa.stakingCurrencyId || api.consts?.homaLite.stakingCurrencyId || api.consts.prices.getStakingCurrencyId
+
 }
 
 export function getLiquidCurrency(api: AnyApi) {
-    return api.consts?.homa.liquidCurrencyId || api.consts?.homaLite.liquidCurrencyId
+    return api.consts?.homa.liquidCurrencyId || api.consts?.homaLite.liquidCurrencyId || api.consts.prices.getLiquidCurrencyId
 }
 
 export function getStableCoinCurrency(api: AnyApi) {
