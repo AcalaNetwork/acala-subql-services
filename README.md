@@ -92,13 +92,13 @@ a collection of acala/karura sub-query services.
 
 -   1.1 Github page:
 
-    > https://github.com/AcalaNetwork/acala-vesting-subql
+    > https://github.com/AcalaNetwork/acala-homa-subql
 
 -   1.2 Graphql workground:
 
 | Chain  | Link |
 | ------ | ---- |
-| Acala  | ---- |
+| Acala  | https://explorer.subquery.network/subquery/AcalaNetwork/karura-homa |
 | Karura | ---- |
 
 -   1.3 includes:
