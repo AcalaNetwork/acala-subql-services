@@ -125,3 +125,22 @@ a collection of acala/karura sub-query services.
 | Extrinsic | events                                                                                                 |
 | --------- | ------------------------------------------------------------------------------------------------------ |
 | homa      | ProvisioningToEnabled、AddLiquidity、RemoveLiquidity、Swap、ListProvisioning、AddProvision |
+
+## 6. Acala-incentives
+
+-   1.1 Github page:
+
+    > https://github.com/AcalaNetwork/acala-incentives-subql
+
+-   1.2 Graphql workground:
+
+| Chain  | Link |
+| ------ | ---- |
+| Acala  | - |
+| Karura | - |
+
+-   1.3 includes:
+
+| Extrinsic | events                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------ |
+| incentives      | DepositDexShare、WithdrawDexShare、PayoutRewards、ClaimRewards |
