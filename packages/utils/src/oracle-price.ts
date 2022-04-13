@@ -17,9 +17,9 @@ const queryFeedPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
 // query liquid token price via homa lite
 const queryLiquidTokenPriceFormHomaLite = async (api: AnyApi, stakingPrice: FixedPointNumber) => {
     const stakingToken = getStakingCurrency(api)
-    const stakingTokenDecimals = getTokenDecimals(api, stakingToken)
+    const stakingTokenDecimals = await getTokenDecimals(api, stakingToken)
     const liquidToken = getLiquidCurrency(api)
-    const liquidTokenDecimals = getTokenDecimals(api, liquidToken)
+    const liquidTokenDecimals = await getTokenDecimals(api, liquidToken)
 
     const totalStaking = await api.query.homaLite?.totalStakingCurrency()
     const liquidTokenIssuance = await api.query.tokens.totalIssuance(liquidToken)
@@ -38,9 +38,9 @@ const queryLiquidTokenPriceFromHoma = async (api: AnyApi, stakingPrice: FixedPoi
     if (api.query.homaLite && !api.query.homa) return queryLiquidTokenPriceFormHomaLite(api, stakingPrice)
 
     const stakingToken = getStakingCurrency(api)
-    const stakingTokenDecimals = getTokenDecimals(api, stakingToken)
+    const stakingTokenDecimals = await getTokenDecimals(api, stakingToken)
     const liquidToken = getLiquidCurrency(api)
-    const liquidTokenDecimals = getTokenDecimals(api, liquidToken)
+    const liquidTokenDecimals = await getTokenDecimals(api, liquidToken)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const stakingLedgers = (await api.query.homa.stakingLedgers.entries()) as any[]
