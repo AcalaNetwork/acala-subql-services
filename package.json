@@ -5,10 +5,10 @@
     "main": "index.js",
     "license": "MIT",
     "workspaces": [
-        "packages"
+        "packages/*"
     ],
     "scripts": {
-        "build": "yarn workspaces run build",
+        "build": "yarn workspaces foreach run build",
         "build:release": "polkadot-ci-ghact-build",
         "codegen": "yarn workspaces run codegen",
         "test": "polkadot-dev-run-test --coverage",
