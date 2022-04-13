@@ -92,13 +92,13 @@ a collection of acala/karura sub-query services.
 
 -   1.1 Github page:
 
-    > https://github.com/AcalaNetwork/acala-vesting-subql
+    > https://github.com/AcalaNetwork/acala-homa-subql
 
 -   1.2 Graphql workground:
 
 | Chain  | Link |
 | ------ | ---- |
-| Acala  | ---- |
+| Acala  | https://explorer.subquery.network/subquery/AcalaNetwork/karura-homa |
 | Karura | ---- |
 
 -   1.3 includes:
@@ -106,3 +106,41 @@ a collection of acala/karura sub-query services.
 | Extrinsic | events                                                                                                 |
 | --------- | ------------------------------------------------------------------------------------------------------ |
 | homa      | Minted、RequestedRedeem、RequestedCancelled、RedeemedByFastMatch、RedeemedByUnbond、WithdrawRedemption |
+
+## 6. Acala-dex
+
+-   1.1 Github page:
+
+    > https://github.com/AcalaNetwork/acala-dex-subql
+
+-   1.2 Graphql workground:
+
+| Chain  | Link |
+| ------ | ---- |
+| Acala  | https://explorer.subquery.network/subquery/AcalaNetwork/acala-dex |
+| Karura | https://explorer.subquery.network/subquery/AcalaNetwork/karura-dex |
+
+-   1.3 includes:
+
+| Extrinsic | events                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------ |
+| homa      | ProvisioningToEnabled、AddLiquidity、RemoveLiquidity、Swap、ListProvisioning、AddProvision |
+
+## 6. Acala-incentives
+
+-   1.1 Github page:
+
+    > https://github.com/AcalaNetwork/acala-incentives-subql
+
+-   1.2 Graphql workground:
+
+| Chain  | Link |
+| ------ | ---- |
+| Acala  | - |
+| Karura | - |
+
+-   1.3 includes:
+
+| Extrinsic | events                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------ |
+| incentives      | DepositDexShare、WithdrawDexShare、PayoutRewards、ClaimRewards |
