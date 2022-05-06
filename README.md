@@ -79,7 +79,7 @@ a collection of acala/karura sub-query services.
 
 | Chain  | Link                                                                  |
 | ------ | --------------------------------------------------------------------- |
-| Acala  | ----                                                                  |
+| Acala  | https://project.subquery.network/project/AcalaNetwork/vesting-acala                                                                  |
 | Karura | https://explorer.subquery.network/subquery/AcalaNetwork/acala-vesting |
 
 -   1.3 includes:
@@ -136,7 +136,7 @@ a collection of acala/karura sub-query services.
 
 | Chain  | Link |
 | ------ | ---- |
-| Acala  | - |
+| Acala  | https://api.subquery.network/sq/AcalaNetwork/acala-incentives |
 | Karura | https://project.subquery.network/project/AcalaNetwork/karura-incentives |
 
 -   1.3 includes:
