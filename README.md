@@ -59,7 +59,7 @@ a collection of acala/karura sub-query services.
 
 | Chain  | Link                                                                |
 | ------ | ------------------------------------------------------------------- |
-| Acala  | ----                                                                |
+| Acala  | https://project.subquery.network/project/AcalaNetwork/acala-loans                                                                |
 | Karura | https://explorer.subquery.network/subquery/AcalaNetwork/karura-loan |
 
 -   1.3 includes:
@@ -98,8 +98,8 @@ a collection of acala/karura sub-query services.
 
 | Chain  | Link |
 | ------ | ---- |
-| Acala  | https://explorer.subquery.network/subquery/AcalaNetwork/karura-homa |
-| Karura | ---- |
+| Acala  | ---- |
+| Karura | https://explorer.subquery.network/subquery/AcalaNetwork/karura-homa |
 
 -   1.3 includes:
 
@@ -137,7 +137,7 @@ a collection of acala/karura sub-query services.
 | Chain  | Link |
 | ------ | ---- |
 | Acala  | - |
-| Karura | - |
+| Karura | https://project.subquery.network/project/AcalaNetwork/karura-incentives |
 
 -   1.3 includes:
 
