@@ -46,7 +46,7 @@ export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
     }
 
-    return tokensDecimals[name]
+    return tokensDecimals[name] || 12
 }
 
 export function getStakingCurrency(api: AnyApi) {

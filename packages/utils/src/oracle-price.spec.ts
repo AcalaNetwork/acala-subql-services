@@ -21,7 +21,7 @@ describe('all tokens helper should be ok', () => {
         console.log(Object.keys(apiAt));
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const lksm = await queryPriceFromOracle(apiAt as any, block, 'LKSM')
+        const lksm = await queryPriceFromOracle(apiAt as any, block as any, 'LKSM')
 
         console.log(lksm.toString())
 
