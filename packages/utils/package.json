@@ -1,6 +1,6 @@
 {
     "name": "@acala-network/subql-utils",
-    "version": "0.1.17",
+    "version": "0.1.19",
     "description": "",
     "main": "dist/index.js",
     "scripts": {
@@ -18,8 +18,8 @@
     "license": "Apache-2.0",
     "dependencies": {
         "@acala-network/api": "^4.0.2-18",
-        "@acala-network/sdk-core": "^4.0.2-18",
         "@acala-network/sdk": "^4.0.2-18",
+        "@acala-network/sdk-core": "^4.0.2-18",
         "@acala-network/types": "^4.0.2-18",
         "@polkadot/api": "^7.10.1",
         "@polkadot/dev": "^0.65.77",
