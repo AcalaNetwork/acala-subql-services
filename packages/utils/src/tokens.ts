@@ -1,4 +1,4 @@
-import { AnyApi, forceToCurrencyName, getForeignAssetIdFromName, getStableAssetPoolIdFromName, isDexShareName, isForeignAssetName, isLiquidCrowdloanName, isStableAssetName, unzipDexShareName } from '@acala-network/sdk-core'
+import { AnyApi, forceToCurrencyName, getForeignAssetIdFromName, getStableAssetPoolIdFromName, isDexShareName, isERC20Name, isForeignAssetName, isLiquidCrowdloanName, isStableAssetName, unzipDexShareName } from '@acala-network/sdk-core'
 import { ApiPromise, ApiRx } from '@polkadot/api'
 import { zip, isEmpty } from 'lodash'
 
@@ -41,6 +41,12 @@ export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
     }
 
     if (isStableAssetName(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        const metadata = (await api.query.assetRegistry.assetMetadatas({ StableAssetId: getStableAssetPoolIdFromName(name) })) as any
+
+        tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
+    }
+
+    if (isERC20Name(name) && api.query.assetRegistry && !tokensDecimals[name]) {
         const metadata = (await api.query.assetRegistry.assetMetadatas({ StableAssetId: getStableAssetPoolIdFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
