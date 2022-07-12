@@ -2,6 +2,10 @@
 
 a collection of acala/karura sub-query services.
 
+# Update Log
+
+### 2022-07-04 (loan subql) fix code bug
+
 ## 1. Acala-subql(Deprecated and may be removed at any time)
 
 -   1.1 Github page:
