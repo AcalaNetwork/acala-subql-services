@@ -3,8 +3,7 @@
 a collection of acala/karura sub-query services.
 
 # Update Log
-
-### 2022-07-04 (loan subql) fix code bug
+1. 2020-07-04: Fix code error in `loan subql`, which will effects `loans.transferLoan`
 
 ## 1. Acala-subql(Deprecated and may be removed at any time)
 
