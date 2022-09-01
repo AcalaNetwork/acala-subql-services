@@ -33,18 +33,21 @@ export async function getTokenDecimals(api: AnyApi, token: any) {
     }
 
     if (isForeignAssetName(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ ForeignAssetId: getForeignAssetIdFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
     }
 
     if (isStableAssetName(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ StableAssetId: getStableAssetPoolIdFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
     }
 
     if (isERC20Name(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ Erc20: getERC20TokenAddressFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
