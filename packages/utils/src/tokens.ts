@@ -1,5 +1,4 @@
 import { AnyApi, forceToCurrencyName, getForeignAssetIdFromName, getStableAssetPoolIdFromName, isDexShareName, isForeignAssetName, isLiquidCrowdloanName, isStableAssetName, unzipDexShareName } from '@acala-network/sdk-core'
-import { ApiPromise, ApiRx } from '@polkadot/api'
 import { zip, isEmpty } from 'lodash'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,7 +14,7 @@ export function getTokenName(token: any) {
 let tokensDecimals: Record<string, number> = {}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
+export async function getTokenDecimals(api: AnyApi, token: any) {
     if (isEmpty(tokensDecimals)) {
         tokensDecimals = Object.fromEntries(zip(api.registry.chainTokens, api.registry.chainDecimals))
     }

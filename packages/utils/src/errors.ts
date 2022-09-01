@@ -1,8 +1,8 @@
-export class SystemAccountNotFound extends Error {
+export class NotSystemAccount extends Error {
     constructor(target: string) {
         super()
 
-        this.message = `${target} is not found.`
-        this.name = 'SystemAccountNotFound'
+        this.message = `${target} is not a system account.`
+        this.name = 'NotSystemAccount'
     }
 }
