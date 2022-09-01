@@ -1,0 +1,73 @@
+specVersion: 1.0.0
+name: acala-homa
+version: 1.0.0
+runner:
+  node:
+    name: '@subql/node'
+    version: 1.0.0
+  query:
+    name: '@subql/query'
+    version: 1.0.0
+schema:
+  file: ./schema.graphql
+network:
+    genesisHash: '0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c'
+    dictionary: https://api.subquery.network/sq/subquery/acala-dictionary
+    endpoint: wss://acala.polkawallet.iochaintypes
+    file: ./src/chain-types.js
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleMinted
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: Minted
+        - handler: handleMinted
+          kind: substrate/EventHandler
+          filter:
+            module: homaLite
+            method: Minted
+        - handler: handleRedeemRequestCancelled
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: RedeemRequestCancelled
+        - handler: handleRedeemRequestCancelled
+          kind: substrate/EventHandler
+          filter:
+            module: homaLite
+            method: RedeemRequestCancelled
+        - handler: handleRedeemRequested
+          kind: substrate/EventHandler
+          filter:
+            module: homaLite
+            method: RedeemRequested
+        - handler: handleRedeemed
+          kind: substrate/EventHandler
+          filter:
+            module: homaLite
+            method: Redeemed
+        - handler: handleRequestedRedeem
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: RequestedRedeem
+        - handler: handleRedeemedByFastMatch
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: RedeemedByFastMatch
+        - handler: handleRedeemedByUnbond
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: RedeemedByUnbond
+        - handler: handleCurrentEraBumped
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: CurrentEraBumped

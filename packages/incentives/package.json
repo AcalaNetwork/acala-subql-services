@@ -1,8 +1,9 @@
 {
-  "name": "acala-incentives-subql",
+  "name": "@acala-subql-services/incentives",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "start": "yarn build && ./node_modules/.bin/subql-node -f . --debug --timeout=512 --batch-size=100 --port=3123",
     "build": "tsc -b",
@@ -10,8 +11,6 @@
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen"
   },
-  "homepage": "https://github.com/subquery/subql-starter",
-  "repository": "github:subquery/subql-starter",
   "files": [
     "dist",
     "schema.graphql",

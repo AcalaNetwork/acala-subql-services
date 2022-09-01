@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: acala-auction-subql
+name: acala-auction
 version: 1.0.0
 runner:
   node:

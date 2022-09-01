@@ -1,8 +1,9 @@
 {
-  "name": "acala-tokens-subql",
+  "name": "@acala-subql-services/tokens",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=2 --port=3123",
     "build": "tsc -b",
@@ -10,8 +11,6 @@
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen"
   },
-  "homepage": "https://github.com/subquery/subql-starter",
-  "repository": "github:subquery/subql-starter",
   "files": [
     "dist",
     "schema.graphql",
@@ -32,7 +31,7 @@
   "dependencies": {
     "@acala-network/sdk-core": "^4.0.4-2",
     "@acala-network/sdk-wallet": "^4.0.4-2",
-    "@acala-network/subql-utils": "0.1.17",
+    "@acala-network/subql-utils": "^0.1.21",
     "@acala-network/types": "^4.0.4-2",
     "@open-web3/util": "^1.1.4",
     "@polkadot/wasm-crypto-init": "^6.1.1",

@@ -8,7 +8,7 @@ export async function getToken(id: string) {
 
     if (!record) {
         record = new Token(id)
-        record.decimals = await getTokenDecimals(api as any, id)
+        record.decimals = await getTokenDecimals(api as any, id);
 
         let issuance = BigInt(0)
 

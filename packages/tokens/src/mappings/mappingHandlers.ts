@@ -11,7 +11,7 @@ import { handleSlashed } from './handleSlashed'
 import { readDataFromFile } from '../utils/readDataFromFile'
 
 const nativeToken = getNativeCurrency(api as any);
-export const startHeight = 2100000;
+export const startHeight = 1200000;
 
 /*
 handle balances.Transfer

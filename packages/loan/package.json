@@ -1,8 +1,9 @@
 {
-  "name": "acala-loans",
+  "name": "@acala-subql-services/loan",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=1 --port=3123",
     "build": "tsc -b",

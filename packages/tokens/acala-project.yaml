@@ -1,0 +1,97 @@
+specVersion: 1.0.0
+name: acala-tokens
+version: 1.0.0
+description: 'statistics tokens data'
+repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
+runner:
+  node:
+    name: "@subql/node"
+    version: "1.2.1"
+  query:
+    name: "@subql/query"
+    version: "1.2.0"
+schema: 
+    file: ./schema.graphql
+network:
+  chainId: "0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c"
+  dictionary: https://api.subquery.network/sq/subquery/acala-dictionary
+  endpoint: wss://acala.polkawallet.io
+  chaintypes:
+    file: './src/chain-types.js'
+dataSources:
+    - kind: substrate/Runtime
+      startBlock: 1197000
+      mapping:
+        file: './dist/index.js'
+        handlers:
+          - handler: handleBalancesDustLost
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: DustLost
+          - handler: handleBalancesTransfer
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: Transfer
+          - handler: handleBalancesReserved
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: Reserved
+          - handler: handleBalancesUnreserved
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: Unreserved
+          - handler: handleBalancesReserveRepatriated
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: ReserveRepatriated
+          - handler: handleBalancesDeposit
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: Deposit
+          - handler: handleBalancesWithdraw
+            kind: substrate/EventHandler
+            filter:
+              module: balances
+              method: Withdraw
+       
+          - handler: handleTokensTransfer
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: Transfer
+          - handler: handleTokensReserved
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: Reserved
+          - handler: handleTokensUnreserved
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: Unreserved
+          - handler: handleTokensReserveRepatriated
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: ReserveRepatriated
+          - handler: handleTokensDeposited
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: Deposited
+          - handler: handleTokensWithdrawn
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: Withdrawn
+          - handler: handleTokensSlashed
+            kind: substrate/EventHandler
+            filter:
+              module: tokens
+              method: Slashed

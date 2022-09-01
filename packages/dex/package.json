@@ -1,8 +1,9 @@
 {
-  "name": "acala-loans",
+  "name": "@acala-subql-services/dex",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "start": "yarn build && ./node_modules/.bin/subql-node -f . --debug --timeout=512 --batch-size=100 --port=3123",
     "build": "tsc -b",
@@ -10,8 +11,6 @@
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen"
   },
-  "homepage": "https://github.com/subquery/subql-starter",
-  "repository": "github:subquery/subql-starter",
   "files": [
     "dist",
     "schema.graphql",
@@ -21,12 +20,8 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@polkadot/api": "^7.1.1",
-    "@polkadot/wasm-bridge": "^6.1.1",
-    "@subql/cli": "1.0.2-0",
-    "@subql/types": "^1.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.14.0",
-    "@typescript-eslint/parser": "^5.14.0",
-    "eslint": "^7.32.0",
+    "@subql/cli": "^0.20.0",
+    "@subql/types": "^0.11.0",
     "typescript": "4.2.4"
   },
   "dependencies": {
@@ -41,6 +36,12 @@
     "dayjs": "^1.10.7"
   },
   "resolutions": {
-    "ipfs-unixfs": "6.0.6"
+    "@acala-network/api": "4.0.2-19",
+    "@acala-network/types": "4.0.2-19",
+    "@acala-network/sdk-core": "4.0.2-19",
+    "@acala-network/sdk-wallet": "4.0.2-19",
+    "@polkadot/api": "^7.1.1",
+    "@polkadot/types": "^7.1.1",
+    "typescript": "4.2.4"
   }
 }

@@ -5,7 +5,7 @@ const fs = require('fs');
 const { forceToCurrencyName } = require('@acala-network/sdk-core');
 
 async function createApi() {
-  const endpoint = 'wss://karura.polkawallet.io';
+  const endpoint = 'wss://acala.polkawallet.io';
   const provider = new WsProvider(endpoint)
 
   const api = await ApiPromise.create(options({ provider }))
@@ -18,7 +18,7 @@ async function createApi() {
 async function getUnnativeToken() {
   const api = await createApi();
 
-  const apiAt = await api.at('0xd13ffe27a9d4c98397f232b4afd80718702f88bcbbce24d06b11f70c499b64a9');
+  const apiAt = await api.at('0x754d100adf4764b24263402bef4ffa9537cab6d15e275d958292e5a31fd4ffd5');
 
   console.log(Object.keys(apiAt.query.tokens.accounts));
 
@@ -27,7 +27,7 @@ async function getUnnativeToken() {
 
     return apiAt.query.tokens.accounts.entriesPaged({
       args: [],
-      pageSize: 100,
+      pageSize: 500,
       startKey,
     })
   }
@@ -51,7 +51,7 @@ async function getUnnativeToken() {
 async function getNativeToken() {
   const api = await createApi();
 
-  const apiAt = await api.at('0xd13ffe27a9d4c98397f232b4afd80718702f88bcbbce24d06b11f70c499b64a9');
+  const apiAt = await api.at('0x754d100adf4764b24263402bef4ffa9537cab6d15e275d958292e5a31fd4ffd5');
 
   console.log(Object.keys(apiAt.query.system.account));
 
@@ -60,7 +60,7 @@ async function getNativeToken() {
 
     return apiAt.query.system.account.entriesPaged({
       args: [],
-      pageSize: 100,
+      pageSize: 500,
       startKey,
     })
   })
@@ -70,7 +70,7 @@ async function getNativeToken() {
   const data = accs.map((item) => {
     return {
       account: item[0].args[0].toString(),
-      token: 'KAR',
+      token: 'ACA',
       free: item[1].data.free.toString(),
       reserved: item[1].data.reserved.toString(),
       frozen: item[1].data.feeFrozen.toString()
