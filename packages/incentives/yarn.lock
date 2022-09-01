@@ -85,10 +85,10 @@
     lodash "^4.17.20"
     rxjs "^7.4.0"
 
-"@acala-network/subql-utils@0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@acala-network/subql-utils/-/subql-utils-0.1.17.tgz#6dccfb3398a6d084d1b97f82a57358a6d7d47803"
-  integrity sha512-LvX8vf5c15vESJrNoy+kFRtaVPI6tyhtGaZqyCUq5FhSO9ccMh8iK3xQGmnkiLtYS1dde8ctq/UfejNUoZQMNg==
+"@acala-network/subql-utils@0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@acala-network/subql-utils/-/subql-utils-0.1.19.tgz#d427326042634fc90518801aa93d4b999e3e9d6f"
+  integrity sha512-/NVqIlX6bxMicwlCKh2lJH8sAo4yf88PnNeSz7/oytPr2C4r5sfJZC3zcP0XunWFFOiLcvipohz24LadcScSYQ==
   dependencies:
     "@acala-network/api" "^4.0.2-18"
     "@acala-network/sdk" "^4.0.2-18"
@@ -8722,16 +8722,16 @@ module-lookup-amd@^7.0.1:
     requirejs-config-file "^4.0.0"
 
 moment-timezone@^0.5.34, moment-timezone@^0.5.x:
-  version "0.5.34"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.34.tgz#a75938f7476b88f155d3504a9343f7519d9a405c"
-  integrity sha512-3zAEHh2hKUs3EXLESx/wsgw6IQdusOT8Bxm3D9UrHPQR7zlMmzwybC8zHEM1tQ4LJwP7fcxrWr8tuBg05fFCbg==
+  version "0.5.37"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.37.tgz#adf97f719c4e458fdb12e2b4e87b8bec9f4eef1e"
+  integrity sha512-uEDzDNFhfaywRl+vwXxffjjq1q0Vzr+fcQpQ1bU0kbzorfS7zVtZnCnGc8mhWmF39d4g4YriF6kwA75mJKE/Zg==
   dependencies:
     moment ">= 2.9.0"
 
 "moment@>= 2.9.0", moment@^2.29.1:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 ms@2.0.0:
   version "2.0.0"
