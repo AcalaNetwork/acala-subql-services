@@ -1,0 +1,304 @@
+type Block @entity {
+  id: ID!
+
+  hash: String!
+  number: BigInt!
+  timestamp: Date!
+
+  debitPool: BigInt
+}
+
+type Extrinsic @entity {
+  id: ID!
+
+  sender: Account!
+
+  hash: String!
+  method: String!
+  section: String!
+  raw: String!
+
+  block: Block
+}
+
+type Account @entity {
+  id: ID! # user address
+
+  address: String!
+  txCount: Int!
+
+  positions: [Position] @derivedFrom(field: "owner")
+
+  # history
+  updatePosition: [UpdatePosition] @derivedFrom(field: "owner")
+  closeByDex: [CloseByDex] @derivedFrom(field: "owner")
+  liquidUnsafe: [LiquidUnsafe] @derivedFrom(field: "owner")
+  transferOutPosition: [TransferPosition] @derivedFrom(field: "from")
+  transferInPosition: [TransferPosition] @derivedFrom(field: "to")
+  confiscatePosition: [ConfiscatePosition] @derivedFrom(field: "owner")
+}
+
+# collateral global position
+type Collateral @entity {
+  id: ID!
+
+  name: String!
+  decimals: Int!
+
+  depositAmount: BigInt!
+  debitAmount: BigInt!
+  txCount: Int!
+
+  positions: [Position] @derivedFrom(field: "collateral")
+
+  hourlyCollateral: [HourlyCollateral] @derivedFrom(field: "collateral")
+  dailyCollateral: [DailyCollateral] @derivedFrom(field: "collateral")
+
+  # history
+  updatePosition: [UpdatePosition] @derivedFrom(field: "collateral")
+  closeByDex: [CloseByDex] @derivedFrom(field: "collateral")
+  liquidUnsafe: [LiquidUnsafe] @derivedFrom(field: "collateral")
+  transferPosition: [TransferPosition] @derivedFrom(field: "collateral")
+  confiscatePosition: [ConfiscatePosition] @derivedFrom(field: "owner")
+}
+
+type HourlyCollateral @entity {
+  id: ID! # `${tokenname}-${timestamp}`
+
+  collateral: Collateral!
+  txCount: Int!
+
+  depositAmount: BigInt!
+  debitAmount: BigInt!
+  depositVolumeUSD: BigInt!
+  debitVolumeUSD: BigInt!
+  depositChanged: BigInt!
+  debitChanged: BigInt!
+  depositChangedUSD: BigInt!
+  debitChangedUSD: BigInt!
+  debitExchangeRate: BigInt!
+
+  timestamp: Date!
+}
+
+type DailyCollateral @entity {
+  id: ID! # `${tokenname}-${timestamp}`
+
+  collateral: Collateral!
+  txCount: Int!
+
+  depositAmount: BigInt!
+  debitAmount: BigInt!
+  depositVolumeUSD: BigInt!
+  debitVolumeUSD: BigInt!
+  depositChanged: BigInt!
+  debitChanged: BigInt!
+  depositChangedUSD: BigInt!
+  debitChangedUSD: BigInt!
+  debitExchangeRate: BigInt!
+
+  timestamp: Date!
+}
+
+# user positions
+type Position @entity {
+  id: ID! # `${ownerId}-${tokenname}`
+
+  owner: Account!
+  collateral: Collateral!
+  txCount: Int!
+
+  depositAmount: BigInt!
+  debitAmount: BigInt!
+
+  updateAt: Date!
+  updateAtBlock: Block!
+}
+
+type HourlyPosition @entity {
+  id: ID! # `${ownerId}-${tokenname}-${timestamp}`
+
+  owner: Account!
+  collateral: Collateral!
+
+  depositAmount: BigInt!
+  debitAmount: BigInt!
+  depositVolumeUSD: BigInt!
+  debitVolumeUSD: BigInt!
+  depositChanged: BigInt!
+  debitChanged: BigInt!
+  depositChangedUSD: BigInt!
+  debitChangedUSD: BigInt!
+  debitExchangeRate: BigInt!
+
+  timestamp: Date!
+  txCount: Int!
+}
+
+type DailyPosition @entity {
+  id: ID! # `${ownerId}-${tokenname}-${timestamp}`
+
+  owner: Account!
+  collateral: Collateral!
+
+  depositAmount: BigInt!
+  debitAmount: BigInt!
+  depositVolumeUSD: BigInt!
+  debitVolumeUSD: BigInt!
+  depositChanged: BigInt!
+  debitChanged: BigInt!
+  depositChangedUSD: BigInt!
+  debitChangedUSD: BigInt!
+  debitExchangeRate: BigInt!
+
+  timestamp: Date!
+  txCount: Int!
+}
+
+# exchange register
+type ExchangeBundle @entity {
+  id: ID! # `${block-height}-${tokenname}`
+
+  block: Block!
+
+  collateral: Collateral!
+  debitExchangeRate: BigInt!
+}
+
+# price register
+type PriceBundle @entity {
+  id: ID! # `${block-height}-${tokenname}`
+
+  block: Block!
+
+  collateral: Collateral!
+  price: BigInt!
+}
+
+# colltaral params
+type CollateralParams @entity {
+  id: ID! # `tokenname`
+
+  collateral: Collateral!
+
+  maximumTotalDebitValue: BigInt!
+  interestRatePerSec: BigInt!
+  liquidationRatio: BigInt!
+  liquidationPenalty: BigInt!
+  requiredCollateralRatio: BigInt!
+
+  updateAt: Date!
+  updateAtBlock: Block!
+}
+
+type CollateralParamsHistory @entity {
+  id: ID! # `${block}-${tokenname}`
+
+  collateral: Collateral!
+
+  maximumTotalDebitValue: BigInt!
+  interestRatePerSec: BigInt!
+  liquidationRatio: BigInt!
+  liquidationPenalty: BigInt!
+  requiredCollateralRatio: BigInt!
+
+  startAtBlock: Block!
+  endAtBlock: Block!
+  startAt: Date!
+  endAt: Date!
+}
+
+# history
+type UpdatePosition @entity {
+  id: ID! # `extrinshcHash`-`event idx`
+
+  owner: Account! 
+  collateral: Collateral!
+
+  collateralAdjustment: BigInt!
+  debitAdjustment: BigInt!
+
+  collateralAdjustmentUSD: BigInt!
+  debitAdjustmentUSD: BigInt!
+
+  price: BigInt! # price snapshot
+  debitExchangeRate: BigInt! # debit exchange rate snapshot
+
+  isDerived: Boolean! # is derived from event
+
+  block: Block!
+  extrinsic: Extrinsic
+  timestamp: Date!
+}
+
+type CloseByDex @entity {
+  id: ID! # `extrinshcHash`-`event idx`
+
+  owner: Account!
+  collateral: Collateral!
+
+  soldAmount: BigInt!
+  refundAmount: BigInt!
+
+  debitVolumeUSD: BigInt!
+  soldVolumeUSD: BigInt!
+  refundVolumeUSD: BigInt!
+
+  price: BigInt! # price snapshot
+  debitExchangeRate: BigInt! # debit exchange rate snapshot
+
+  block: Block!
+  extrinsic: Extrinsic
+  timestamp: Date!
+}
+
+type LiquidUnsafe @entity {
+  id: ID! # `extrinshcHash`-`event idx`
+
+  sender: Account!
+  owner: Account!
+  collateral: Collateral!
+
+  collateralAmount: BigInt!
+  collateralVolumeUSD: BigInt!
+  badDebitVolumeUSD: BigInt!
+  liquidationStrategy: String!
+  price: BigInt! # price snapshot
+  debitExchangeRate: BigInt! # debit exchange rate snapshot
+
+  block: Block!
+  extrinsic: Extrinsic
+  timestamp: Date!
+}
+
+type TransferPosition @entity {
+  id: ID!
+
+  collateral: Collateral!
+  from: Account!
+  to: Account!
+
+  block: Block!
+  extrinsic: Extrinsic
+  timestamp: Date!
+}
+
+type ConfiscatePosition @entity {
+  id: ID! # `extrinshcHash`-`event idx`
+
+  sender: Account
+
+  owner: Account
+  collateral: Collateral
+
+  collateralAdjustment : BigInt
+  debitAdjustment: BigInt
+  collateralAdjustmentUSD: BigInt
+  debitAdjustmentUSD: BigInt
+
+  debitPool: BigInt
+
+  block: Block
+  timestamp: Date
+  extrinsic: Extrinsic
+}

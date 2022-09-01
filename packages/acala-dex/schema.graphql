@@ -1,0 +1,402 @@
+type Block @entity {
+  id: ID! # block number
+  hash: String
+  number: BigInt
+  timestamp: Date
+}
+
+type Extrinsic @entity {
+  id: ID! # extrinsic hash
+  hash: String
+  block: Block
+
+  address: Account
+  method: String
+  section: String
+}
+
+type Account @entity {
+  id: ID! # user address
+  address: String
+  txCount: BigInt
+
+  userProvision: [UserProvision] @derivedFrom(field: "owner")
+
+  # history
+  addProvision: [AddProvision] @derivedFrom(field: "address")
+  addLiquidity: [AddLiquidity] @derivedFrom(field: "address")
+  removeLiquidity: [RemoveLiquidity] @derivedFrom(field: "address")
+  swap: [Swap] @derivedFrom(field: "address")
+}
+
+type Token @entity {
+  id: ID!
+
+  name: String
+  decimals: Int
+
+  # modify [addprovison, addLiquidity, removeLiquidity, swap]
+  amount: BigInt # total amount in every pool
+  # modify [addprovison, addLiquidity, removeLiquidity, swap]
+  tvl: BigInt # total TVL in every pool
+  # modify [addLiquidity, removeLiquidity, swap]
+  tradeVolume: BigInt # total trade volume
+  # modify [addLiquidity, removeLiquidity, swap]
+  tradeVolumeUSD: BigInt # total trade volume in USD
+  # modify [addprovison, addLiquidity, removeLiquidity, swap]
+  txCount: BigInt
+  # modify [listprovison]
+  price: BigInt
+  poolCount: Int # pool count relate to the token
+  dailyData: [TokenDailyData] @derivedFrom(field: "token")
+  provisionPoolBase: [ProvisionPool] @derivedFrom(field: "token0")
+  provisionPoolQuote: [ProvisionPool] @derivedFrom(field: "token1")
+  poolBase: [Pool] @derivedFrom(field: "token0")
+  poolQuote: [Pool] @derivedFrom(field: "token1")
+}
+
+type TokenDailyData @entity {
+  id: ID! # token-timestamp
+  token: Token!
+
+  amount: BigInt! # total amount in every pool
+  tvl: BigInt! # total TVL in every pool
+  dailyTradeVolume: BigInt! # total trade volume
+  dailyTradeVolumeUSD: BigInt! # total trade volume in USD
+  dailyTxCount: BigInt!
+  price: BigInt
+
+  timestamp: Date
+  updateAtBlock: Block
+}
+
+type ProvisionPool @entity {
+  id: ID! #poolid
+  token0: Token
+  token1: Token
+
+  token0Amount: BigInt
+  token1Amount: BigInt
+
+  initializeShare: BigInt
+
+  startAt: Date
+  startAtBlock: Block
+  endAt: Date
+  endAtBlock: Block
+
+  txCount: BigInt
+
+  hourlyData: [ProvisionPoolHourlyData] @derivedFrom(field: "pool")
+  userProvisions: [UserProvision] @derivedFrom(field: "pool")
+
+  # history
+  addProvision: [AddProvision] @derivedFrom(field: "pool")
+  provisionToEnabled: [ProvisionToEnabled] @derivedFrom(field: "pool")
+  listProvision: [ListProvision] @derivedFrom(field: "pool")
+}
+
+type ProvisionPoolHourlyData @entity {
+  id: ID! # poolid-time
+  pool: ProvisionPool
+
+  token0Amount: BigInt
+  token1Amount: BigInt
+  price0: BigInt
+  price1: BigInt
+  hourlyToken0InAmount: BigInt
+  hourlyToken1InAmount: BigInt
+
+  timestamp: Date
+  updateAtBlock: Block
+}
+
+type UserProvision @entity {
+  id: ID! #poolId-user
+  owner: Account
+
+  pool: ProvisionPool
+
+  token0Amount: BigInt
+  token1Amount: BigInt
+}
+
+type Pool @entity {
+  id: ID! # poolId
+  token0: Token
+  token1: Token
+
+  # amount * price
+  token0Amount: BigInt
+  token1Amount: BigInt
+  token0Price: BigInt
+  token1Price: BigInt
+  # total trade fee accumulate
+  feeRate: BigInt
+  feeToken0Amount: BigInt
+  feeToken1Amount: BigInt
+
+  token0TradeVolume: BigInt
+  token1TradeVolume: BigInt
+  tradeVolumeUSD: BigInt
+
+  token0TVL: BigInt
+  token1TVL: BigInt
+  totalTVL: BigInt
+
+  txCount: BigInt
+
+  hourlyData: [HourlyPool] @derivedFrom(field: "pool")
+  dayData: [DailyPool] @derivedFrom(field: "pool")
+}
+
+type HourlyPool @entity {
+  id: ID! # poolId-timestamp
+  pool: Pool
+  timestamp: Date
+
+  token0: Token
+  token1: Token
+
+  # amount & price
+  token0Amount: BigInt
+  token1Amount: BigInt
+  token0Price: BigInt
+  token1Price: BigInt
+
+  # total trade fee accumulate
+  feeRateUSD: BigInt
+  feeToken0Amount: BigInt
+  feeToken1Amount: BigInt
+
+  # hourly trade volume
+  hourlyToken0TradeVolume: BigInt
+  hourlyToken1TradeVolume: BigInt
+  hourlyTradeVolumeUSD: BigInt
+
+  # trade volume
+  token0TradeVolume: BigInt
+  token1TradeVolume: BigInt
+  tradeVolumeUSD: BigInt
+
+  # TVL
+  token0TVL: BigInt
+  token1TVL: BigInt
+  totalTVL: BigInt
+
+  txCount: BigInt
+
+  # for track price change
+  token0Open: BigInt
+  token0High: BigInt
+  token0Low: BigInt
+  token0Close: BigInt
+
+  token1Open: BigInt
+  token1High: BigInt
+  token1Low: BigInt
+  token1Close: BigInt
+
+  updateAtBlock: Block
+}
+
+type DailyPool @entity {
+  id: ID! # poolId-timestamp
+  pool: Pool
+  timestamp: Date
+
+  token0: Token
+  token1: Token
+
+  # amount & price
+  token0Amount: BigInt
+  token1Amount: BigInt
+  token0Price: BigInt
+  token1Price: BigInt
+
+  # total trade fee accumulate
+  feeRateUSD: BigInt
+  feeToken0Amount: BigInt
+  feeToken1Amount: BigInt
+
+  # daily trade volume
+  dailyToken0TradeVolume: BigInt
+  dailyToken1TradeVolume: BigInt
+  dailyTradeVolumeUSD: BigInt
+
+  # trade volume
+  token0TradeVolume: BigInt
+  token1TradeVolume: BigInt
+  tradeVolumeUSD: BigInt
+
+  # TVL
+  token0TVL: BigInt
+  token1TVL: BigInt
+  totalTVL: BigInt
+
+  txCount: BigInt
+
+  # for track price change
+  token0Open: BigInt
+  token0High: BigInt
+  token0Low: BigInt
+  token0Close: BigInt
+
+  token1Open: BigInt
+  token1High: BigInt
+  token1Low: BigInt
+  token1Close: BigInt
+  
+  updateAtBlock: Block
+}
+
+type Dex @entity {
+  id: ID!
+
+  poolCount: Int
+
+  tradeVolumeUSD: BigInt # total trade volume
+  totalTVL: BigInt
+}
+
+type HourDex @entity {
+  id: ID!
+
+  poolCount: Int
+
+  hourlyTradeVolumeUSD: BigInt
+
+  tradeVolumeUSD: BigInt # total trade volume
+  totalTVL: BigInt # total tvl
+  timestamp: Date
+
+  updateAtBlock: Block
+}
+
+type DailyDex @entity {
+  id: ID!
+
+  poolCount: Int
+
+  dailyTradeVolumeUSD: BigInt
+
+  tradeVolumeUSD: BigInt # total trade volume
+  totalTVL: BigInt # total tvl
+  timestamp: Date
+  
+  updateAtBlock: Block
+}
+
+type PriceBundle @entity {
+  id: ID!
+  block: Block
+
+  Token: Token
+  price: BigInt
+}
+
+# history entities
+type ProvisionToEnabled @entity {
+  id: ID!
+
+  address: Account
+  pool: Token
+
+  token0: Token
+  token1: Token
+  token0Amount: BigInt
+  token1Amount: BigInt
+  totalShareAmount: BigInt
+
+  block: Block
+  extrinsic: Extrinsic
+  timestamp: Date
+}
+
+type ListProvision @entity {
+  id: ID!
+
+  pool: Token
+
+  token0: Token
+  token1: Token
+
+  block: Block
+  extrinsic: Extrinsic
+  timestamp: Date
+}
+
+type AddProvision @entity {
+  id: ID!
+
+  address: Account
+  pool: Token
+
+  token0: Token
+  token1: Token
+  token0Amount: BigInt
+  token1Amount: BigInt
+  price0: BigInt
+  price1: BigInt
+
+  block: Block
+  extrinsic: Extrinsic
+  timestamp: Date
+}
+
+type AddLiquidity @entity {
+  id: ID!
+
+  address: Account
+  pool: Token
+
+  token0: Token
+  token1: Token
+  token0Amount: BigInt
+  token1Amount: BigInt
+  price0: BigInt
+  price1: BigInt
+
+  block: Block
+  extrinsic: Extrinsic
+  timestamp: Date
+}
+
+type RemoveLiquidity @entity {
+  id: ID!
+
+  address: Account
+  pool: Token
+
+  token0: Token
+  token1: Token
+  token0Amount: BigInt
+  token1Amount: BigInt
+  shareAmount: BigInt
+  price0: BigInt
+  price1: BigInt
+
+  block: Block
+  extrinsic: Extrinsic
+  timestamp: Date
+}
+
+type Swap @entity {
+  id: ID!
+
+  address: Account
+  pool: Token
+
+  token0: Token
+  token1: Token
+  token0InAmount: BigInt
+  token1OutAmount: BigInt
+  tradePath: String
+  price0: BigInt
+  price1: BigInt
+  amounts: String
+
+  block: Block
+  extrinsic: Extrinsic
+  timestamp: Date
+}
