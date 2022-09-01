@@ -1,0 +1,63 @@
+enum AccountType { SYSTEM, USER }
+
+type Block @entity {
+    id: ID! # block hash
+
+    hash: String!
+    number: BigInt!
+    timestamp: Date!
+}
+
+type Extrinsic @entity {
+    id: ID! #extrinsic hash
+
+    sender: Account!
+    method: String!
+    section: String!
+    hash: String!
+    block: Block!
+    raw: String!
+}
+
+type Account @entity {
+    id: ID! # account address
+
+    address: String!
+    type: AccountType!
+    name: String!
+
+    transferIn: [Transfer] @derivedFrom(field: "to")
+    transferOut: [Transfer] @derivedFrom(field: "from")
+
+    txCount: Int
+    updateAt: Date
+    updateAtBlock: Block
+}
+
+type Token @entity {
+    id: ID! # token symbol
+
+    name: String!
+    decimals: Int!
+
+    transferVolume: BigInt! # transfer volume
+
+    transfer: [Transfer] @derivedFrom(field: "token")
+
+    txCount: Int!
+    updateAt: Date!
+    updateAtBlock: Block
+}
+
+type Transfer @entity {
+    id: ID! # ${from}-${to}-${extrinsic}
+
+    from: Account!
+    to: Account!
+    token: Token!
+    amount: BigInt!
+    isSystemCall: Boolean!
+    block: Block!
+    extrinsic: Extrinsic
+    timestamp: Date!
+}

@@ -1,0 +1,46 @@
+specVersion: 1.0.0
+name: karura-tokens
+version: 1.0.0
+description: 'statistics tokens data of karura network'
+repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
+runner:
+  node:
+    name: "@subql/node"
+    version: "1.2.1"
+  query:
+    name: "@subql/query"
+    version: "1.2.0"
+schema: 
+    file: ./schema.graphql
+network:
+  chainId: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
+  dictionary: https://api.subquery.network/sq/subquery/karura-dictionary
+  endpoint: wss://karura.api.onfinality.io/public-ws
+  chaintypes:
+    file: './src/chain-types.js'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleDepositDexShare
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: DepositDexShare
+        - handler: handleWithdrawDexShare
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: WithdrawDexShare
+        - handler: handlePayoutRewards
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: PayoutRewards
+        - handler: handleClaimRewards
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: ClaimRewards

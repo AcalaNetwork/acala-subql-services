@@ -1,0 +1,124 @@
+enum BidType {
+    KICK,
+    DENT,
+    DEX_TAKE
+}
+
+enum AuctionStatus {
+    IN_PROGRESS,
+    CANCELL,
+    DEALT,
+    DEX_TAKE,
+    ABORT
+}
+
+type CollateralAuction @entity {
+    id: ID! # auction id
+    collateral: String!
+    initAmount: BigInt!
+    amount: BigInt!
+    target: BigInt!
+    status: AuctionStatus!
+    refundRecipient: String!
+    lastBid: BigInt
+    winner: String
+    bidder: [String]
+
+    create: [NewCollateralAuction] @derivedFrom(field: "auction")
+    cancel: [CancelAuction] @derivedFrom(field: "auction")
+    dealt: [CollateralAuctionDealt] @derivedFrom(field: "auction")
+    dexTake: [DEXTakeCollateralAuction] @derivedFrom(field: "auction")
+    abort: [CollateralAuctionAborted] @derivedFrom(field: "auction")
+    bids: [Bid] @derivedFrom(field: "auction")
+
+    createAt: Date!
+    updateAt: Date!
+    endAt: Date
+    updateAtBlock: BigInt!
+    createAtBlock: BigInt!
+    endAtBlock: BigInt
+}
+
+type NewCollateralAuction @entity {
+    id: ID! # event index
+    auction: CollateralAuction
+    collateral: String!
+    amount: BigInt!
+    target: BigInt!
+
+    timestamp: Date!
+    blockNumber: BigInt!
+    blockHash: String!
+    extrinsic: String
+}
+
+type CancelAuction @entity {
+    id: ID! # event index
+    auction: CollateralAuction!
+
+    timestamp: Date!
+    blockNumber: BigInt!
+    blockHash: String!
+    extrinsic: String
+}
+
+type CollateralAuctionDealt @entity {
+    id: ID! # event index
+
+    auction: CollateralAuction!
+    collateral: String!
+    amount: BigInt!
+    winner: String!
+    paymentAmount: BigInt!
+
+    timestamp: Date!
+    blockNumber: BigInt!
+    blockHash: String!
+    extrinsic: String
+}
+
+type DEXTakeCollateralAuction @entity {
+    id: ID! # event index
+
+    auction: CollateralAuction!
+    collateral: String!
+    amount: BigInt!
+    supplyCollateralAmount: BigInt!
+    targetStableAmount: BigInt!
+
+    timestamp: Date!
+    blockNumber: BigInt!
+    blockHash: String!
+    extrinsic: String
+}
+
+type CollateralAuctionAborted @entity {
+    id: ID! #event index
+
+    auction: CollateralAuction!
+    collateral: String!
+    amount: BigInt!
+    targetStableAmount: BigInt!
+    refundRecipient: String!
+
+    timestamp: Date!
+    blockNumber: BigInt!
+    blockHash: String!
+    extrinsic: String
+}
+
+type Bid @entity {
+    id: ID! # event index
+
+    type: BidType! # insert an fack bid auction when auction kick off
+    auction: CollateralAuction!
+    bidder: String!
+    amount: BigInt!
+    collateralAmount: BigInt!
+
+    timestamp: Date!
+    blockNumber: BigInt!
+    blockHash: String!
+    extrinsic: String
+    eventIndex: Int!
+}

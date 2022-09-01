@@ -1,0 +1,37 @@
+import { forceToCurrencyName } from "@acala-network/sdk-core";
+import { AccountId, Balance, CurrencyId } from "@acala-network/types/interfaces";
+import { SubstrateEvent } from "@subql/types";
+import { getPoolId } from "../utils/getPoolId";
+import { getAccount, getClaimRewards, getToken } from "../utils/record";
+import { ensureBlock, ensureExtrinsic } from "./event";
+
+export const claimRewards = async (event: SubstrateEvent) => {
+  // who, pool_id, reward_currency_id, actual_amount, deduction_amount
+  const [account, pool,  currency, actual_amount, deduction_amount] = event.event.data as unknown as [AccountId, any, CurrencyId, Balance, Balance];
+  const blockData = await ensureBlock(event);
+  await getAccount(account.toString());
+  const token = await getToken(forceToCurrencyName(currency));
+
+  const historyId = `${blockData.id}-${event.idx.toString()}`;
+  const history = await getClaimRewards(historyId);
+
+  history.addressId = account.toString();
+  history.tokenId = token.name;
+  history.pool = getPoolId(pool);
+  history.actualAmount = BigInt(actual_amount.toString());
+  history.deductionAmount = BigInt(deduction_amount.toString());
+  history.blockId = blockData.id;
+
+  if (event.extrinsic) {
+		const extrinsicData = await ensureExtrinsic(event);
+		history.extrinsicId = extrinsicData.id;
+		await getAccount(event.extrinsic.extrinsic.signer.toString());
+
+		extrinsicData.section = event.event.section;
+		extrinsicData.method = event.event.method;
+		extrinsicData.addressId = event.extrinsic.extrinsic.signer.toString();
+
+		await extrinsicData.save();
+	}
+	await history.save();
+}

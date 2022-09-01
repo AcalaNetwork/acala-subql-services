@@ -1,0 +1,49 @@
+specVersion: 0.2.0
+name: acala-auction
+version: 1.0.0
+description: 'acala auction'
+repository: 'https://github.com/AcalaNetwork/acala-auction-subql'
+schema: 
+    file: ./schema.graphql
+network:
+  genesisHash: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
+  dictionary: https://api.subquery.network/sq/subquery/karura-dictionary
+  endpoint: wss://karura.api.onfinality.io/public-ws
+  chaintypes:
+    file: './src/chain-types.js'
+dataSources:
+    - kind: substrate/Runtime
+      startBlock: 1
+      mapping:
+        file: './dist/index.js'
+        handlers:
+          - handler: handleNewCollateralAuction
+            kind: substrate/EventHandler
+            filter:
+              module: auctionManager
+              method: NewCollateralAuction
+          - handler: handleCancelAuction
+            kind: substrate/EventHandler
+            filter:
+              module: auctionManager
+              method: CancelAuction
+          - handler: handleCollateralAuctionDealt
+            kind: substrate/EventHandler
+            filter:
+              module: auctionManager
+              method: CollateralAuctionDealt
+          - handler: handleDEXTakeCollateralAuction
+            kind: substrate/EventHandler
+            filter:
+              module: auctionManager
+              method: DEXTakeCollateralAuction
+          - handler: handleCollateralAuctionAborted
+            kind: substrate/EventHandler
+            filter:
+              module: auctionManager
+              method: CollateralAuctionAborted
+          - handler: handleBid
+            kind: substrate/EventHandler
+            filter:
+              module: auction
+              method: Bid

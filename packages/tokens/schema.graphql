@@ -1,0 +1,89 @@
+type Token @entity {
+    id: ID! # token symbol
+    decimals: Int!
+
+    volume: BigInt! # total trade volume, sum of transfer, deposit, withdrawn, reserved, frozen
+    issuance: BigInt! # total issuance amount
+    reserved: BigInt! # reserved amount
+    frozen: BigInt! # frozen balance
+    updateAtBlock: BigInt # update at block
+}
+
+type HourToken @entity {
+    id: ID! # token symbol
+    token: Token!
+
+    volume: BigInt! # total trade volume
+    issuance: BigInt! # total issuance amount
+    reserved: BigInt! # reserved amount
+    frozen: BigInt! # frozen balance
+    timestmap: Date
+    updateAtBlock: BigInt # update at block
+}
+
+type DailyToken @entity {
+    id: ID! # token symbol
+    token: Token!
+
+    volume: BigInt! # total trade volume
+    issuance: BigInt! # total issuance amount
+    reserved: BigInt! # reserved amount
+    frozen: BigInt! # frozen balance
+    timestmap: Date
+    updateAtBlock: BigInt # update at block
+}
+
+type Account @entity {
+    id: ID! # account address
+    address: String!
+    mark: String # mark system account
+    tokens: [AccountBalance] @derivedFrom(field: "account") # group all tokens belong to the account
+}
+
+type AccountBalance @entity {
+    id: ID! #`account`-`token`
+    account: Account!
+    token: Token!
+
+    total: BigInt! # total balance
+    free: BigInt! # free balance
+    reserved: BigInt! #revert balance
+    frozen: BigInt! # locked balance
+
+    updateAtBlock: BigInt! # update block number
+    initAt: BigInt!
+    initFromChainAt: BigInt
+}
+
+type HourAccountBalance @entity {
+    id: ID! #`account`-`token`
+    account: Account!
+    token: Token!
+
+    total: BigInt! # total balance
+    free: BigInt! # free balance
+    reserved: BigInt! #revert balance
+    frozen: BigInt! # locked balance
+    timestamp: Date
+    updateAtBlock: BigInt # update at block
+}
+
+type DailyAccountBalance @entity {
+    id: ID! #`account`-`token`
+    account: Account!
+    token: Token!
+
+    total: BigInt! # total balance
+    free: BigInt! # free balance
+    reserved: BigInt! #revert balance
+    frozen: BigInt! # locked balance
+    timestamp: Date
+    updateAtBlock: BigInt # update at block
+}
+
+type ReadBlock @entity {
+    id: ID!
+    height: BigInt
+    size: Int
+    start: Int
+}

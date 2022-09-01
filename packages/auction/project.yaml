@@ -1,0 +1,55 @@
+specVersion: 1.0.0
+name: acala-auction-subql
+version: 1.0.0
+runner:
+  node:
+    name: '@subql/node'
+    version: 1.0.0
+  query:
+    name: '@subql/query'
+    version: 1.0.0
+description: acala auction
+repository: https://github.com/AcalaNetwork/acala-auction-subql
+schema:
+  file: ./schema.graphql
+network:
+  chainId: '0xb50c458093bea113da6a62ca36d6b39fd35f6e842989011b55c9a7d2e44ca215'
+  endpoint: wss://karura-rococo.aca-dev.network
+  chaintypes:
+    file: ./src/chain-types.js
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 600000
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleNewCollateralAuction
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: NewCollateralAuction
+        - handler: handleCancelAuction
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: CancelAuction
+        - handler: handleCollateralAuctionDealt
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: CollateralAuctionDealt
+        - handler: handleDEXTakeCollateralAuction
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: DEXTakeCollateralAuction
+        - handler: handleCollateralAuctionAborted
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: CollateralAuctionAborted
+        - handler: handleBid
+          kind: substrate/EventHandler
+          filter:
+            module: auction
+            method: Bid
