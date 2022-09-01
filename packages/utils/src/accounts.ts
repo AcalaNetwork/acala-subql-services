@@ -3,7 +3,7 @@ import { encodeAddress, decodeAddress } from '@polkadot/util-crypto'
 import { defaults } from '@polkadot/util-crypto/address/defaults'
 import { NotSystemAccount } from './errors'
 
-const DEFAULT_PREFIX = api.registry.chainSS58 || defaults.prefix
+const DEFAULT_PREFIX = defaults.prefix
 
 export function getPalletAddress(value: string, prefix = DEFAULT_PREFIX) {
     return encodeAddress(u8aToU8a(stringToU8a(`modl${value}`.padEnd(32, '\0'))), prefix)
