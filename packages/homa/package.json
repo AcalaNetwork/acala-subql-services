@@ -1,0 +1,50 @@
+{
+  "name": "acala-subql-homa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "yarn build && ./node_modules/.bin/subql-node -f . --debug --timeout=512 --batch-size=100 --port=3123",
+    "build": "tsc -b",
+    "prepack": "rm -rf dist && npm build",
+    "codegen": "./node_modules/.bin/subql codegen"
+  },
+  "homepage": "https://github.com/subquery/subql-starter",
+  "repository": "github:subquery/subql-starter",
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "shenger",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@polkadot/api": "^7.1.1",
+    "@subql/cli": "1.2.1",
+    "@subql/types": "^1.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.4.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
+    "typescript": "4.2.4"
+  },
+  "dependencies": {
+    "@acala-network/sdk-core": "^4.0.2-15",
+    "@acala-network/sdk-wallet": "^4.0.2-15",
+    "@acala-network/subql-utils": "0.1.17",
+    "@acala-network/types": "^4.0.2-15",
+    "@subql/node": "^1.4.1"
+  },
+  "resolutions": {
+    "@acala-network/api": "4.0.2-15",
+    "@acala-network/types": "4.0.2-15",
+    "@acala-network/sdk-core": "4.0.2-15",
+    "@acala-network/sdk-wallet": "4.0.2-15",
+    "@polkadot/api": "^7.1.1",
+    "@polkadot/types": "^7.1.1",
+    "typescript": "4.2.4"
+  }
+}
