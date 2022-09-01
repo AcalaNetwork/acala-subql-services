@@ -1,4 +1,4 @@
-import { AnyApi, forceToCurrencyName, getForeignAssetIdFromName, getStableAssetPoolIdFromName, isDexShareName, isForeignAssetName, isLiquidCrowdloanName, isStableAssetName, unzipDexShareName } from '@acala-network/sdk-core'
+import { AnyApi, forceToCurrencyName, getERC20TokenAddressFromName, getForeignAssetIdFromName, getStableAssetPoolIdFromName, isDexShareName, isERC20Name, isForeignAssetName, isLiquidCrowdloanName, isStableAssetName, unzipDexShareName } from '@acala-network/sdk-core'
 import { zip, isEmpty } from 'lodash'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +33,6 @@ export async function getTokenDecimals(api: AnyApi, token: any) {
     }
 
     if (isForeignAssetName(name) && api.query.assetRegistry && !tokensDecimals[name]) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ ForeignAssetId: getForeignAssetIdFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
@@ -45,16 +44,22 @@ export async function getTokenDecimals(api: AnyApi, token: any) {
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
     }
 
-    return tokensDecimals[name]
+    if (isERC20Name(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        const metadata = (await api.query.assetRegistry.assetMetadatas({ Erc20: getERC20TokenAddressFromName(name) })) as any
+
+        tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
+    }
+
+    return tokensDecimals[name] || 12
 }
 
 export function getStakingCurrency(api: AnyApi) {
-    return api.consts?.homa.stakingCurrencyId || api.consts?.homaLite.stakingCurrencyId || api.consts.prices.getStakingCurrencyId
+    return api.consts?.homa?.stakingCurrencyId || api.consts?.homaLite?.stakingCurrencyId || api.consts.prices.getStakingCurrencyId
 
 }
 
 export function getLiquidCurrency(api: AnyApi) {
-    return api.consts?.homa.liquidCurrencyId || api.consts?.homaLite.liquidCurrencyId || api.consts.prices.getLiquidCurrencyId
+    return api.consts?.homa?.liquidCurrencyId || api.consts?.homaLite?.liquidCurrencyId || api.consts.prices.getLiquidCurrencyId
 }
 
 export function getStableCoinCurrency(api: AnyApi) {
