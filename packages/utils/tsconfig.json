@@ -8,7 +8,7 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "module": "commonjs",
-        "outDir": "dist",
+        "outDir": "build",
         "target": "es2017"
     },
     "include": ["src/**/*", "node_modules/@subql/types/dist/global.d.ts"]

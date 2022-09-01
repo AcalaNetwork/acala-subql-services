@@ -1,5 +1,4 @@
 import { AnyApi, forceToCurrencyName, getERC20TokenAddressFromName, getForeignAssetIdFromName, getStableAssetPoolIdFromName, isDexShareName, isERC20Name, isForeignAssetName, isLiquidCrowdloanName, isStableAssetName, unzipDexShareName } from '@acala-network/sdk-core'
-import { ApiPromise, ApiRx } from '@polkadot/api'
 import { zip, isEmpty } from 'lodash'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,7 +14,7 @@ export function getTokenName(token: any) {
 let tokensDecimals: Record<string, number> = {}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
+export async function getTokenDecimals(api: AnyApi, token: any) {
     if (isEmpty(tokensDecimals)) {
         tokensDecimals = Object.fromEntries(zip(api.registry.chainTokens, api.registry.chainDecimals))
     }
@@ -41,12 +40,14 @@ export async function getTokenDecimals(api: ApiPromise | ApiRx, token: any) {
     }
 
     if (isStableAssetName(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ StableAssetId: getStableAssetPoolIdFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
     }
 
     if (isERC20Name(name) && api.query.assetRegistry && !tokensDecimals[name]) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const metadata = (await api.query.assetRegistry.assetMetadatas({ Erc20: getERC20TokenAddressFromName(name) })) as any
 
         tokensDecimals[name] = metadata.unwrapOrDefault()?.decimals?.toNumber()
