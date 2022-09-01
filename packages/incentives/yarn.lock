@@ -85,10 +85,10 @@
     lodash "^4.17.20"
     rxjs "^7.4.0"
 
-"@acala-network/subql-utils@0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@acala-network/subql-utils/-/subql-utils-0.1.17.tgz#6dccfb3398a6d084d1b97f82a57358a6d7d47803"
-  integrity sha512-LvX8vf5c15vESJrNoy+kFRtaVPI6tyhtGaZqyCUq5FhSO9ccMh8iK3xQGmnkiLtYS1dde8ctq/UfejNUoZQMNg==
+"@acala-network/subql-utils@0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@acala-network/subql-utils/-/subql-utils-0.1.19.tgz#d427326042634fc90518801aa93d4b999e3e9d6f"
+  integrity sha512-/NVqIlX6bxMicwlCKh2lJH8sAo4yf88PnNeSz7/oytPr2C4r5sfJZC3zcP0XunWFFOiLcvipohz24LadcScSYQ==
   dependencies:
     "@acala-network/api" "^4.0.2-18"
     "@acala-network/sdk" "^4.0.2-18"
@@ -4732,10 +4732,10 @@ debug@2.6.9, debug@^2.2.0, debug@^2.6.0, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.0.0, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
-  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
+debug@4, debug@^4.0.0, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
   dependencies:
     ms "2.1.2"
 
@@ -10718,13 +10718,13 @@ simple-get@^4.0.0:
     simple-concat "^1.0.0"
 
 simple-git@^3.1.1:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.3.0.tgz#91692d576f851be691124781b79872b246d2f92c"
-  integrity sha512-K9qcbbZwPHhk7MLi0k0ekvSFXJIrRoXgHhqMXAFM75qS68vdHTcuzmul1ilKI02F/4lXshVgBoDll2t++JK0PQ==
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.13.0.tgz#36589e201c28cecaca6f3a898e7257c6610e8588"
+  integrity sha512-VYrs3joeHvWGcN3K135RpGpPjm4AHYeOrclwew6LlfHgq6ozQYIW2yMnmjf4PCgVOuSYCbXkdUjyiFawuJz8MA==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.1.1"
-    debug "^4.3.3"
+    debug "^4.3.4"
 
 sisteransi@^1.0.5:
   version "1.0.5"
