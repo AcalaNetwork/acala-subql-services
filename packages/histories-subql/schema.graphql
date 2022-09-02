@@ -4,7 +4,11 @@ enum AccountType { SYSTEM, USER }
 type Account @entity {
   id: ID! # user address
   address: String
-  txCount: BigInt
+  type: AccountType
+  name: String
+  txCount: Int
+  updateAt: Date
+  updateAtBlock: BigInt
 
   # history
   mint: [Mint] @derivedFrom(field: "address")

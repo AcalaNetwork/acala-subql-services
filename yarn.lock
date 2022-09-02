@@ -238,16 +238,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@acala-network/type-definitions@npm:4.1.4-3":
-  version: 4.1.4-3
-  resolution: "@acala-network/type-definitions@npm:4.1.4-3"
-  dependencies:
-    "@open-web3/orml-type-definitions": ^1.1.4
-  checksum: 9e8581c8d36b01635c2ab9f901df20f7be403d56357b003e8575e6f5651396f84bec3cca3bd42c0fed08b4df95a73a37ccdc46a6b3410da1d832a0da5b9e9cd3
-  languageName: node
-  linkType: hard
-
-"@acala-network/type-definitions@npm:4.1.6-30":
+"@acala-network/type-definitions@npm:^4.1.6-30":
   version: 4.1.6-30
   resolution: "@acala-network/type-definitions@npm:4.1.6-30"
   dependencies:
@@ -301,6 +292,7 @@ __metadata:
     "@acala-network/sdk-core": ^4.1.6-30
     "@acala-network/sdk-wallet": ^4.1.6-30
     "@acala-network/subql-utils": ^0.1.21
+    "@acala-network/type-definitions": ^4.1.6-30
     "@acala-network/types": ^4.1.6-30
     "@open-web3/util": ^1.1.4
     "@polkadot/api": ^7.1.1
@@ -8476,10 +8468,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "acala-subql-services@workspace:."
   dependencies:
+    "@acala-network/api": 4.1.6-30
+    "@acala-network/sdk-core": 4.1.6-30
+    "@acala-network/sdk-wallet": 4.1.6-30
+    "@acala-network/type-definitions": ^4.1.6-30
+    "@acala-network/types": 4.1.6-30
     "@babel/core": ^7.14.3
     "@babel/register": ^7.13.6
     "@babel/runtime": ^7.14.0
     "@open-web3/dev-config": ^0.1.13
+    "@polkadot/api": ^7.1.1
+    "@polkadot/types": ^7.1.1
     "@subql/node": ^1.4.1
     "@types/jest": ^27.0.3
     "@typescript-eslint/eslint-plugin": ^5.4.0

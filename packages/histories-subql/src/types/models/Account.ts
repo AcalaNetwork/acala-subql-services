@@ -4,6 +4,10 @@ import assert from 'assert';
 
 
 
+import {
+    AccountType,
+} from '../enums'
+
 
 type AccountProps = Omit<Account, NonNullable<FunctionPropertyNames<Account>>>;
 
@@ -18,7 +22,15 @@ export class Account implements Entity {
 
     public address?: string;
 
-    public txCount?: bigint;
+    public type?: AccountType;
+
+    public name?: string;
+
+    public txCount?: number;
+
+    public updateAt?: Date;
+
+    public updateAtBlock?: bigint;
 
 
     async save(): Promise<void>{

@@ -1,6 +1,6 @@
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus, BidType } from '../types';
-import { getBid, getCollateralAuction } from '../utils/records'
+import { getBid, getCollateralAuction } from '../records'
 import type { Balance } from '@polkadot/types/interfaces/runtime';
 
 export async function handleBid (event: SubstrateEvent) {

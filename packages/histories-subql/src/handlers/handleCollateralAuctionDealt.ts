@@ -1,7 +1,7 @@
 import { forceToCurrencyName, MaybeCurrency } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus } from '../types';
-import { getCollateralAuction, getCollateralAuctionDealt } from '../utils/records'
+import { getCollateralAuction, getCollateralAuctionDealt } from '../records'
 import type { Balance } from '@polkadot/types/interfaces/runtime';
 
 export async function handleCollateralAuctionDealt(event: SubstrateEvent) {

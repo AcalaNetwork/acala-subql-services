@@ -1,6 +1,6 @@
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus } from '../types';
-import { getCancelAuction, getCollateralAuction } from '../utils/records'
+import { getCancelAuction, getCollateralAuction } from '../records'
 
 export async function handleCancelAuction (event: SubstrateEvent) {
     /**

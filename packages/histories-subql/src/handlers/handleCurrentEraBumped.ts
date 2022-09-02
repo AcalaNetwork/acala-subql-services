@@ -1,8 +1,9 @@
 import { SubstrateEvent } from '@subql/types';
-import { getStartOfDay, getStakingCurrency, getTokenName, getTokenDecimals, getLiquidCurrency } from '@acala-network/subql-utils';
+import { getStartOfDay, getStakingCurrency, getTokenDecimals, getLiquidCurrency } from '@acala-network/subql-utils';
 import { FixedPointNumber } from '@acala-network/sdk-core';
-import { ensureBlock, ensureExtrinsic } from './event';
-import { getAccount, getRate } from '../utils/record';
+import { getRate } from '../records';
+import { getBlockHash, getBlockNumber } from '../utils/block';
+import { getExtrinsicHashFromEvent } from '../utils/extrinsic';
 
 export const getTotalStaking = async (decimals: number) => {
   const toBond = await api.query.homa.toBondPool();
@@ -19,9 +20,8 @@ export const getTotalStaking = async (decimals: number) => {
   return total;
 }
 
-export const currentEraBumped = async (event: SubstrateEvent) => {
+export const handleCurrentEraBumped = async (event: SubstrateEvent) => {
   const timestamp = event.block.timestamp;
-  const blockData = await ensureBlock(event);
   const dayHour = getStartOfDay(timestamp);
 
   const stakingToken = getStakingCurrency(api as any);
@@ -35,27 +35,19 @@ export const currentEraBumped = async (event: SubstrateEvent) => {
   const totalVoidliquid = await api.query.homa.totalVoidLiquid();
   const totalVoidliquidFN = FixedPointNumber.fromInner(totalVoidliquid.toString(), liquidTokenDecimals);
   const exchangeRate = totalStaking.div(totalLiquid.add(totalVoidliquidFN));
+
   exchangeRate.setPrecision(18)
 
   const rate = await getRate(`${dayHour.getTime()}`)
+
   rate.totalLiquidity = BigInt(totalLiquid.toChainData());
   rate.totalStaking = BigInt(totalStaking.toChainData());
   rate.totalVoidLiquid = BigInt(totalVoidliquidFN.toChainData());
   rate.exchangeRate = BigInt(exchangeRate.toChainData())
-  rate.blockId = blockData.id;
+  rate.blockNumber = getBlockNumber(event.block);
+  rate.blockHash = getBlockHash(event.block);
   rate.timestamp = timestamp;
-
-  if (event.extrinsic) {
-    const extrinsicData = await ensureExtrinsic(event);
-    rate.extrinsicId = extrinsicData.id;
-    await getAccount(event.extrinsic.extrinsic.signer.toString());
-
-    extrinsicData.section = event.event.section;
-    extrinsicData.method = event.event.method;
-    extrinsicData.addressId = event.extrinsic.extrinsic.signer.toString();
-
-    await extrinsicData.save();
-  }
+  rate.extrinsic = getExtrinsicHashFromEvent(event);
   
   await rate.save();
 }

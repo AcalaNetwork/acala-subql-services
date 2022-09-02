@@ -1,15 +1,18 @@
 import { AccountId, Balance } from "@acala-network/types/interfaces";
 import { SubstrateEvent } from "@subql/types";
-import { getAccount, getMint } from "../utils/record";
-import { ensureBlock, ensureExtrinsic } from "./event";
+import { getAccount, getMint } from "../records";
+import { getBlockHash, getBlockNumber, getBlockTimestamp } from "../utils/block";
+import { getExtrinsicHashFromEvent } from "../utils/extrinsic";
 
-export const minted = async (event: SubstrateEvent) => {
-  const blockData = await ensureBlock(event);
-
-  const historyId = `${blockData.hash}-${event.idx.toString()}`;
+export const handleMinted = async (event: SubstrateEvent) => {
+  const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getMint(historyId);
-  history.blockId = blockData.id;
-  history.timestamp = blockData.timestamp;
+
+  history.blockNumber = getBlockNumber(event.block);
+  history.blockHash = getBlockHash(event.block);
+  history.timestamp = getBlockTimestamp(event.block);
+  history.eventIndex = Number(event.idx.toString());
+  history.extrinsic = getExtrinsicHashFromEvent(event);
 
   if (event.event.data.length === 3) {
     const [account, amount_staked, amount_minted] = event.event.data as unknown as [AccountId, Balance, Balance];
@@ -28,16 +31,5 @@ export const minted = async (event: SubstrateEvent) => {
     history.type ='homa.Minted'
   }
 
-  if (event.extrinsic) {
-    const extrinsicData = await ensureExtrinsic(event);
-    history.extrinsicId = extrinsicData.id;
-    await getAccount(event.extrinsic.extrinsic.signer.toString());
-
-    extrinsicData.section = event.event.section;
-    extrinsicData.method = event.event.method;
-    extrinsicData.addressId = event.extrinsic.extrinsic.signer.toString();
-
-    await extrinsicData.save();
-  }
   await history.save();
 }

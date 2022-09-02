@@ -1,8 +1,10 @@
 import { forceToCurrencyName, MaybeCurrency } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus, BidType } from '../types';
-import { getBid, getCollateralAuction, getNewCollateralAuction } from '../utils/records'
+import { getBid, getCollateralAuction, getNewCollateralAuction } from '../records'
 import type { Balance } from '@polkadot/types/interfaces/runtime';
+import { getExtrinsicHashFromEvent } from '../utils/extrinsic';
+import { getBlockHash, getBlockNumber, getBlockTimestamp } from '../utils/block';
 
 export async function handleNewCollateralAuction (event: SubstrateEvent) {
     /**
@@ -18,10 +20,10 @@ export async function handleNewCollateralAuction (event: SubstrateEvent) {
     const collateral = forceToCurrencyName(eventData[1] as any as MaybeCurrency);
     const amount = (eventData[2] as Balance).toBigInt();
     const target = (eventData[3] as Balance).toBigInt();
-    const blockNumber = event.block.block.header.number.toBigInt();
-    const blockHash = event.block.block.hash.toString();
-    const extrinsic = event.extrinsic ? event.extrinsic.extrinsic.hash.toString() : '';
-    const timestamp = event.block.timestamp;
+    const blockNumber = getBlockNumber(event.block);
+    const blockHash = getBlockHash(event.block);
+    const extrinsic = getExtrinsicHashFromEvent(event);
+    const timestamp = getBlockTimestamp(event.block);
     const eventId = `${blockHash}-${event.idx.toString()}`;
 
     const auction = await getCollateralAuction(auctionId);
