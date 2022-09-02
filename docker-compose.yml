@@ -26,7 +26,7 @@ services:
     volumes:
       - ./:/app
     command:
-      - --subquery=/app/packages/dex/acala-project.yaml
+      - --subquery=/app/packages/dex-subql/acala-project.yaml
       - --network-endpoint=wss://acala-polkadot.api.onfinality.io/public-ws,wss://acala.polkawallet.io,wss://acala-rpc-0.aca-api.network
       - --db-schema=acala-dex
       - --schema=acala-dex
@@ -47,7 +47,7 @@ services:
     volumes:
       - ./:/app
     command:
-      - --subquery=/app/packages/dex/karura-project.yaml
+      - --subquery=/app/packages/dex-subql/karura-project.yaml
       - --network-endpoint=wss://karura-rpc-0.aca-api.network,wss://karura.api.onfinality.io/public-ws,wss://karura-rpc-1.aca-api.network
       - --db-schema=karura-dex
       - --schema=karura-dex
