@@ -24,9 +24,9 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     volumes:
-      - ./:/app
+      - ./packages/dex-subql:/app
     command:
-      - --subquery=/app/packages/dex-subql/acala-project.yaml
+      - --subquery=/app/acala-project.yaml
       - --network-endpoint=wss://acala-polkadot.api.onfinality.io/public-ws,wss://acala.polkawallet.io,wss://acala-rpc-0.aca-api.network
       - --db-schema=acala-dex
       - --schema=acala-dex
@@ -45,9 +45,9 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     volumes:
-      - ./:/app
+      - ./packages/dex-subql:/app
     command:
-      - --subquery=/app/packages/dex-subql/karura-project.yaml
+      - --subquery=/app/karura-project.yaml
       - --network-endpoint=wss://karura-rpc-0.aca-api.network,wss://karura.api.onfinality.io/public-ws,wss://karura-rpc-1.aca-api.network
       - --db-schema=karura-dex
       - --schema=karura-dex
