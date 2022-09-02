@@ -12,7 +12,7 @@ services:
 
   subquery-node-acala-dex:
     build:
-      context: ./packages/dex
+      context: ./packages/dex-subql
       dockerfile: subqueryNode.Dockerfile
     depends_on:
       - "postgres"
@@ -26,14 +26,14 @@ services:
     volumes:
       - ./:/app
     command:
-      - --subquery=/app/packages/dex/acala-project.yaml
+      - --subquery=/app/packages/dex-subql/acala-project.yaml
       - --network-endpoint=wss://acala-polkadot.api.onfinality.io/public-ws,wss://acala.polkawallet.io,wss://acala-rpc-0.aca-api.network
       - --db-schema=acala-dex
       - --schema=acala-dex
 
   subquery-node-karura-dex:
     build:
-      context: ./packages/dex
+      context: ./packages/dex-subql
       dockerfile: subqueryNode.Dockerfile
     depends_on:
       - "postgres"
@@ -47,14 +47,14 @@ services:
     volumes:
       - ./:/app
     command:
-      - --subquery=/app/packages/dex/karura-project.yaml
+      - --subquery=/app/packages/dex-subql/karura-project.yaml
       - --network-endpoint=wss://karura-rpc-0.aca-api.network,wss://karura.api.onfinality.io/public-ws,wss://karura-rpc-1.aca-api.network
       - --db-schema=karura-dex
       - --schema=karura-dex
 
   graphql-engine-acala-dex:
     build:
-      context: ./packages/dex
+      context: ./packages/dex-subql
       dockerfile: graphqlEngine.Dockerfile
     ports:
       - 3000:3000
@@ -76,7 +76,7 @@ services:
 
   graphql-engine-karura-dex:
     build:
-      context: ./packages/dex
+      context: ./packages/dex-subql
       dockerfile: graphqlEngine.Dockerfile
     ports:
       - 3001:3000
