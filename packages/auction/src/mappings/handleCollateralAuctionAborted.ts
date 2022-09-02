@@ -1,4 +1,4 @@
-import { forceToCurrencyName } from '@acala-network/sdk-core';
+import { forceToCurrencyName, MaybeCurrency } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus } from '../types';
 import { getCollateralAuction, getCollateralAuctionAborted } from '../utils/records'
@@ -17,7 +17,7 @@ export async function handleCollateralAuctionAborted (event: SubstrateEvent) {
      */
     const eventData = event.event.data;
     const auctionId = eventData[0].toString();
-    const collateral = forceToCurrencyName(eventData[1]);
+    const collateral = forceToCurrencyName(eventData[1] as any as MaybeCurrency);
     const amount = (eventData[2] as Balance).toBigInt();
     const targetStableAmount = (eventData[3] as Balance).toBigInt();
     const refundRecipient = eventData[4].toString();

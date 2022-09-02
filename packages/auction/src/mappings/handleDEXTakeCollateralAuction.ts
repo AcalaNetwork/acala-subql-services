@@ -1,4 +1,4 @@
-import { forceToCurrencyName } from '@acala-network/sdk-core';
+import { forceToCurrencyName, MaybeCurrency } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus, BidType } from '../types';
 import { getBid, getCollateralAuction, getDEXTakeCollateralAuction } from '../utils/records'
@@ -18,7 +18,7 @@ export async function handleDEXTakeCollateralAuction (event: SubstrateEvent) {
     const oldVersion = event.event.data.length === 4;
     const eventData = event.event.data;
     const auctionId = eventData[0].toString();
-    const collateral = forceToCurrencyName(eventData[1]);
+    const collateral = forceToCurrencyName(eventData[1] as unknown as MaybeCurrency);
     const amount = (eventData[2] as Balance).toBigInt();
     const supplyCollateralAmount = oldVersion ? BigInt(0) : (eventData[3] as Balance).toBigInt();
     const targetStableAmount = oldVersion ? (eventData[3] as Balance).toBigInt() : (eventData[4] as Balance).toBigInt();

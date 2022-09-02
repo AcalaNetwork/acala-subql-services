@@ -36,10 +36,7 @@
     "@open-web3/util": "^1.1.4",
     "@polkadot/wasm-crypto-init": "^6.1.1",
     "@polkadot/wasm-util": "^6.1.1",
-    "@subql/node": "^0.29.1",
+    "@subql/node": "^1.4.1",
     "dayjs": "^1.10.7"
-  },
-  "resolutions": {
-    "ipfs-unixfs": "6.0.6"
   }
 }

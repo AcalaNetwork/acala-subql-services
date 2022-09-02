@@ -33,16 +33,6 @@
     "@acala-network/types": "^4.1.6-17",
     "@polkadot/wasm-crypto": "^6.0.1",
     "@polkadot/wasm-crypto-asmjs": "^6.0.1",
-    "@subql/node": "^0.29.1",
     "dayjs": "^1.10.7"
-  },
-  "resolutions": {
-    "@acala-network/api": "4.1.6-17",
-    "@acala-network/types": "4.1.6-17",
-    "@acala-network/sdk-core": "4.1.6-17",
-    "@acala-network/sdk-wallet": "4.1.6-17",
-    "@polkadot/api": "^7.1.1",
-    "@polkadot/types": "^7.1.1",
-    "typescript": "4.2.4"
   }
 }

@@ -1,4 +1,3 @@
-import { forceToCurrencyName } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus, BidType } from '../types';
 import { getBid, getCollateralAuction } from '../utils/records'

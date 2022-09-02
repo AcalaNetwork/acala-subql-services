@@ -27,14 +27,5 @@
     "@acala-network/subql-utils": "^0.1.17",
     "@acala-network/types": "^4.0.2-20",
     "@subql/node": "^1.4.1"
-  },
-  "resolutions": {
-    "@acala-network/api": "4.0.2-19",
-    "@acala-network/types": "4.0.2-19",
-    "@acala-network/sdk-core": "4.0.2-19",
-    "@acala-network/sdk-wallet": "4.0.2-19",
-    "@polkadot/api": "^7.1.1",
-    "@polkadot/types": "^7.1.1",
-    "typescript": "4.2.4"
   }
 }

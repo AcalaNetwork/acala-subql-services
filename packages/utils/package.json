@@ -23,7 +23,7 @@
     "@acala-network/types": "^4.1.6-14",
     "@polkadot/api": "^8.10.1",
     "@polkadot/dev": "^0.65.77",
-    "@subql/node": "^0.29.1",
+    "@subql/node": "^1.4.1",
     "@subql/types": "^0.10.0",
     "dayjs": "^1.10.7"
   },

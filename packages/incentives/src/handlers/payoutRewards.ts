@@ -1,4 +1,4 @@
-import { forceToCurrencyName } from "@acala-network/sdk-core";
+import { forceToCurrencyName, MaybeCurrency } from "@acala-network/sdk-core";
 import { SubstrateEvent } from "@subql/types";
 import { getPoolId } from "../utils/getPoolId";
 import { getAccount, getPayoutRewards, getToken } from "../utils/record";
@@ -10,7 +10,7 @@ export const payoutRewards = async (event: SubstrateEvent) => {
 
   const blockData = await ensureBlock(event);
   await getAccount(account.toString());
-  const token = await getToken(forceToCurrencyName(reward_currency_type));
+  const token = await getToken(forceToCurrencyName(reward_currency_type as unknown as MaybeCurrency));
 
   const historyId = `${blockData.id}-${event.idx.toString()}`;
   const history = await getPayoutRewards(historyId);

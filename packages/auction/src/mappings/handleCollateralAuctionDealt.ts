@@ -1,23 +1,23 @@
-import { forceToCurrencyName } from '@acala-network/sdk-core';
+import { forceToCurrencyName, MaybeCurrency } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus } from '../types';
 import { getCollateralAuction, getCollateralAuctionDealt } from '../utils/records'
 import type { Balance } from '@polkadot/types/interfaces/runtime';
 
-export async function handleCollateralAuctionDealt (event: SubstrateEvent) {
+export async function handleCollateralAuctionDealt(event: SubstrateEvent) {
     /**
         /// Collateral auction dealt.
-		CollateralAuctionDealt {
-			auction_id: AuctionId,
-			collateral_type: CurrencyId,
-			collateral_amount: Balance,
-			winner: T::AccountId,
-			payment_amount: Balance,
-		},
+        CollateralAuctionDealt {
+            auction_id: AuctionId,
+            collateral_type: CurrencyId,
+            collateral_amount: Balance,
+            winner: T::AccountId,
+            payment_amount: Balance,
+        },
      */
     const eventData = event.event.data;
     const auctionId = eventData[0].toString();
-    const collateral = forceToCurrencyName(eventData[1]);
+    const collateral = forceToCurrencyName(eventData[1] as unknown as MaybeCurrency);
     const amount = (eventData[2] as Balance).toBigInt();
     const winner = eventData[3].toString();
     const paymentAmount = (eventData[4] as Balance).toBigInt();

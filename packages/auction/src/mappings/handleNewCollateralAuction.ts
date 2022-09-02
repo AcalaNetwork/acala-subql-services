@@ -1,4 +1,4 @@
-import { forceToCurrencyName } from '@acala-network/sdk-core';
+import { forceToCurrencyName, MaybeCurrency } from '@acala-network/sdk-core';
 import { SubstrateEvent } from '@subql/types';
 import { AuctionStatus, BidType } from '../types';
 import { getBid, getCollateralAuction, getNewCollateralAuction } from '../utils/records'
@@ -15,7 +15,7 @@ export async function handleNewCollateralAuction (event: SubstrateEvent) {
      */
     const eventData = event.event.data;
     const auctionId = eventData[0].toString();
-    const collateral = forceToCurrencyName(eventData[1]);
+    const collateral = forceToCurrencyName(eventData[1] as any as MaybeCurrency);
     const amount = (eventData[2] as Balance).toBigInt();
     const target = (eventData[3] as Balance).toBigInt();
     const blockNumber = event.block.block.header.number.toBigInt();
@@ -29,6 +29,7 @@ export async function handleNewCollateralAuction (event: SubstrateEvent) {
     const bid = await getBid(eventId);
 
     // query auction data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const auctionData = (await api.query.auctionManager.collateralAuctions(auctionId) as any).unwrapOrDefault();
 
     auction.collateral = collateral;
