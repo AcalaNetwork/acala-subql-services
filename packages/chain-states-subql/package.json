@@ -19,25 +19,27 @@
   "author": "qwer951123",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@polkadot/api": "^7.1.1",
-    "@polkadot/wasm-bridge": "^6.1.1",
     "@subql/cli": "1.0.2-0",
+    "@subql/node": "^1.4.1",
     "@subql/types": "^1.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.14.0",
-    "@typescript-eslint/parser": "^5.14.0",
-    "eslint": "^7.32.0",
-    "typescript": "4.2.4"
+    "typescript": "4.4.4"
   },
   "dependencies": {
     "@acala-network/sdk-core": "^4.1.6-30",
     "@acala-network/sdk-wallet": "^4.1.6-30",
     "@acala-network/subql-utils": "^0.1.21",
+    "@acala-network/type-definitions": "^4.1.6-30",
     "@acala-network/types": "^4.1.6-30",
     "@open-web3/util": "^1.1.4",
-    "@polkadot/wasm-crypto-init": "^6.1.1",
-    "@polkadot/wasm-util": "^6.1.1",
-    "@subql/node": "^1.4.1",
-    "dayjs": "^1.10.7",
-    "typescript": "4.2.4"
+    "dayjs": "^1.10.7"
+  },
+  "resolutions": {
+    "@acala-network/api": "4.1.6-30",
+    "@acala-network/types": "4.1.6-30",
+    "@acala-network/sdk-core": "4.1.6-30",
+    "@acala-network/sdk-wallet": "4.1.6-30",
+    "@acala-network/type-definitions": "^4.1.6-30",
+    "@polkadot/api": "^7.1.1",
+    "@polkadot/types": "^7.1.1"
   }
 }
