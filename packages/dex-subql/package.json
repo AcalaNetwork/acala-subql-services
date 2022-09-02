@@ -1,5 +1,5 @@
 {
-  "name": "@acala-subql-services/dex",
+  "name": "@acala-subql-services/dex-subql",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -25,21 +25,22 @@
     "typescript": "4.2.4"
   },
   "dependencies": {
-    "@acala-network/sdk-core": "^4.1.6-17",
-    "@acala-network/sdk-wallet": "^4.1.6-17",
+    "@acala-network/sdk-core": "^4.1.6-30",
+    "@acala-network/sdk-wallet": "^4.1.6-30",
     "@acala-network/subql-utils": "^0.1.21",
-    "@acala-network/types": "^4.1.6-17",
+    "@acala-network/types": "^4.1.6-30",
     "@open-web3/util": "^1.1.4",
     "@polkadot/wasm-crypto-init": "^6.1.1",
     "@polkadot/wasm-util": "^6.1.1",
     "@subql/node": "^1.4.1",
-    "dayjs": "^1.10.7"
+    "dayjs": "^1.10.7",
+    "typescript": "4.2.4"
   },
   "resolutions": {
-    "@acala-network/api": "4.0.2-19",
-    "@acala-network/types": "4.0.2-19",
-    "@acala-network/sdk-core": "4.0.2-19",
-    "@acala-network/sdk-wallet": "4.0.2-19",
+    "@acala-network/api": "4.1.6-30",
+    "@acala-network/types": "4.1.6-30",
+    "@acala-network/sdk-core": "4.1.6-30",
+    "@acala-network/sdk-wallet": "4.1.6-30",
     "@polkadot/api": "^7.1.1",
     "@polkadot/types": "^7.1.1",
     "typescript": "4.2.4"

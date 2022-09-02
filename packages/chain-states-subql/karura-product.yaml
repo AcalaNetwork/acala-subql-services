@@ -17,7 +17,7 @@ network:
   dictionary: https://api.subquery.network/sq/subquery/karura-dictionary
   endpoint: wss://karura.api.onfinality.io/public-ws
   chaintypes:
-    file: './src/chain-types.js'
+    file: './src/chain-types.ts'
 dataSources:
     - kind: substrate/Runtime
       startBlock: 2098000
