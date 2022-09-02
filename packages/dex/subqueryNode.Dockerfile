@@ -1,0 +1,1 @@
+FROM onfinality/subql-node:v1.1.2
