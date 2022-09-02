@@ -26,11 +26,15 @@ export class Transfer implements Entity {
 
     public isSystemCall: boolean;
 
-    public blockId: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
 
-    public timestamp: Date;
+    public extrinsic?: string;
+
+    public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -71,20 +75,6 @@ export class Transfer implements Entity {
     static async getByTokenId(tokenId: string): Promise<Transfer[] | undefined>{
       
       const records = await store.getByField('Transfer', 'tokenId', tokenId);
-      return records.map(record => Transfer.create(record as TransferProps));
-      
-    }
-
-    static async getByBlockId(blockId: string): Promise<Transfer[] | undefined>{
-      
-      const records = await store.getByField('Transfer', 'blockId', blockId);
-      return records.map(record => Transfer.create(record as TransferProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<Transfer[] | undefined>{
-      
-      const records = await store.getByField('Transfer', 'extrinsicId', extrinsicId);
       return records.map(record => Transfer.create(record as TransferProps));
       
     }

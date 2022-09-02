@@ -24,11 +24,15 @@ export class RedeemedByFastMatch implements Entity {
 
     public redeemedStakingAmount?: bigint;
 
-    public blockId?: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
+
+    public extrinsic?: string;
 
     public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -55,20 +59,6 @@ export class RedeemedByFastMatch implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemedByFastMatch[] | undefined>{
       
       const records = await store.getByField('RedeemedByFastMatch', 'addressId', addressId);
-      return records.map(record => RedeemedByFastMatch.create(record as RedeemedByFastMatchProps));
-      
-    }
-
-    static async getByBlockId(blockId: string): Promise<RedeemedByFastMatch[] | undefined>{
-      
-      const records = await store.getByField('RedeemedByFastMatch', 'blockId', blockId);
-      return records.map(record => RedeemedByFastMatch.create(record as RedeemedByFastMatchProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<RedeemedByFastMatch[] | undefined>{
-      
-      const records = await store.getByField('RedeemedByFastMatch', 'extrinsicId', extrinsicId);
       return records.map(record => RedeemedByFastMatch.create(record as RedeemedByFastMatchProps));
       
     }

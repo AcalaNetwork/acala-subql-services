@@ -20,11 +20,15 @@ export class RedeemRequestCancelled implements Entity {
 
     public amount?: bigint;
 
-    public blockId?: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
+
+    public extrinsic?: string;
 
     public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -51,20 +55,6 @@ export class RedeemRequestCancelled implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemRequestCancelled[] | undefined>{
       
       const records = await store.getByField('RedeemRequestCancelled', 'addressId', addressId);
-      return records.map(record => RedeemRequestCancelled.create(record as RedeemRequestCancelledProps));
-      
-    }
-
-    static async getByBlockId(blockId: string): Promise<RedeemRequestCancelled[] | undefined>{
-      
-      const records = await store.getByField('RedeemRequestCancelled', 'blockId', blockId);
-      return records.map(record => RedeemRequestCancelled.create(record as RedeemRequestCancelledProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<RedeemRequestCancelled[] | undefined>{
-      
-      const records = await store.getByField('RedeemRequestCancelled', 'extrinsicId', extrinsicId);
       return records.map(record => RedeemRequestCancelled.create(record as RedeemRequestCancelledProps));
       
     }

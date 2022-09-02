@@ -22,11 +22,15 @@ export class RedeemRequested implements Entity {
 
     public extraFee?: bigint;
 
-    public blockId?: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
+
+    public extrinsic?: string;
 
     public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -53,20 +57,6 @@ export class RedeemRequested implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemRequested[] | undefined>{
       
       const records = await store.getByField('RedeemRequested', 'addressId', addressId);
-      return records.map(record => RedeemRequested.create(record as RedeemRequestedProps));
-      
-    }
-
-    static async getByBlockId(blockId: string): Promise<RedeemRequested[] | undefined>{
-      
-      const records = await store.getByField('RedeemRequested', 'blockId', blockId);
-      return records.map(record => RedeemRequested.create(record as RedeemRequestedProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<RedeemRequested[] | undefined>{
-      
-      const records = await store.getByField('RedeemRequested', 'extrinsicId', extrinsicId);
       return records.map(record => RedeemRequested.create(record as RedeemRequestedProps));
       
     }

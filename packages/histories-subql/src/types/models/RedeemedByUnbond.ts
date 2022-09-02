@@ -24,11 +24,15 @@ export class RedeemedByUnbond implements Entity {
 
     public unbondingStakingAmount?: bigint;
 
-    public blockId?: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
+
+    public extrinsic?: string;
 
     public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -55,20 +59,6 @@ export class RedeemedByUnbond implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemedByUnbond[] | undefined>{
       
       const records = await store.getByField('RedeemedByUnbond', 'addressId', addressId);
-      return records.map(record => RedeemedByUnbond.create(record as RedeemedByUnbondProps));
-      
-    }
-
-    static async getByBlockId(blockId: string): Promise<RedeemedByUnbond[] | undefined>{
-      
-      const records = await store.getByField('RedeemedByUnbond', 'blockId', blockId);
-      return records.map(record => RedeemedByUnbond.create(record as RedeemedByUnbondProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<RedeemedByUnbond[] | undefined>{
-      
-      const records = await store.getByField('RedeemedByUnbond', 'extrinsicId', extrinsicId);
       return records.map(record => RedeemedByUnbond.create(record as RedeemedByUnbondProps));
       
     }

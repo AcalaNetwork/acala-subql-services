@@ -2,11 +2,9 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {Block} from "./Block"
-
-export {Extrinsic} from "./Extrinsic"
-
 export {Account} from "./Account"
+
+export {Token} from "./Token"
 
 export {Mint} from "./Mint"
 
@@ -24,7 +22,27 @@ export {RedeemedByFastMatch} from "./RedeemedByFastMatch"
 
 export {Rate} from "./Rate"
 
-export {Token} from "./Token"
-
 export {Transfer} from "./Transfer"
+
+export {DepositDexShare} from "./DepositDexShare"
+
+export {WithdrawDexShare} from "./WithdrawDexShare"
+
+export {PayoutRewards} from "./PayoutRewards"
+
+export {ClaimRewards} from "./ClaimRewards"
+
+export {CollateralAuction} from "./CollateralAuction"
+
+export {NewCollateralAuction} from "./NewCollateralAuction"
+
+export {CancelAuction} from "./CancelAuction"
+
+export {CollateralAuctionDealt} from "./CollateralAuctionDealt"
+
+export {DEXTakeCollateralAuction} from "./DEXTakeCollateralAuction"
+
+export {CollateralAuctionAborted} from "./CollateralAuctionAborted"
+
+export {Bid} from "./Bid"
 

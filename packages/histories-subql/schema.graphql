@@ -1,23 +1,6 @@
 # -------- COMMON -------- #
 enum AccountType { SYSTEM, USER }
 
-type Block @entity {
-  id: ID! # block number
-  hash: String
-  number: BigInt
-  timestamp: Date
-}
-
-type Extrinsic @entity {
-  id: ID! # extrinsic hash
-  hash: String
-  block: Block
-
-  address: Account
-  method: String
-  section: String
-}
-
 type Account @entity {
   id: ID! # user address
   address: String
@@ -40,12 +23,10 @@ type Token @entity {
     decimals: Int!
 
     transferVolume: BigInt! # transfer volume
-
     transfer: [Transfer] @derivedFrom(field: "token")
 
-    txCount: Int!
     updateAt: Date!
-    updateAtBlock: Block
+    updateAtBlock: BigInt
 }
 
 
@@ -65,9 +46,11 @@ type Mint @entity {
   liquidAmountReceived: BigInt
   liquidAmountAddedToVoid: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type RedeemRequestCancelled @entity {
@@ -78,9 +61,11 @@ type RedeemRequestCancelled @entity {
   address: Account
   amount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type RequestedRedeem @entity {
@@ -91,9 +76,11 @@ type RequestedRedeem @entity {
   amount: BigInt
   allowFastMatch: Boolean
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type RedeemRequested @entity {
@@ -104,9 +91,11 @@ type RedeemRequested @entity {
   amount: BigInt
   extraFee: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type RedeemedByUnbond @entity {
@@ -118,9 +107,11 @@ type RedeemedByUnbond @entity {
   liquidAmount: BigInt
   unbondingStakingAmount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type Redeemed @entity {
@@ -131,9 +122,11 @@ type Redeemed @entity {
   stakingAmountRedeemed: BigInt
   liquidAmountDeducted: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type RedeemedByFastMatch @entity {
@@ -144,9 +137,11 @@ type RedeemedByFastMatch @entity {
   feeInLiquid: BigInt
   redeemedStakingAmount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type Rate @entity {
@@ -157,23 +152,28 @@ type Rate @entity {
   totalVoidLiquid: BigInt
   exchangeRate: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 # ---------TRANSFER--------#
 type Transfer @entity {
-    id: ID! # ${from}-${to}-${extrinsic}
+  id: ID! # ${from}-${to}-${extrinsic}
 
-    from: Account!
-    to: Account!
-    token: Token!
-    amount: BigInt!
-    isSystemCall: Boolean!
-    block: Block!
-    extrinsic: Extrinsic
-    timestamp: Date!
+  from: Account!
+  to: Account!
+  token: Token!
+  amount: BigInt!
+  isSystemCall: Boolean!
+
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }
 
 # -------- incentives -------- #
@@ -185,9 +185,11 @@ type DepositDexShare @entity {
 
   amount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type WithdrawDexShare @entity {
@@ -198,9 +200,11 @@ type WithdrawDexShare @entity {
 
   amount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type PayoutRewards @entity {
@@ -214,9 +218,11 @@ type PayoutRewards @entity {
   actualPayout: BigInt
   deductionAmount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 type ClaimRewards @entity {
@@ -230,133 +236,141 @@ type ClaimRewards @entity {
   actualAmount: BigInt
   deductionAmount: BigInt
 
-  block: Block
-  extrinsic: Extrinsic
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
   timestamp: Date
+  eventIndex: Int
 }
 
 # -------- auction -------- #
 enum BidType {
-    KICK,
-    DENT,
-    DEX_TAKE
+  KICK,
+  DENT,
+  DEX_TAKE
 }
 
 enum AuctionStatus {
-    IN_PROGRESS,
-    CANCELL,
-    DEALT,
-    DEX_TAKE,
-    ABORT
+  IN_PROGRESS,
+  CANCELL,
+  DEALT,
+  DEX_TAKE,
+  ABORT
 }
 
 type CollateralAuction @entity {
-    id: ID! # auction id
-    collateral: String!
-    initAmount: BigInt!
-    amount: BigInt!
-    target: BigInt!
-    status: AuctionStatus!
-    refundRecipient: String!
-    lastBid: BigInt
-    winner: String
-    bidder: [String]
+  id: ID! # auction id
+  collateral: String!
+  initAmount: BigInt!
+  amount: BigInt!
+  target: BigInt!
+  status: AuctionStatus!
+  refundRecipient: String!
+  lastBid: BigInt
+  winner: String
+  bidder: [String]
 
-    create: [NewCollateralAuction] @derivedFrom(field: "auction")
-    cancel: [CancelAuction] @derivedFrom(field: "auction")
-    dealt: [CollateralAuctionDealt] @derivedFrom(field: "auction")
-    dexTake: [DEXTakeCollateralAuction] @derivedFrom(field: "auction")
-    abort: [CollateralAuctionAborted] @derivedFrom(field: "auction")
-    bids: [Bid] @derivedFrom(field: "auction")
+  create: [NewCollateralAuction] @derivedFrom(field: "auction")
+  cancel: [CancelAuction] @derivedFrom(field: "auction")
+  dealt: [CollateralAuctionDealt] @derivedFrom(field: "auction")
+  dexTake: [DEXTakeCollateralAuction] @derivedFrom(field: "auction")
+  abort: [CollateralAuctionAborted] @derivedFrom(field: "auction")
+  bids: [Bid] @derivedFrom(field: "auction")
 
-    createAt: Date!
-    updateAt: Date!
-    endAt: Date
-    updateAtBlock: BigInt!
-    createAtBlock: BigInt!
-    endAtBlock: BigInt
+  createAt: Date!
+  updateAt: Date!
+  endAt: Date
+  updateAtBlock: BigInt!
+  createAtBlock: BigInt!
+  endAtBlock: BigInt
+  eventIndex: Int
 }
 
 type NewCollateralAuction @entity {
-    id: ID! # event index
-    auction: CollateralAuction
-    collateral: String!
-    amount: BigInt!
-    target: BigInt!
+  id: ID! # event index
+  auction: CollateralAuction
+  collateral: String!
+  amount: BigInt!
+  target: BigInt!
 
-    timestamp: Date!
-    blockNumber: BigInt!
-    blockHash: String!
-    extrinsic: String
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }
 
 type CancelAuction @entity {
-    id: ID! # event index
-    auction: CollateralAuction!
+  id: ID! # event index
+  auction: CollateralAuction!
 
-    timestamp: Date!
-    blockNumber: BigInt!
-    blockHash: String!
-    extrinsic: String
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }
 
 type CollateralAuctionDealt @entity {
-    id: ID! # event index
+  id: ID! # event index
 
-    auction: CollateralAuction!
-    collateral: String!
-    amount: BigInt!
-    winner: String!
-    paymentAmount: BigInt!
+  auction: CollateralAuction!
+  collateral: String!
+  amount: BigInt!
+  winner: String!
+  paymentAmount: BigInt!
 
-    timestamp: Date!
-    blockNumber: BigInt!
-    blockHash: String!
-    extrinsic: String
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }
 
 type DEXTakeCollateralAuction @entity {
-    id: ID! # event index
+  id: ID! # event index
 
-    auction: CollateralAuction!
-    collateral: String!
-    amount: BigInt!
-    supplyCollateralAmount: BigInt!
-    targetStableAmount: BigInt!
+  auction: CollateralAuction!
+  collateral: String!
+  amount: BigInt!
+  supplyCollateralAmount: BigInt!
+  targetStableAmount: BigInt!
 
-    timestamp: Date!
-    blockNumber: BigInt!
-    blockHash: String!
-    extrinsic: String
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }
 
 type CollateralAuctionAborted @entity {
-    id: ID! #event index
+  id: ID! #event index
 
-    auction: CollateralAuction!
-    collateral: String!
-    amount: BigInt!
-    targetStableAmount: BigInt!
-    refundRecipient: String!
+  auction: CollateralAuction!
+  collateral: String!
+  amount: BigInt!
+  targetStableAmount: BigInt!
+  refundRecipient: String!
 
-    timestamp: Date!
-    blockNumber: BigInt!
-    blockHash: String!
-    extrinsic: String
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }
 
 type Bid @entity {
-    id: ID! # event index
+  id: ID! # event index
 
-    type: BidType! # insert an fack bid auction when auction kick off
-    auction: CollateralAuction!
-    bidder: String!
-    amount: BigInt!
-    collateralAmount: BigInt!
+  type: BidType! # insert an fack bid auction when auction kick off
+  auction: CollateralAuction!
+  bidder: String!
+  amount: BigInt!
+  collateralAmount: BigInt!
 
-    timestamp: Date!
-    blockNumber: BigInt!
-    blockHash: String!
-    extrinsic: String
-    eventIndex: Int!
+  blockNumber: BigInt!
+  blockHash: String!
+  extrinsic: String
+  timestamp: Date
+  eventIndex: Int
 }

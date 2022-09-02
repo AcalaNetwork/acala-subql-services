@@ -22,11 +22,9 @@ export class Token implements Entity {
 
     public transferVolume: bigint;
 
-    public txCount: number;
-
     public updateAt: Date;
 
-    public updateAtBlockId?: string;
+    public updateAtBlock?: bigint;
 
 
     async save(): Promise<void>{
@@ -49,13 +47,6 @@ export class Token implements Entity {
         }
     }
 
-
-    static async getByUpdateAtBlockId(updateAtBlockId: string): Promise<Token[] | undefined>{
-      
-      const records = await store.getByField('Token', 'updateAtBlockId', updateAtBlockId);
-      return records.map(record => Token.create(record as TokenProps));
-      
-    }
 
 
     static create(record: TokenProps): Token {

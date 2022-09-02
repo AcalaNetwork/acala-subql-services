@@ -24,11 +24,15 @@ export class Rate implements Entity {
 
     public exchangeRate?: bigint;
 
-    public blockId?: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
+
+    public extrinsic?: string;
 
     public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -51,20 +55,6 @@ export class Rate implements Entity {
         }
     }
 
-
-    static async getByBlockId(blockId: string): Promise<Rate[] | undefined>{
-      
-      const records = await store.getByField('Rate', 'blockId', blockId);
-      return records.map(record => Rate.create(record as RateProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<Rate[] | undefined>{
-      
-      const records = await store.getByField('Rate', 'extrinsicId', extrinsicId);
-      return records.map(record => Rate.create(record as RateProps));
-      
-    }
 
 
     static create(record: RateProps): Rate {

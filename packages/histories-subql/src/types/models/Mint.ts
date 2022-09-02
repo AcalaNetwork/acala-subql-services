@@ -30,11 +30,15 @@ export class Mint implements Entity {
 
     public liquidAmountAddedToVoid?: bigint;
 
-    public blockId?: string;
+    public blockNumber: bigint;
 
-    public extrinsicId?: string;
+    public blockHash: string;
+
+    public extrinsic?: string;
 
     public timestamp?: Date;
+
+    public eventIndex?: number;
 
 
     async save(): Promise<void>{
@@ -61,20 +65,6 @@ export class Mint implements Entity {
     static async getByAddressId(addressId: string): Promise<Mint[] | undefined>{
       
       const records = await store.getByField('Mint', 'addressId', addressId);
-      return records.map(record => Mint.create(record as MintProps));
-      
-    }
-
-    static async getByBlockId(blockId: string): Promise<Mint[] | undefined>{
-      
-      const records = await store.getByField('Mint', 'blockId', blockId);
-      return records.map(record => Mint.create(record as MintProps));
-      
-    }
-
-    static async getByExtrinsicId(extrinsicId: string): Promise<Mint[] | undefined>{
-      
-      const records = await store.getByField('Mint', 'extrinsicId', extrinsicId);
       return records.map(record => Mint.create(record as MintProps));
       
     }
