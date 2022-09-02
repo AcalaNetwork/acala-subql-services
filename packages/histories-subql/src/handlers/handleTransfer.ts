@@ -1,6 +1,6 @@
 import { SubstrateEvent } from '@subql/types'
 import { AccountType } from '../types';
-import { getAccount, getBlock, getExtrinsic, getToken, getTransfer } from '../utils/records'
+import { getAccount, getBlock, getExtrinsic, getToken, getTransfer } from '../../../homa/src/utils/records'
 
 export async function handleTransfer(
     tokenName: string,

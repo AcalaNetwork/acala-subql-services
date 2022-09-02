@@ -6,10 +6,10 @@ repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
 runner:
   node:
     name: "@subql/node"
-    version: "1.1.2"
+    version: "1.2.1"
   query:
     name: "@subql/query"
-    version: "1.1.1"
+    version: "1.2.0"
 schema: 
     file: ./schema.graphql
 network:
@@ -17,7 +17,7 @@ network:
   dictionary: https://api.subquery.network/sq/subquery/karura-dictionary
   endpoint: wss://karura.api.onfinality.io/public-ws
   chaintypes:
-    file: './src/chain-types.js'
+    file: '/dist/chain-types.js'
 dataSources:
   - kind: substrate/Runtime
     startBlock: 1

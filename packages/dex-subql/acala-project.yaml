@@ -17,7 +17,7 @@ network:
   dictionary: https://api.subquery.network/sq/subquery/acala-dictionary
   endpoint: wss://acala.polkawallet.io
   chaintypes:
-    file: './src/chain-types.ts'
+    file: '/dist/chain-types.js'
 dataSources:
   - kind: substrate/Runtime
     startBlock: 1

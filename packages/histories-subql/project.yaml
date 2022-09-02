@@ -14,7 +14,7 @@ network:
     genesisHash: '0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c'
     dictionary: https://api.subquery.network/sq/subquery/acala-dictionary
     endpoint: wss://acala.polkawallet.iochaintypes
-    file: ./src/chain-types.js
+    file: /dist/chain-types.js
 dataSources:
   - kind: substrate/Runtime
     startBlock: 1
