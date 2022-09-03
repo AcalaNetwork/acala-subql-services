@@ -11,9 +11,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
   subquery-node-acala-dex:
-    build:
-      context: ./packages/dex-subql
-      dockerfile: subqueryNode.Dockerfile
+    image: ${SUBQUERY_NODE_IMAGETAG}
     depends_on:
       - "postgres"
     restart: always
@@ -29,15 +27,13 @@ services:
       - ./:/app
     command:
       - --subquery=/app/packages/dex-subql/acala-project.yaml
-      - --network-endpoint=wss://acala-polkadot.api.onfinality.io/public-ws,wss://acala.polkawallet.io,wss://acala-rpc-0.aca-api.network
+      - --network-endpoint=${ACALA_ENDPOINT}
       - --db-schema=acala-dex
       - --schema=acala-dex
       - --unsafe
 
   subquery-node-karura-dex:
-    build:
-      context: ./packages/dex-subql
-      dockerfile: subqueryNode.Dockerfile
+    image: ${SUBQUERY_NODE_IMAGETAG}
     depends_on:
       - "postgres"
     restart: always
@@ -53,15 +49,13 @@ services:
       - ./:/app
     command:
       - --subquery=/app/packages/dex-subql/karura-project.yaml
-      - --network-endpoint=wss://karura-rpc-0.aca-api.network,wss://karura.api.onfinality.io/public-ws,wss://karura-rpc-1.aca-api.network
+      - --network-endpoint=${KARURA_ENDPOINT}
       - --db-schema=karura-dex
       - --schema=karura-dex
       - --unsafe
 
   graphql-engine-acala-dex:
-    build:
-      context: ./packages/dex-subql
-      dockerfile: graphqlEngine.Dockerfile
+    image: ${SUBQUERY_IMAGETAG}
     ports:
       - 4000:4000
     depends_on:
@@ -81,9 +75,7 @@ services:
       - --indexer=http://subquery-node-acala-dex:3000
 
   graphql-engine-karura-dex:
-    build:
-      context: ./packages/dex-subql
-      dockerfile: graphqlEngine.Dockerfile
+    image: ${SUBQUERY_IMAGETAG}
     ports:
       - 4001:4000
     depends_on:
@@ -103,9 +95,7 @@ services:
       - --indexer=http://subquery-node-karura-dex:3000
 
   subquery-node-acala-loan:
-    build:
-      context: ./packages/loan-subql
-      dockerfile: subqueryNode.Dockerfile
+    image: ${SUBQUERY_NODE_IMAGETAG}
     depends_on:
       - "postgres"
     restart: always
@@ -121,15 +111,13 @@ services:
       - ./:/app
     command:
       - --subquery=/app/packages/loan-subql/acala-project.yaml
-      - --network-endpoint=wss://acala-polkadot.api.onfinality.io/public-ws,wss://acala.polkawallet.io,wss://acala-rpc-0.aca-api.network
+      - --network-endpoint=${ACALA_ENDPOINT}
       - --db-schema=acala-loan
       - --schema=acala-loan
       - --unsafe
 
   subquery-node-karura-loan:
-    build:
-      context: ./packages/loan-subql
-      dockerfile: subqueryNode.Dockerfile
+    image: ${SUBQUERY_NODE_IMAGETAG}
     depends_on:
       - "postgres"
     restart: always
@@ -145,15 +133,13 @@ services:
       - ./:/app
     command:
       - --subquery=/app/packages/loan-subql/karura-project.yaml
-      - --network-endpoint=wss://karura-rpc-0.aca-api.network,wss://karura.api.onfinality.io/public-ws,wss://karura-rpc-1.aca-api.network
+      - --network-endpoint=${KARURA_ENDPOINT}
       - --db-schema=karura-loan
       - --schema=karura-loan
       - --unsafe
 
   graphql-engine-acala-loan:
-    build:
-      context: ./packages/loan-subql
-      dockerfile: graphqlEngine.Dockerfile
+    image: ${SUBQUERY_IMAGETAG}
     ports:
       - 4010:4000
     depends_on:
@@ -173,9 +159,7 @@ services:
       - --indexer=http://subquery-node-acala-loan:3000
 
   graphql-engine-karura-loan:
-    build:
-      context: ./packages/loan-subql
-      dockerfile: graphqlEngine.Dockerfile
+    image: ${SUBQUERY_IMAGETAG}
     ports:
       - 4011:4000
     depends_on:

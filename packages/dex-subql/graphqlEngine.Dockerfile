@@ -1,1 +1,0 @@
-FROM onfinality/subql-query:v1.1.1
