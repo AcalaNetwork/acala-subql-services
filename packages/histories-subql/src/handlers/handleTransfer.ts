@@ -3,6 +3,7 @@ import { AccountType } from '../types';
 import { getAccount, getToken, getTransfer } from '../records';
 import { getBlockHash, getBlockNumber, getBlockTimestamp } from '../utils/block';
 import { getExtrinsicHashFromEvent } from '../utils/extrinsic';
+import { getNativeCurrency, getTokenName } from '@acala-network/subql-utils';
 
 export async function saveTransfer(
     tokenName: string,
@@ -44,4 +45,32 @@ export async function saveTransfer(
     await from.save();
     await to.save();
     await transfer.save();
+}
+const nativeToken = getNativeCurrency(api as any);
+
+// handle balances.Transfer
+export async function handleBalancesTransfer(event: SubstrateEvent) {
+    const [from, to, value] = event.event.data
+    const fromId = from.toString()
+    const toId = to.toString()
+    const amount = BigInt(value.toString())
+    const tokenName = getTokenName(nativeToken)
+
+    await saveTransfer(tokenName, fromId, toId, amount, event)
+}
+
+
+// handle currencies.Transferred
+export async function handleCurrenciesTransfer(event: SubstrateEvent) {
+    const [currency, from, to, value] = event.event.data
+    const fromId = from.toString()
+    const toId = to.toString()
+    const amount = BigInt(value.toString())
+    const tokenName = getTokenName(currency)
+    const nativeName = getTokenName(nativeToken)
+
+    // don't handle native token here
+    if (tokenName === nativeName) return;
+
+    await saveTransfer(tokenName, fromId, toId, amount, event)
 }
