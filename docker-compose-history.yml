@@ -1,0 +1,187 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - .data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  subquery-node-acala-states:
+    image: ${SUBQUERY_NODE_IMAGETAG}
+    depends_on:
+      - "postgres"
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - --subquery=/app/packages/chain-states-subql/acala-project.yaml
+      - --network-endpoint=${ACALA_ENDPOINT}
+      - --scale-batch-size=true
+      - --db-schema=acala-states
+      - --schema=acala-states
+      - --unsafe
+
+  subquery-node-karura-states:
+    image: ${SUBQUERY_NODE_IMAGETAG}
+    depends_on:
+      - "postgres"
+    restart: always
+    ports:
+      - 3001:3000
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - --subquery=/app/packages/chain-states-subql/karura-project.yaml
+      - --network-endpoint=${KARURA_ENDPOINT}
+      - --scale-batch-size=true
+      - --db-schema=karura-states
+      - --schema=karura-states
+      - --unsafe
+
+  graphql-engine-acala-states:
+    image: ${SUBQUERY_IMAGETAG}
+    ports:
+      - 4000:3001
+    depends_on:
+      - "postgres"
+      - "subquery-node-acala-states"
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      PORT: 3001
+    command:
+      - --name=acala-states
+      - --playground
+      - --scale-batch-size=true
+      - --indexer=http://subquery-node-acala-states:3000
+
+  graphql-engine-karura-states:
+    image: ${SUBQUERY_IMAGETAG}
+    ports:
+      - 4001:3001
+    depends_on:
+      - "postgres"
+      - "subquery-node-karura-states"
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      PORT: 3001
+    command:
+      - --name=karura-states
+      - --playground
+      - --scale-batch-size=true
+      - --indexer=http://subquery-node-karura-states:3000
+
+  subquery-node-acala-histories:
+    image: ${SUBQUERY_NODE_IMAGETAG}
+    depends_on:
+      - "postgres"
+    restart: always
+    ports:
+      - 3010:3000
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - --subquery=/app/packages/histories-subql/acala-project.yaml
+      - --network-endpoint=${ACALA_ENDPOINT}
+      - --scale-batch-size=true
+      - --db-schema=acala-histories
+      - --schema=acala-histories
+      - --unsafe
+
+  subquery-node-karura-histories:
+    image: ${SUBQUERY_NODE_IMAGETAG}
+    depends_on:
+      - "postgres"
+    restart: always
+    ports:
+      - 3011:3000
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - --subquery=/app/packages/histories-subql/karura-project.yaml
+      - --network-endpoint=${KARURA_ENDPOINT}
+      - --scale-batch-size=true
+      - --db-schema=karura-histories
+      - --schema=karura-histories
+      - --unsafe
+
+  graphql-engine-acala-histories:
+    image: ${SUBQUERY_IMAGETAG}
+    ports:
+      - 4010:3001
+    depends_on:
+      - "postgres"
+      - "subquery-node-acala-histories"
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      PORT: 3001
+    command:
+      - --name=acala-histories
+      - --playground
+      - --scale-batch-size=true
+      - --indexer=http://subquery-node-acala-histories:3000
+
+  graphql-engine-karura-histories:
+    image: ${SUBQUERY_IMAGETAG}
+    ports:
+      - 4011:3001
+    depends_on:
+      - "postgres"
+      - "subquery-node-karura-histories"
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      PORT: 3001
+    command:
+      - --name=karura-histories
+      - --playground
+      - --scale-batch-size=true
+      - --indexer=http://subquery-node-karura-histories:3000
