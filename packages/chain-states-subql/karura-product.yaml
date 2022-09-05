@@ -6,10 +6,10 @@ repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
 runner:
   node:
     name: "@subql/node"
-    version: "1.2.1"
+    version: "1.1.2"
   query:
     name: "@subql/query"
-    version: "1.2.0"
+    version: "1.1.1"
 schema: 
     file: ./schema.graphql
 network:

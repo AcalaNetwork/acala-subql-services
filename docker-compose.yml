@@ -28,7 +28,7 @@ services:
     command:
       - --subquery=/app/packages/dex-subql/acala-project.yaml
       - --network-endpoint=${ACALA_ENDPOINT}
-        - --scale-batch-size=true
+      - --scale-batch-size=true
       - --db-schema=acala-dex
       - --schema=acala-dex
       - --unsafe
@@ -59,7 +59,7 @@ services:
   graphql-engine-acala-dex:
     image: ${SUBQUERY_IMAGETAG}
     ports:
-      - 4000:4000
+      - 4000:3001
     depends_on:
       - "postgres"
       - "subquery-node-acala-dex"
@@ -70,6 +70,7 @@ services:
       DB_DATABASE: postgres
       DB_HOST: postgres
       DB_PORT: 5432
+      PORT: 3001
     command:
       - --name=acala-dex
       - --playground
@@ -79,7 +80,7 @@ services:
   graphql-engine-karura-dex:
     image: ${SUBQUERY_IMAGETAG}
     ports:
-      - 4001:4000
+      - 4001:3001
     depends_on:
       - "postgres"
       - "subquery-node-karura-dex"
@@ -90,6 +91,7 @@ services:
       DB_DATABASE: postgres
       DB_HOST: postgres
       DB_PORT: 5432
+      PORT: 3001
     command:
       - --name=karura-dex
       - --playground
@@ -145,7 +147,7 @@ services:
   graphql-engine-acala-loan:
     image: ${SUBQUERY_IMAGETAG}
     ports:
-      - 4010:4000
+      - 4010:3001
     depends_on:
       - "postgres"
       - "subquery-node-acala-loan"
@@ -156,6 +158,7 @@ services:
       DB_DATABASE: postgres
       DB_HOST: postgres
       DB_PORT: 5432
+      PORT: 3001
     command:
       - --name=acala-loan
       - --playground
@@ -165,7 +168,7 @@ services:
   graphql-engine-karura-loan:
     image: ${SUBQUERY_IMAGETAG}
     ports:
-      - 4011:4000
+      - 4011:3001
     depends_on:
       - "postgres"
       - "subquery-node-karura-loan"
@@ -176,6 +179,7 @@ services:
       DB_DATABASE: postgres
       DB_HOST: postgres
       DB_PORT: 5432
+      PORT: 3001
     command:
       - --name=karura-loan
       - --playground
