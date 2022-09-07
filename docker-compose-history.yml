@@ -28,7 +28,7 @@ services:
     command:
       - --subquery=/app/packages/chain-states-subql/acala-project.yaml
       - --network-endpoint=${ACALA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=acala-states
       - --schema=acala-states
       - --unsafe
@@ -51,7 +51,7 @@ services:
     command:
       - --subquery=/app/packages/chain-states-subql/karura-project.yaml
       - --network-endpoint=${KARURA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=karura-states
       - --schema=karura-states
       - --unsafe
@@ -74,7 +74,7 @@ services:
     command:
       - --name=acala-states
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-acala-states:3000
 
   graphql-engine-karura-states:
@@ -95,7 +95,7 @@ services:
     command:
       - --name=karura-states
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-karura-states:3000
 
   subquery-node-acala-histories:
@@ -116,7 +116,7 @@ services:
     command:
       - --subquery=/app/packages/histories-subql/acala-project.yaml
       - --network-endpoint=${ACALA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=acala-histories
       - --schema=acala-histories
       - --unsafe
@@ -139,7 +139,7 @@ services:
     command:
       - --subquery=/app/packages/histories-subql/karura-project.yaml
       - --network-endpoint=${KARURA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=karura-histories
       - --schema=karura-histories
       - --unsafe
@@ -162,7 +162,7 @@ services:
     command:
       - --name=acala-histories
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-acala-histories:3000
 
   graphql-engine-karura-histories:
@@ -183,5 +183,5 @@ services:
     command:
       - --name=karura-histories
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-karura-histories:3000
