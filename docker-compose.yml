@@ -28,7 +28,7 @@ services:
     command:
       - --subquery=/app/packages/dex-subql/acala-project.yaml
       - --network-endpoint=${ACALA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=acala-dex
       - --schema=acala-dex
       - --unsafe
@@ -51,7 +51,7 @@ services:
     command:
       - --subquery=/app/packages/dex-subql/karura-project.yaml
       - --network-endpoint=${KARURA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=karura-dex
       - --schema=karura-dex
       - --unsafe
@@ -74,7 +74,7 @@ services:
     command:
       - --name=acala-dex
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-acala-dex:3000
 
   graphql-engine-karura-dex:
@@ -95,7 +95,7 @@ services:
     command:
       - --name=karura-dex
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-karura-dex:3000
 
   subquery-node-acala-loan:
@@ -116,7 +116,7 @@ services:
     command:
       - --subquery=/app/packages/loan-subql/acala-project.yaml
       - --network-endpoint=${ACALA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=acala-loan
       - --schema=acala-loan
       - --unsafe
@@ -139,7 +139,7 @@ services:
     command:
       - --subquery=/app/packages/loan-subql/karura-project.yaml
       - --network-endpoint=${KARURA_ENDPOINT}
-      - --scale-batch-size=true
+      - --batch-size=10
       - --db-schema=karura-loan
       - --schema=karura-loan
       - --unsafe
@@ -162,7 +162,7 @@ services:
     command:
       - --name=acala-loan
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-acala-loan:3000
 
   graphql-engine-karura-loan:
@@ -183,5 +183,5 @@ services:
     command:
       - --name=karura-loan
       - --playground
-      - --scale-batch-size=true
+      - --batch-size=10
       - --indexer=http://subquery-node-karura-loan:3000
