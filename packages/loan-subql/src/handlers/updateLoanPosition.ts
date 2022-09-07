@@ -161,7 +161,7 @@ export async function handleConfiscate (event: SubstrateEvent) {
   const debitChanged = -BigInt(_debitChanged.toString())
 
   // should update position in the the old version beacuse confiscate will not create PositionUpdated event
-  const shouldUpdate = !event.extrinsic.events.find((item) => {
+  const shouldUpdate = !event.extrinsic?.events.find((item) => {
     return item.event.section === 'loans' && item.event.method === 'PositionUpdated';
   })
 
