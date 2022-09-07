@@ -73,7 +73,7 @@ export const createUpdatePositionHistroy = async (
   debitExchangeRate: bigint
 ) => {
   let isDerived = false;
-  event.extrinsic.events.forEach(event => {
+  event.extrinsic?.events.forEach(event => {
     const seciton = event.event.section;
     const method = event.event.method;
     if(seciton === 'cdpEngine' && method === 'CloseCDPInDebitByDEX') {
