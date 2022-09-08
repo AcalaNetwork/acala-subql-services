@@ -22,8 +22,10 @@ export const getToken = async (token: string) => {
 	if (!reacord) {
 		const decimals = await getTokenDecimals(api as any, token);
 		const record = new Token(token);
+
 		record.decimals = Number(decimals.toString());
 		record.name = token;
+		record.transferVolume = BigInt(0);
 	}
 
 	return reacord;

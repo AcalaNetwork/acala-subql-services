@@ -4,10 +4,10 @@ version: 1.0.0
 runner:
   node:
     name: '@subql/node'
-    version: 1.0.0
+    version: 1.9.1
   query:
     name: '@subql/query'
-    version: 1.0.0
+    version: 1.1.1
 schema:
   file: ./schema.graphql
 network:
@@ -71,3 +71,63 @@ dataSources:
           filter:
             module: homa
             method: CurrentEraBumped
+        - handler: handleBalancesTransfer
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer
+        - handler: handleCurrenciesTransfer
+          kind: substrate/EventHandler
+          filter:
+            module: currencies
+            method: Transferred
+        - handler: handleDepositDexShare
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: DepositDexShare
+        - handler: handleWithdrawDexShare
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: WithdrawDexShare
+        - handler: handlePayoutRewards
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: PayoutRewards
+        - handler: handleClaimRewards
+          kind: substrate/EventHandler
+          filter:
+            module: incentives 
+            method: ClaimRewards
+        - handler: handleNewCollateralAuction
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: NewCollateralAuction
+        - handler: handleCancelAuction
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: CancelAuction
+        - handler: handleCollateralAuctionDealt
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: CollateralAuctionDealt
+        - handler: handleDEXTakeCollateralAuction
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: DEXTakeCollateralAuction
+        - handler: handleCollateralAuctionAborted
+          kind: substrate/EventHandler
+          filter:
+            module: auctionManager
+            method: CollateralAuctionAborted
+        - handler: handleBid
+          kind: substrate/EventHandler
+          filter:
+            module: auction
+            method: Bid
