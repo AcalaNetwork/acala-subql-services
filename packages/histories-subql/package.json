@@ -26,7 +26,7 @@
   "dependencies": {
     "@acala-network/sdk": "^4.1.6-30",
     "@acala-network/sdk-core": "^4.1.6-30",
-    "@acala-network/subql-utils": "^0.1.17",
+    "@acala-network/subql-utils": "^0.1.23",
     "@acala-network/type-definitions": "^4.1.6-30",
     "@acala-network/types": "^4.1.6-30"
   },

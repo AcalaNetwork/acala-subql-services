@@ -1,8 +1,8 @@
 {
   "name": "@acala-network/subql-utils",
-  "version": "0.0.2-0",
+  "version": "0.1.23",
   "description": "",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc -b",
     "test": "polkadot-dev-run-test"
@@ -10,9 +10,7 @@
   "homepage": "https://github.com/AcalaNetwork/acala-subql-services",
   "repository": "https://github.com/AcalaNetwork/acala-subql-services.git",
   "files": [
-    "dist",
-    "schema.graphql",
-    "project.yaml"
+    "build"
   ],
   "author": "qwer951123",
   "license": "Apache-2.0",

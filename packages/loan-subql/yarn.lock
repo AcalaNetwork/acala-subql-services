@@ -195,8 +195,8 @@ __metadata:
   linkType: hard
 
 "@acala-network/subql-utils@npm:^0.1.18":
-  version: 0.1.21
-  resolution: "@acala-network/subql-utils@npm:0.1.21"
+  version: 0.1.22
+  resolution: "@acala-network/subql-utils@npm:0.1.22"
   dependencies:
     "@acala-network/api": ^4.1.6-14
     "@acala-network/sdk": ^4.1.6-14

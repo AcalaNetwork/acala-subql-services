@@ -1,4 +1,4 @@
-import { getSystemAccount, getTokenDecimals, isSystemAccount } from "@acala-network/subql-utils";
+import { getSystemAccountName , getTokenDecimals, isSystemAccount } from "@acala-network/subql-utils";
 import { Account, AccountType, Token } from "../types";
 
 export const getAccount = async (address: string) => {
@@ -10,7 +10,7 @@ export const getAccount = async (address: string) => {
     const isSystem = isSystemAccount(address);
 
     account.type = isSystem ? AccountType.SYSTEM : AccountType.USER;
-    account.name =  isSystem ? getSystemAccount(address) : 'user'; 
+    account.name =  isSystem ? getSystemAccountName(address) : 'user'; 
 		account.txCount = 0;
 	}
   return account;

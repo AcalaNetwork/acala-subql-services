@@ -1,4 +1,4 @@
-import { isSystemAccount, getNativeCurrency, getTokenDecimals, isTokenEqual } from '@acala-network/subql-utils'
+import { isSystemAccount, getNativeCurrency, getTokenDecimals, isTokenEqual, getSystemAccountName } from '@acala-network/subql-utils'
 import { Token, Account, AccountBalance, DailyAccountBalance, HourAccountBalance, HourToken, DailyToken } from '../types/models'
 
 const nativeToken = getNativeCurrency(api as any);
@@ -71,12 +71,12 @@ export async function getAccount(id: string) {
     let record = await Account.get(id)
 
     if (!record) {
-        const systemAccount = isSystemAccount(id)
+        const isSystem = isSystemAccount(id)
 
         record = new Account(id)
 
         record.address = id
-        record.mark = systemAccount ? systemAccount.name : 'user'
+        record.mark = isSystem ? getSystemAccountName(id) : 'user'
     }
 
     return record
