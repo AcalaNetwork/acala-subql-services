@@ -5,7 +5,7 @@ import { getBlockHash, getBlockNumber, getBlockTimestamp } from '../utils/block'
 import { getExtrinsicHashFromEvent } from '../utils/extrinsic';
 import { getNativeCurrency, getTokenName } from '@acala-network/subql-utils';
 
-export async function saveTransfer(
+async function saveTransfer(
     tokenName: string,
     fromId: string,
     toId: string,
