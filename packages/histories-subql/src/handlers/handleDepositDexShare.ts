@@ -13,7 +13,7 @@ export const handleDepositDexShare = async (event : SubstrateEvent) => {
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getDepositDexShare(historyId);
 
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.tokenId = token.name;
   history.amount = BigInt(balance.toString());
   history.blockNumber = getBlockNumber(event.block);

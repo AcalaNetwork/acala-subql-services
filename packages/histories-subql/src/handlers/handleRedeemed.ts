@@ -10,7 +10,7 @@ export const handleRedeemed = async (event: SubstrateEvent) => {
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRedeemed(historyId);
 
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.stakingAmountRedeemed = BigInt(staking_amount_redeemed.toString());
   history.liquidAmountDeducted = BigInt(liquid_amount_deducted.toString());
   history.blockNumber = getBlockNumber(event.block);

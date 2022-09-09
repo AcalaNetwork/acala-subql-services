@@ -173,12 +173,12 @@ export const createProvisionToEnableHistory = async (event: SubstrateEvent) => {
 	// [trading_pair, pool_0_amount, pool_1_amount, total_share_amount\]
 	const [tradingPair, token0Amount, token1Amount] = event.event.data as unknown as [TradingPair, Balance, Balance, Balance];
 	const blockData = await ensureBlock(event);
-	const {address} =await getAccount(event.extrinsic.extrinsic.signer.toString());
+	const account = await getAccount(event.extrinsic.extrinsic.signer.toString());
 
 	const [poolId, token0Id, token1Id] = getPoolId(tradingPair[0], tradingPair[1]);
 	const historyId = `${blockData.hash}-${event.idx}`;
 	const history = await getProvisionToEnabled(historyId);
-	history.addressId = address;
+	history.addressId = account.id;
 	history.poolId = poolId;
 	history.token0Id = token0Id;
 	history.token1Id = token1Id;
@@ -190,7 +190,6 @@ export const createProvisionToEnableHistory = async (event: SubstrateEvent) => {
 	if (event.extrinsic) {
 		const extrinsicData = await ensureExtrinsic(event);
 		history.extrinsicId = extrinsicData.id;
-		await getAccount(event.extrinsic.extrinsic.signer.toString());
 
 		extrinsicData.section = event.event.section;
 		extrinsicData.method = event.event.method;
@@ -198,5 +197,7 @@ export const createProvisionToEnableHistory = async (event: SubstrateEvent) => {
 
 		await extrinsicData.save();
 	}
+
+	await account.save();
 	await history.save();
 };

@@ -10,7 +10,7 @@ export const handleRequestedRedeem = async (event: SubstrateEvent) => {
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRequestedRedeem(historyId);
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.amount = BigInt(liquid_amount.toString());
   history.allowFastMatch = allow_fast_match;
   history.blockNumber = getBlockNumber(event.block);

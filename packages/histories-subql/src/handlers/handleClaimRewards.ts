@@ -16,7 +16,7 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
   const historyId = `${block.block.header.number}-${event.idx.toString()}`;
   const history = await getClaimRewards(historyId);
 
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.tokenId = token.name;
   history.pool = getPoolId(pool);
   history.actualAmount = BigInt(actual_amount.toString());

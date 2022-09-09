@@ -34,5 +34,7 @@ export const closeByDex = async (event: SubstrateEvent) => {
 
   owner.txCount = owner.txCount + 1;
 
+  await owner.save();
+  await token.save();
   await history.save();
 }

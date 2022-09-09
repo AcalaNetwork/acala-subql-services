@@ -11,7 +11,7 @@ export const handleRedeemedByUnbond = async (event: SubstrateEvent) => {
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRedeemedByUnbond(historyId);
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.eraIndexWhenUnbond = BigInt(era_index_when_unbond.toString());
   history.liquidAmount = BigInt(liquid_amount.toString());
   history.unbondingStakingAmount = BigInt(unbonding_staking_amount.toString());

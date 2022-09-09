@@ -10,7 +10,7 @@ export const handleRedeemedByFastMatch = async (event: SubstrateEvent) => {
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRedeemedByFastMatch(historyId);
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.matchedLiquidAmount = BigInt(matchedLiquidAmount.toString());
   history.feeInLiquid = BigInt(feeInLiquid.toString());
   history.redeemedStakingAmount = BigInt(redeemedStakingAmount.toString());

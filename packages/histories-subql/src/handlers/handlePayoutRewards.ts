@@ -15,7 +15,7 @@ export const handlePayoutRewards = async (event: SubstrateEvent) => {
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getPayoutRewards(historyId);
 
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.pool = getPoolId(pool);
   history.tokenId = token.name
   history.actualPayout = BigInt(actual_payout.toString());

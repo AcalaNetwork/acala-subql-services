@@ -199,12 +199,13 @@ export const createAddLiquidyHistory = async (event: SubstrateEvent, price0: FN,
 	if (event.extrinsic) {
 		const extrinsicData = await ensureExtrinsic(event);
 		history.extrinsicId = extrinsicData.id;
-		await getAccount(event.extrinsic.extrinsic.signer.toString());
+		const account = await getAccount(event.extrinsic.extrinsic.signer.toString());
 
 		extrinsicData.section = event.event.section;
 		extrinsicData.method = event.event.method;
 		extrinsicData.addressId = event.extrinsic.extrinsic.signer.toString();
 
+		await account.save();
 		await extrinsicData.save();
 	}
 

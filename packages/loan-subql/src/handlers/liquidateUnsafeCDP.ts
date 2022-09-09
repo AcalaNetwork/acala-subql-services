@@ -37,5 +37,8 @@ export const liquidateUnsafeCDP = async (event: SubstrateEvent) => {
   }
 
   await owner.save();
+  await collateral.save();
+  await priceBundle.save();
+  await exchangeRateBundle.save();
   await history.save();
 }

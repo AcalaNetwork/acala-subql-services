@@ -36,6 +36,10 @@ export const transferLoan = async (event: SubstrateEvent) => {
   const toAccount = await getAccount(to.toString());
   const fromPosition = await getPosition(tokenName, fromAccount.id);
 
+  await fromAccount.save();
+  await toAccount.save();
+  await fromPosition.save();
+
   await updateLoanPosition(
     event.block,
     fromAccount.address,

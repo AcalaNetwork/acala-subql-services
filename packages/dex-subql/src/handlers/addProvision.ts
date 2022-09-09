@@ -6,10 +6,10 @@ import { getPoolId } from "../utils/getPoolId";
 
 export const addProvision = async (event: SubstrateEvent) => {
 	// [who, currency_id_0, contribution_0, currency_id_1, contribution_1]
-	const [account, _token0, _token0Amount, _token1, _token1Amount] = event.event.data as unknown as [AccountId, CurrencyId, Balance, CurrencyId, Balance];
+	const [address, _token0, _token0Amount, _token1, _token1Amount] = event.event.data as unknown as [AccountId, CurrencyId, Balance, CurrencyId, Balance];
 	const [poolId, token0Name, token1Name] = getPoolId(_token0, _token1);
 	const blockData = await ensureBlock(event);
-	const { address } = await getAccount(account.toString());
+	const account = await getAccount(address.toString());
 	const hourTime = getStartOfHour(blockData.timestamp);
 
 	await getToken(token0Name);
@@ -25,10 +25,11 @@ export const addProvision = async (event: SubstrateEvent) => {
 	provisionPool.token1Amount = provisionPool.token1Amount + token1Amount;
 	provisionPool.txCount = provisionPool.txCount + BigInt(1);
 
+	await account.save();
 	await provisionPool.save();
 	await addHourProvisionPool(blockData.id, hourTime, poolId, token0Amount, token1Amount);
-	await addUserProvision(address, poolId, token0Amount, token1Amount);
-	await createAddProvisionHistory(event, address, poolId, token0Name, token1Name, token0Amount, token1Amount);
+	await addUserProvision(account.address, poolId, token0Amount, token1Amount);
+	await createAddProvisionHistory(event, account.address, poolId, token0Name, token1Name, token0Amount, token1Amount);
 };
 
 export const addHourProvisionPool = async (number: string, hourTime: Date, poolId: string, token0Amount: bigint, token1Amount: bigint) => {
@@ -73,12 +74,13 @@ export const createAddProvisionHistory = async (event: SubstrateEvent, addressId
 	if (event.extrinsic) {
 		const extrinsicData = await ensureExtrinsic(event);
 		history.extrinsicId = extrinsicData.id;
-		await getAccount(event.extrinsic.extrinsic.signer.toString());
+		const account = await getAccount(event.extrinsic.extrinsic.signer.toString());
 
 		extrinsicData.section = event.event.section;
 		extrinsicData.method = event.event.method;
 		extrinsicData.addressId = event.extrinsic.extrinsic.signer.toString();
 
+		await account.save();
 		await extrinsicData.save();
 	}
 	await history.save();

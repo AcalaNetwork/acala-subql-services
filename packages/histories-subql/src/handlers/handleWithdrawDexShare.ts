@@ -13,7 +13,7 @@ export const handleWithdrawDexShare = async (event: SubstrateEvent) => {
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getWithdrawDexShare(historyId);
 
-  history.addressId = account.toString();
+  history.addressId = account.id;
   history.tokenId = token.name;
   history.amount = BigInt(balance.toString());
   history.blockNumber = getBlockNumber(event.block);
