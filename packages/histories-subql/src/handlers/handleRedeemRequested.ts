@@ -4,8 +4,8 @@ import { getAccount, getRedeemRequested } from "../records";
 import { getBlockHash, getBlockNumber, getBlockTimestamp } from "../utils/block";
 
 export const handleRedeemRequested = async (event: SubstrateEvent) => {
-  const [account, liquid_amount, extra_fee] = event.event.data as unknown as [AccountId, Balance, Balance];
-  await getAccount(account.toString());
+  const [address, liquid_amount, extra_fee] = event.event.data as unknown as [AccountId, Balance, Balance];
+  const account = await getAccount(address.toString());
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRedeemRequested(historyId);
@@ -18,5 +18,6 @@ export const handleRedeemRequested = async (event: SubstrateEvent) => {
   history.timestamp = getBlockTimestamp(event.block);
   history.eventIndex = Number(event.idx.toString());
 
+  await account.save();
   await history.save();
 }

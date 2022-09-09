@@ -5,8 +5,8 @@ import { getBlockHash, getBlockNumber, getBlockTimestamp } from "../utils/block"
 import { getExtrinsicHashFromEvent } from "../utils/extrinsic";
 
 export const handleRequestedRedeem = async (event: SubstrateEvent) => {
-  const [account, liquid_amount, allow_fast_match] = event.event.data as unknown as [AccountId, Balance, any];
-  await getAccount(account.toString());
+  const [address, liquid_amount, allow_fast_match] = event.event.data as unknown as [AccountId, Balance, any];
+  const account = await getAccount(address.toString());
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRequestedRedeem(historyId);
@@ -19,5 +19,6 @@ export const handleRequestedRedeem = async (event: SubstrateEvent) => {
   history.eventIndex = Number(event.idx.toString());
   history.extrinsic = getExtrinsicHashFromEvent(event);
 
+  await account.save();
   await history.save();
 }

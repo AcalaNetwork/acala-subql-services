@@ -5,8 +5,8 @@ import { getBlockHash, getBlockNumber, getBlockTimestamp } from "../utils/block"
 import { getExtrinsicHashFromEvent } from "../utils/extrinsic";
 
 export const handleRedeemedByFastMatch = async (event: SubstrateEvent) => {
-  const [account, matchedLiquidAmount, feeInLiquid, redeemedStakingAmount] = event.event.data as unknown as [AccountId, Balance, Balance, Balance];
-  await getAccount(account.toString());
+  const [address, matchedLiquidAmount, feeInLiquid, redeemedStakingAmount] = event.event.data as unknown as [AccountId, Balance, Balance, Balance];
+  const account = await getAccount(address.toString());
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRedeemedByFastMatch(historyId);
@@ -20,5 +20,6 @@ export const handleRedeemedByFastMatch = async (event: SubstrateEvent) => {
   history.eventIndex = Number(event.idx.toString());
   history.extrinsic = getExtrinsicHashFromEvent(event);
 
+  await account.save();
   await history.save();
 }

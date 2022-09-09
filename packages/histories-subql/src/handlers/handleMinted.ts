@@ -15,21 +15,27 @@ export const handleMinted = async (event: SubstrateEvent) => {
   history.extrinsic = getExtrinsicHashFromEvent(event);
 
   if (event.event.data.length === 3) {
-    const [account, amount_staked, amount_minted] = event.event.data as unknown as [AccountId, Balance, Balance];
-    await getAccount(account.toString())
-    history.addressId = account.toString();
+    const [address, amount_staked, amount_minted] = event.event.data as unknown as [AccountId, Balance, Balance];
+    const account = await getAccount(address.toString())
+
+    history.addressId = account.id;
     history.amountStaked = BigInt(amount_staked.toString());
     history.amountMinted = BigInt(amount_minted.toString());
     history.type ='homaLite.Minted'
+
+    await account.save();
+    await history.save();
   } else {
-    const [account, staking_currency_amount, liquid_amount_received, liquid_amount_added_to_void] = event.event.data as unknown as [AccountId, Balance, Balance, Balance];
-    await getAccount(account.toString())
-    history.addressId = account.toString();
+    const [address, staking_currency_amount, liquid_amount_received, liquid_amount_added_to_void] = event.event.data as unknown as [AccountId, Balance, Balance, Balance];
+    const account = await getAccount(address.toString())
+
+    history.addressId = account.id;
     history.stakingCurrencyAmount = BigInt(staking_currency_amount.toString());
     history.liquidAmountReceived = BigInt(liquid_amount_received.toString());
     history.liquidAmountAddedToVoid = BigInt(liquid_amount_added_to_void.toString());
     history.type ='homa.Minted'
-  }
 
-  await history.save();
+    await account.save();
+    await history.save();
+  }
 }

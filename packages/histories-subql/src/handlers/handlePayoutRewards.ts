@@ -7,9 +7,9 @@ import { getExtrinsicHashFromEvent } from "../utils/extrinsic";
 
 export const handlePayoutRewards = async (event: SubstrateEvent) => {
   // who, pool_id, reward_currency_type, actual_payout, deduction_amount
-  const [account, pool, reward_currency_type, actual_payout, deduction_amount] = event.event.data;
+  const [address, pool, reward_currency_type, actual_payout, deduction_amount] = event.event.data;
 
-  await getAccount(account.toString());
+  const account = await getAccount(address.toString());
   const token = await getToken(forceToCurrencyName(reward_currency_type as unknown as MaybeCurrency));
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
@@ -26,5 +26,7 @@ export const handlePayoutRewards = async (event: SubstrateEvent) => {
   history.eventIndex = Number(event.idx.toString());
   history.extrinsic = getExtrinsicHashFromEvent(event);
 
+  await account.save();
+  await token.save();
 	await history.save();
 }

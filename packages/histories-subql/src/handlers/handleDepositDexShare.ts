@@ -6,8 +6,8 @@ import { getBlockHash, getBlockNumber } from "../utils/block";
 import { getExtrinsicHashFromEvent } from "../utils/extrinsic";
 
 export const handleDepositDexShare = async (event : SubstrateEvent) => {
-  const [account, currency, balance] = event.event.data as unknown as [AccountId, CurrencyId, Balance];
-  await getAccount(account.toString());
+  const [address, currency, balance] = event.event.data as unknown as [AccountId, CurrencyId, Balance];
+  const account = await getAccount(address.toString());
   const token = await getToken(forceToCurrencyName(currency));
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
@@ -21,5 +21,7 @@ export const handleDepositDexShare = async (event : SubstrateEvent) => {
   history.extrinsic = getExtrinsicHashFromEvent(event);
   history.eventIndex = Number(event.idx.toString());
 
+  await account.save();
+  await token.save();
 	await history.save();
 }
