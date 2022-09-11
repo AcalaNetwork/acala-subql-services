@@ -18,17 +18,6 @@ async function saveTransfer(
     const transferId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
     const transfer = await getTransfer(transferId);
 
-    // update token record
-    token.transferVolume = token.transferVolume + amount;
-    token.updateAt = getBlockTimestamp(event.block);
-    token.updateAtBlock = getBlockNumber(event.block);
-    // update from account record
-    from.updateAt = getBlockTimestamp(event.block);
-    from.updateAtBlock = getBlockNumber(event.block);
-    // update to account record
-    to.txCount = to.txCount + 1;
-    to.updateAt = getBlockTimestamp(event.block);
-    to.updateAtBlock = getBlockNumber(event.block);
     // update tranfser history record
     transfer.tokenId = token.id;
     transfer.fromId = from.id;

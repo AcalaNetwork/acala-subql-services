@@ -6,9 +6,6 @@ type Account @entity {
   address: String
   type: AccountType
   name: String
-  txCount: Int
-  updateAt: Date
-  updateAtBlock: BigInt
 
   # history
   mint: [Mint] @derivedFrom(field: "address")
