@@ -26,9 +26,11 @@ export const getToken = async (token: string) => {
 
 		record.decimals = Number(decimals.toString());
 		record.name = token;
-		record.transferVolume = BigInt(0);
-		record.updateAt = new Date();
 	}
+
+	// TODO: should remove
+	record.transferVolume = BigInt(0);
+	record.updateAt = new Date();
 
 	return record;
 };
