@@ -26,11 +26,7 @@ type Token @entity {
     name: String!
     decimals: Int!
 
-    transferVolume: BigInt! # transfer volume
     transfer: [Transfer] @derivedFrom(field: "token")
-
-    updateAt: Date!
-    updateAtBlock: BigInt
 }
 
 

@@ -3,7 +3,7 @@ import { SubstrateEvent } from "@subql/types";
 import { getAccount, getRedeemRequestCancelled } from "../records";
 import { getBlockHash, getBlockNumber, getBlockTimestamp } from "../utils/block";
 
-export const redeemRequestCancelled = async (event: SubstrateEvent) => {
+export const handleRedeemRequestCancelled = async (event: SubstrateEvent) => {
   const [address, cancelled_liquid_amount] = event.event.data as unknown as [AccountId, Balance];
   const account = await getAccount(address.toString());
 
