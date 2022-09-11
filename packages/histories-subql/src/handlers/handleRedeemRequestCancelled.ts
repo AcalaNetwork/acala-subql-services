@@ -10,6 +10,7 @@ export const handleRedeemRequestCancelled = async (event: SubstrateEvent) => {
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRedeemRequestCancelled(historyId);
 
+  history.addressId = account.id;
   history.amount = BigInt(cancelled_liquid_amount.toString());
   history.blockNumber = getBlockNumber(event.block);
   history.blockHash = getBlockHash(event.block);
