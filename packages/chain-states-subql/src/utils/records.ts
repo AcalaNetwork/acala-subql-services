@@ -68,7 +68,6 @@ export async function getDailyToken(tokenName: string, timestamp: Date) {
 }
 
 export async function getAccount(id: string) {
-    logger.info(id)
     let record = await Account.get(id)
 
     if (!record) {
