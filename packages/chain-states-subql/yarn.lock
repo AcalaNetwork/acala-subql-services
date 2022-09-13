@@ -245,7 +245,7 @@ __metadata:
     "@acala-network/types": ^4.1.6-30
     "@open-web3/util": ^1.1.4
     "@subql/cli": 1.0.2-0
-    "@subql/node": ^1.4.1
+    "@subql/node": 1.1.2
     "@subql/types": ^1.1.0
     dayjs: ^1.10.7
     typescript: 4.4.4
@@ -3088,7 +3088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/event-emitter@npm:^1.3.0":
+"@nestjs/event-emitter@npm:^1.0.0, @nestjs/event-emitter@npm:^1.3.0":
   version: 1.3.1
   resolution: "@nestjs/event-emitter@npm:1.3.1"
   dependencies:
@@ -5253,6 +5253,45 @@ __metadata:
     sequelize: 6.19.0
     yargs: ^16.2.0
   checksum: 4f06f5ff10c1fb4a9628ce244a5400dd2fc6471f9b799000777938e9ecd2eb4cc414895d2d529692d5f152551a364d6a4ad73b74f76b0d5501216d6cb2250e99
+  languageName: node
+  linkType: hard
+
+"@subql/node@npm:1.1.2":
+  version: 1.1.2
+  resolution: "@subql/node@npm:1.1.2"
+  dependencies:
+    "@apollo/client": 3.5.8
+    "@nestjs/common": ^8.2.6
+    "@nestjs/core": ^8.2.6
+    "@nestjs/event-emitter": ^1.0.0
+    "@nestjs/platform-express": ^8.2.6
+    "@nestjs/schedule": ^1.0.2
+    "@polkadot/api": 8.2.1
+    "@subql/common": 1.1.0
+    "@subql/common-substrate": 1.1.0
+    "@subql/types": 1.1.0
+    "@subql/utils": 1.0.0
+    "@subql/x-merkle-mountain-range": 2.0.0-0.1.2
+    "@willsoto/nestjs-prometheus": ^4.4.0
+    app-module-path: ^2.2.0
+    dayjs: ^1.10.7
+    eventemitter2: ^6.4.5
+    lodash: ^4.17.21
+    merkle-tools: ^1.4.1
+    parse-json: ^6.0.2
+    pg: ^8.7.1
+    prom-client: ^14.0.1
+    reflect-metadata: ^0.1.13
+    rimraf: ^3.0.2
+    rxjs: ^7.5.2
+    sequelize: 6.19.0
+    tar: ^6.1.11
+    typescript: ^4.4.4
+    vm2: ^3.9.9
+    yargs: ^16.2.0
+  bin:
+    subql-node: ./bin/run
+  checksum: 094571e2a7fac205bfdfedfdf34e1c4d3e30fde2086c946d3be4d688b848f1c6cb34dd36c16968011d509f945b2eb0ab0badd5ba8241a7057d539800df1a30e4
   languageName: node
   linkType: hard
 
