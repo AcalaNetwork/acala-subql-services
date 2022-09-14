@@ -333,14 +333,12 @@ export const getUpdatePosition = async (id: string) => {
     record.ownerId = '';
     record.collateralId = '';
     record.blockId = '1';
-    record.extrinsicId = '';
     record.collateralAdjustment = BigInt(0);
     record.debitAdjustment = BigInt(0);
     record.collateralAdjustmentUSD = BigInt(0);
     record.debitAdjustmentUSD = BigInt(0);
     record.price = BigInt(0);
     record.debitExchangeRate = BigInt(0)
-    record.extrinsicId = ''
     record.timestamp = new Date(0)
   }
 
@@ -360,7 +358,6 @@ export const getCloseByDex = async (id: string) => {
     record.soldVolumeUSD = BigInt(0);
     record.refundVolumeUSD = BigInt(0);
     record.blockId = '1';
-    record.extrinsicId = '';
     record.price = BigInt(0);
     record.debitExchangeRate = BigInt(0)
     record.timestamp = new Date(0)
@@ -382,7 +379,6 @@ export const getLiquidUnsafe = async (id: string) => {
     record.badDebitVolumeUSD = BigInt(0);
     record.liquidationStrategy = '';
     record.blockId = '1';
-    record.extrinsicId = '';
     record.price = BigInt(0);
     record.debitExchangeRate = BigInt(0)
     record.timestamp = new Date(0)
@@ -401,7 +397,6 @@ export const getTransferPosition = async (id: string) => {
     record.fromId = '';
     record.toId = '';
     record.blockId = '1';
-    record.extrinsicId = '';
     record.timestamp = new Date()
   }
 
@@ -417,7 +412,6 @@ export const getConfiscatePosition = async (id: string) => {
     record.collateralId = '';
     record.blockId = '1';
     record.ownerId = '';
-    record.extrinsicId = '';
     record.collateralAdjustment = BigInt(0);
     record.debitAdjustment = BigInt(0);
     record.collateralAdjustmentUSD = BigInt(0);

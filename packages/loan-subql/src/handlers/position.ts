@@ -73,6 +73,7 @@ export const createUpdatePositionHistroy = async (
   debitExchangeRate: bigint
 ) => {
   let isDerived = false;
+  // TODO: should fix
   event.extrinsic?.events.forEach(event => {
     const seciton = event.event.section;
     const method = event.event.method;
@@ -88,6 +89,7 @@ export const createUpdatePositionHistroy = async (
       isDerived = true;
     }
   })
+
   const collateral = await getCollateral(collateralName);
   const block = await getBlock(event.block);
   const history = await getUpdatePosition(`${block.id}-${event.idx.toString()}`);

@@ -1,8 +1,6 @@
 specVersion: 1.0.0
 name: karura-loan
 version: 1.0.0
-description: 'statistics tokens data of karura network'
-repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
 runner:
   node:
     name: "@subql/node"

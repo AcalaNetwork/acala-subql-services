@@ -210,7 +210,7 @@ type CollateralParamsHistory @entity {
 
 # history
 type UpdatePosition @entity {
-  id: ID! # `extrinshcHash`-`event idx`
+  id: ID! # `block hash`-`event idx`
 
   owner: Account! 
   collateral: Collateral!
