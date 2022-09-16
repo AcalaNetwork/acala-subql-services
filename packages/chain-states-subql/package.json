@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=2 --port=3123 --debug",
+    "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=2 --port=3123",
     "build": "tsc -b",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
@@ -38,8 +38,6 @@
     "@acala-network/types": "4.1.6-30",
     "@acala-network/sdk-core": "4.1.6-30",
     "@acala-network/sdk-wallet": "4.1.6-30",
-    "@acala-network/type-definitions": "^4.1.6-30",
-    "@polkadot/api": "^7.1.1",
-    "@polkadot/types": "^7.1.1"
+    "@acala-network/type-definitions": "4.1.6-30"
   }
 }

@@ -30,10 +30,6 @@ export class AccountBalance implements Entity {
 
     public updateAtBlock: bigint;
 
-    public initAt: bigint;
-
-    public initFromChainAt?: bigint;
-
 
     async save(): Promise<void>{
         let id = this.id;

@@ -7,11 +7,9 @@ export async function handleTransfer(
     toId: string,
     amount: bigint,
     timestamp: Date,
-    blockNumber: bigint,
-    fromAccountIsNew?: boolean,
-    toAccountIsNew?: boolean,
+    blockNumber: bigint
 ) {
     await updateToken(tokenName, BigInt(0), amount, BigInt(0), BigInt(0), blockNumber, timestamp)
-    await updateAccountBalance(fromId, tokenName, -amount, BigInt(0), BigInt(0), timestamp, blockNumber, fromAccountIsNew)
-    await updateAccountBalance(toId, tokenName, amount, BigInt(0), BigInt(0), timestamp, blockNumber, toAccountIsNew)
+    await updateAccountBalance(fromId, tokenName, -amount, BigInt(0), BigInt(0), timestamp, blockNumber)
+    await updateAccountBalance(toId, tokenName, amount, BigInt(0), BigInt(0), timestamp, blockNumber)
 }

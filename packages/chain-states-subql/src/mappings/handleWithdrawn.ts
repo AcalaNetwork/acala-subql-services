@@ -11,5 +11,5 @@ export async function handleWithdrawn(
 ) {
     // if the withdrawn event had been sent, that means the new amount of token had been burned
     await updateToken(tokenName, -amount, amount, BigInt(0), BigInt(0), blockNumber, timestamp)
-    await updateAccountBalance(recipientId, tokenName, -amount, BigInt(0), BigInt(0), timestamp, blockNumber, accountIsNew)
+    await updateAccountBalance(recipientId, tokenName, -amount, BigInt(0), BigInt(0), timestamp, blockNumber)
 }

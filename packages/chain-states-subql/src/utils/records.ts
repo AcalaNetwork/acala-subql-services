@@ -1,7 +1,17 @@
 import { isSystemAccount, getNativeCurrency, getTokenDecimals, isTokenEqual, getSystemAccountName } from '@acala-network/subql-utils'
-import { Token, Account, AccountBalance, DailyAccountBalance, HourAccountBalance, HourToken, DailyToken } from '../types/models'
+import { Block, Token, Account, AccountBalance, DailyAccountBalance, HourAccountBalance, HourToken, DailyToken } from '../types/models'
 
 const nativeToken = getNativeCurrency(api as any);
+
+export async function getBlock(id: string) {
+    let record = await Block.get(id)
+
+    if (!record) {
+        record = new Block(id)
+    }
+
+    return record
+}
 
 export async function getToken(id: string) {
     let record = await Token.get(id)
@@ -85,8 +95,7 @@ export async function getAccount(id: string) {
 export async function getAccountBalance(
     address: string,
     tokenName: string,
-    blockNumber: bigint,
-    isNewAccount?: boolean
+    blockNumber: bigint
 ) {
     const id = `${address}-${tokenName}`
 
@@ -98,30 +107,11 @@ export async function getAccountBalance(
         record.accountId = address
         record.tokenId = tokenName
 
-        let total = BigInt(0);
         let free = BigInt(0);
         let reserved = BigInt(0);
         let frozen = BigInt(0);
 
-        // will init token balance when token is native token and is not new account
-        if (isTokenEqual(tokenName, nativeToken) && !isNewAccount) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const balanceData = (await api.query.system.account(address)) as any
-
-            free = BigInt(balanceData.data.free.toString())
-            reserved = BigInt(balanceData.data.reserved.toString())
-
-            const miscFrozen = BigInt(balanceData.data.miscFrozen.toString())
-            const feeFrozen = BigInt(balanceData.data.feeFrozen.toString())
-
-            frozen = miscFrozen > feeFrozen ? miscFrozen : feeFrozen;
-            record.initFromChainAt = blockNumber
-        }
-
-        total = free + reserved
-
-        record.initAt= blockNumber
-        record.total = total 
+        record.total = free + reserved
         record.free = free
         record.reserved = reserved
         record.frozen = frozen

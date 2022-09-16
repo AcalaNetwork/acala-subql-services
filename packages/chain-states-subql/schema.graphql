@@ -51,8 +51,6 @@ type AccountBalance @entity {
     frozen: BigInt! # locked balance
 
     updateAtBlock: BigInt! # update block number
-    initAt: BigInt!
-    initFromChainAt: BigInt
 }
 
 type HourAccountBalance @entity {
@@ -81,9 +79,9 @@ type DailyAccountBalance @entity {
     updateAtBlock: BigInt # update at block
 }
 
-type ReadBlock @entity {
+type Block @entity {
     id: ID!
+    hash: String
     height: BigInt
-    size: Int
-    start: Int
+    timestamp: Date
 }

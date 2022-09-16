@@ -30,26 +30,20 @@ export async function updateAccountBalance(
     frozenChanged: bigint,
     timestamp: Date,
     blockNumber: bigint,
-    accountIsNew = false
 ) {
     const account = await getAccount(address)
-    const accountBalance = await getAccountBalance(address, tokenName, blockNumber, accountIsNew)
+    const accountBalance = await getAccountBalance(address, tokenName, blockNumber)
 
     const hourDate = getStartOfHour(timestamp)
     const dayDate = getStartOfDay(timestamp)
     const hourAccountBalance = await getHourAccountBalance(address, tokenName, hourDate)
     const dailyAccountBalance = await getDailyAccountBalance(address, tokenName, dayDate)
 
-    // ignore update when the account balance is initizlied and init from chain is equal to blocknumber
-    if (isTokenEqual(tokenName, nativeToken) && accountBalance.initFromChainAt && accountBalance.initFromChainAt === blockNumber) {
-        // pass
-    } else {
-        // if free is changed, the total balance will change
-        accountBalance.total = accountBalance.total + freeChanged + frozenChanged
-        accountBalance.free = accountBalance.free + freeChanged
-        accountBalance.reserved = accountBalance.reserved + reservedChanged
-        accountBalance.frozen = accountBalance.frozen + frozenChanged
-    }
+    // if free is changed, the total balance will change
+    accountBalance.total = accountBalance.total + freeChanged + frozenChanged
+    accountBalance.free = accountBalance.free + freeChanged
+    accountBalance.reserved = accountBalance.reserved + reservedChanged
+    accountBalance.frozen = accountBalance.frozen + frozenChanged
 
     updateAccountBalanceHistoryRecord(accountBalance, hourAccountBalance)
     updateAccountBalanceHistoryRecord(accountBalance, dailyAccountBalance)

@@ -6,10 +6,9 @@ export async function handleDeposit(
     tokenName: string,
     amount: bigint,
     timestamp: Date,
-    blockNumber: bigint,
-    accountIsNew?: boolean
+    blockNumber: bigint
 ) {
     // if the deposit event had been sent, that means the new amount of token had been issued
     await updateToken(tokenName, amount, amount, BigInt(0), BigInt(0), blockNumber, timestamp)
-    await updateAccountBalance(recipientId, tokenName, amount, BigInt(0), BigInt(0), timestamp, blockNumber, accountIsNew)
+    await updateAccountBalance(recipientId, tokenName, amount, BigInt(0), BigInt(0), timestamp, blockNumber)
 }

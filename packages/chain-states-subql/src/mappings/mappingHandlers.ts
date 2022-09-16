@@ -6,12 +6,22 @@ import { handleReserved } from './handleReserved'
 import { handleUnReserved } from './handleUnReserved'
 import { handleReservedRepatriated } from './handleReserveRepatriated'
 import { handleWithdrawn } from './handleWithdrawn'
-import { isNewAccount } from '../utils/isNewAccount'
 import { handleSlashed } from './handleSlashed'
-import { readDataFromFile } from '../utils/readDataFromFile'
 
 const nativeToken = getNativeCurrency(api as any);
-export const startHeight = 1200000;
+
+const isAcala = api.registry.chainSS58 === 10;
+
+// when insert process end
+export const insertBefore = isAcala ? BigInt(1870000) : BigInt(2650000);
+// when the process start at
+export const startAt = isAcala ? BigInt(1869500) : BigInt(2649500);
+
+export * from './handleBlock';
+
+function shouldJump (blockNumber: bigint) {
+    return blockNumber <= insertBefore;
+}
 
 /*
 handle balances.Transfer
@@ -26,12 +36,10 @@ export async function handleBalancesTransfer(event: SubstrateEvent) {
     const amount = BigInt(value.toString())
     const tokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
-    const fromAccountIsNew = isNewAccount(fromId, event);
-    const toAccountIsNew = isNewAccount(toId, event);
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
-    await handleTransfer(tokenName, fromId, toId, amount, event.block.timestamp, blockNumber, fromAccountIsNew, toAccountIsNew)
+    if (shouldJump(blockNumber)) return;
+
+    await handleTransfer(tokenName, fromId, toId, amount, event.block.timestamp, blockNumber)
 }
 
 /*
@@ -45,11 +53,10 @@ export async function handleBalancesDeposit(event: SubstrateEvent) {
     const amount = BigInt(value.toString())
     const tokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
-    const accountIsNew = isNewAccount(toId, event);
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
-    await handleDeposit(toId, tokenName, amount, event.block.timestamp, blockNumber, accountIsNew)
+    if (shouldJump(blockNumber)) return;
+
+    await handleDeposit(toId, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
 /*
@@ -63,11 +70,10 @@ export async function handleBalancesWithdraw(event: SubstrateEvent) {
     const amount = BigInt(value.toString())
     const tokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
-    const accountIsNew = isNewAccount(fromId, event);
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
-    await handleWithdrawn(fromId, tokenName, amount, event.block.timestamp, blockNumber, accountIsNew)
+    if (shouldJump(blockNumber)) return;
+
+    await handleWithdrawn(fromId, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
 /*
@@ -80,8 +86,8 @@ export async function handleBalancesDustLost(event: SubstrateEvent) {
     const tokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleWithdrawn(fromId, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -97,8 +103,8 @@ export async function handleBalancesReserved(event: SubstrateEvent) {
     const nativeTokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleReserved(account, nativeTokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -114,8 +120,8 @@ export async function handleBalancesUnreserved(event: SubstrateEvent) {
     const nativeTokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleUnReserved(account, nativeTokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -138,8 +144,8 @@ export async function handleBalancesReserveRepatriated(event: SubstrateEvent) {
     const nativeTokenName = await getTokenName(nativeToken)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleReservedRepatriated(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         status as any,
@@ -171,8 +177,8 @@ export async function handleTokensTransfer(event: SubstrateEvent) {
     const tokenName = await getTokenName(currency)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleTransfer(tokenName, fromId, toId, amountN, event.block.timestamp, blockNumber)
 }
 
@@ -192,8 +198,8 @@ export async function handleTokensReserved(event: SubstrateEvent) {
     const tokenName = await getTokenName(currencyId)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleReserved(account, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -211,8 +217,8 @@ export async function handleTokensUnreserved(event: SubstrateEvent) {
     const tokenName = await getTokenName(currencyId)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleUnReserved(account, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -235,8 +241,8 @@ export async function handleTokensReserveRepatriated(event: SubstrateEvent) {
     const tokenName = await getTokenName(currencyId)
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleReservedRepatriated(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         status as any,
@@ -265,8 +271,8 @@ export async function handleTokensDeposited(event: SubstrateEvent) {
     const amount = BigInt(value.toString())
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleDeposit(recipientId, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -286,8 +292,8 @@ export async function handleTokensWithdrawn(event: SubstrateEvent) {
     const amount = BigInt(value.toString())
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleWithdrawn(accountId, tokenName, amount, event.block.timestamp, blockNumber)
 }
 
@@ -309,7 +315,7 @@ export async function handleTokensSlashed (event: SubstrateEvent) {
     const reservedAmount = BigInt(reserved.toString())
     const blockNumber = event.block.block.header.number.toBigInt()
 
-    await readDataFromFile(event)
-    if(blockNumber <= BigInt(startHeight)) return;
+    if (shouldJump(blockNumber)) return;
+
     await handleSlashed(accountId, tokenName, freeAmount, reservedAmount, event.block.timestamp, blockNumber);
 }

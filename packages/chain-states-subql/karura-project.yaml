@@ -20,10 +20,12 @@ network:
     file: './dist/chain-types.js'
 dataSources:
     - kind: substrate/Runtime
-      startBlock: 2098000
+      startBlock: 2649500
       mapping:
         file: './dist/index.js'
         handlers:
+          - handler: handleBlock
+            kind: substrate/BlockHandler
           - handler: handleBalancesDustLost
             kind: substrate/EventHandler
             filter:

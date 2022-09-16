@@ -16,5 +16,5 @@ export {HourAccountBalance} from "./HourAccountBalance"
 
 export {DailyAccountBalance} from "./DailyAccountBalance"
 
-export {ReadBlock} from "./ReadBlock"
+export {Block} from "./Block"
 
