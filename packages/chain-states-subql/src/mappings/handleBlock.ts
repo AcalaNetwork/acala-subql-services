@@ -32,6 +32,9 @@ export async function handleBlock(block: SubstrateBlock) {
 
     for (let i = 0; i < 1000; i++) {
       const data = accountData[i + round * 1000] as { account: string; token: string; free: string; reserved: string; frozen: string };
+
+      if (!data) return;
+
       const token = await getToken(data.token);
 
       await token.save();
