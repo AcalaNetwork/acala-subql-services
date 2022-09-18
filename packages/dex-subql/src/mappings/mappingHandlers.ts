@@ -1,8 +1,22 @@
-import { SubstrateEvent } from "@subql/types";
+import { SubstrateBlock, SubstrateEvent } from "@subql/types";
 import { addLiquidity, addProvision, listProvision, removeLiquidity, swap } from "../handlers";
 import { provisionToEnable } from "../handlers";
+import { forceUpdatePositions } from "../handlers/forceUpdatePositions";
+
+const isAcala = api.registry.chainSS58 === 10;
+const acalaForceUpdateAt = BigInt(1889000);
+
+export const handleBlock = async (block: SubstrateBlock) => {
+	const height = block.block.header.number.toBigInt();
+
+	if (height === acalaForceUpdateAt && isAcala) {
+		await forceUpdatePositions();
+	}
+}
 
 export const handleProvisioningToEnabled = async (event: SubstrateEvent) => {
+
+
 	await provisionToEnable(event);
 };
 
