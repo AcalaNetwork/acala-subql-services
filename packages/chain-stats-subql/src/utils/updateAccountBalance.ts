@@ -1,14 +1,11 @@
-import { getStartOfDay, getStartOfHour, isTokenEqual, getNativeCurrency } from '@acala-network/subql-utils'
+import { getStartOfDay, getStartOfHour } from '@acala-network/subql-utils'
 import { AccountBalance, DailyAccountBalance, HourAccountBalance } from '../types/models'
 import { getAccount, getAccountBalance, getDailyAccountBalance, getHourAccountBalance } from './records'
-
-const nativeToken = getNativeCurrency(api as any);
 
 export function updateAccountBalanceHistoryRecord(source: AccountBalance, target: HourAccountBalance | DailyAccountBalance) {
     target.total = source.total
     target.free = source.free
     target.reserved = source.reserved
-    target.frozen = source.frozen
     target.updateAtBlock = source.updateAtBlock
 }
 
@@ -18,7 +15,6 @@ export function updateAccountBalanceHistoryRecord(source: AccountBalance, target
  * @param tokenName
  * @param freeChanged
  * @param reservedChanged
- * @param frozenChanged
  * @param timestamp
  * @param blockNumber
  */
@@ -27,7 +23,6 @@ export async function updateAccountBalance(
     tokenName: string,
     freeChanged: bigint,
     reservedChanged: bigint,
-    frozenChanged: bigint,
     timestamp: Date,
     blockNumber: bigint,
 ) {
@@ -40,10 +35,9 @@ export async function updateAccountBalance(
     const dailyAccountBalance = await getDailyAccountBalance(address, tokenName, dayDate)
 
     // if free is changed, the total balance will change
-    accountBalance.total = accountBalance.total + freeChanged + frozenChanged
+    accountBalance.total = accountBalance.total + freeChanged + reservedChanged
     accountBalance.free = accountBalance.free + freeChanged
     accountBalance.reserved = accountBalance.reserved + reservedChanged
-    accountBalance.frozen = accountBalance.frozen + frozenChanged
 
     updateAccountBalanceHistoryRecord(accountBalance, hourAccountBalance)
     updateAccountBalanceHistoryRecord(accountBalance, dailyAccountBalance)

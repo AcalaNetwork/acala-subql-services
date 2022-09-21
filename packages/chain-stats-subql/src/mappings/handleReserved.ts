@@ -3,6 +3,6 @@ import { updateToken } from '../utils/updateToken'
 
 export async function handleReserved(accountId: string, tokenName: string, amount: bigint, timestamp: Date, blockNumber: bigint) {
     // reserved isn't includes in the trading volume
-    await updateToken(tokenName, BigInt(0), BigInt(0), amount, BigInt(0), blockNumber, timestamp)
-    await updateAccountBalance(accountId, tokenName, -amount, amount, BigInt(0), timestamp, blockNumber)
+    await updateToken(tokenName, BigInt(0), BigInt(0), amount, blockNumber, timestamp)
+    await updateAccountBalance(accountId, tokenName, -amount, amount, timestamp, blockNumber)
 }

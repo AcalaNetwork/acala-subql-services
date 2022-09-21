@@ -26,8 +26,6 @@ export class HourAccountBalance implements Entity {
 
     public reserved: bigint;
 
-    public frozen: bigint;
-
     public timestamp?: Date;
 
     public updateAtBlock?: bigint;

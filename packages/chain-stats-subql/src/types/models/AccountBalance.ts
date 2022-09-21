@@ -26,8 +26,6 @@ export class AccountBalance implements Entity {
 
     public reserved: bigint;
 
-    public frozen: bigint;
-
     public updateAtBlock: bigint;
 
 

@@ -9,7 +9,6 @@ function absBN(n: bigint) {
 export function updateTokenHistoryRecord(source: Token, target: HourToken | DailyToken) {
     target.issuance = source.issuance
     target.reserved = source.reserved
-    target.frozen = source.frozen
     target.updateAtBlock = source.updateAtBlock
 }
 
@@ -19,7 +18,6 @@ export function updateTokenHistoryRecord(source: Token, target: HourToken | Dail
  * @param issuanceChanged
  * @param volumeChanged
  * @param reservedChanged
- * @param frozenChanged
  * @param blockNumber
  * @param timestamp
  */
@@ -28,7 +26,6 @@ export async function updateToken(
     issuanceChanged: bigint,
     volumeChanged: bigint,
     reservedChanged: bigint,
-    frozenChanged: bigint,
     blockNumber: bigint,
     timestamp: Date
 ) {
@@ -42,7 +39,6 @@ export async function updateToken(
     token.volume = token.volume + absBN(volumeChanged)
     token.issuance = token.issuance + issuanceChanged
     token.reserved = token.reserved + reservedChanged
-    token.frozen = token.frozen + frozenChanged
     token.updateAtBlock = blockNumber
 
     updateTokenHistoryRecord(token, hourToken)

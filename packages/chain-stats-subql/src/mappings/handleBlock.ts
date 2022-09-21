@@ -43,7 +43,6 @@ export async function handleBlock(block: SubstrateBlock) {
         data.token,
         BigInt(data.free),
         BigInt(data.reserved),
-        BigInt(data.frozen),
         block.timestamp,
         blockNumber
       )

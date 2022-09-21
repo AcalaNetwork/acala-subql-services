@@ -31,7 +31,6 @@ export async function getToken(id: string) {
 
         record.volume = BigInt(0)
         record.reserved = BigInt(0)
-        record.frozen = BigInt(0)
         record.issuance = issuance
         record.updateAtBlock = BigInt(0)
     }
@@ -49,7 +48,6 @@ export async function getHourToken(tokenName: string, timestamp: Date) {
 
         record.tokenId = tokenName
         record.volume = BigInt(0)
-        record.frozen = BigInt(0)
         record.reserved = BigInt(0)
         record.timestmap = timestamp
         record.updateAtBlock = BigInt(0)
@@ -68,7 +66,6 @@ export async function getDailyToken(tokenName: string, timestamp: Date) {
 
         record.tokenId = tokenName
         record.volume = BigInt(0)
-        record.frozen = BigInt(0)
         record.reserved = BigInt(0)
         record.timestmap = timestamp
         record.updateAtBlock = BigInt(0)
@@ -109,12 +106,10 @@ export async function getAccountBalance(
 
         let free = BigInt(0);
         let reserved = BigInt(0);
-        let frozen = BigInt(0);
 
         record.total = free + reserved
         record.free = free
         record.reserved = reserved
-        record.frozen = frozen
     }
 
     record.updateAtBlock = blockNumber
@@ -136,7 +131,6 @@ export async function getHourAccountBalance(address: string, tokenName: string, 
         record.total = BigInt(0)
         record.free = BigInt(0)
         record.reserved = BigInt(0)
-        record.frozen = BigInt(0)
         record.timestamp = timestamp
         record.updateAtBlock = BigInt(0)
     }
@@ -158,7 +152,6 @@ export async function getDailyAccountBalance(address: string, tokenName: string,
         record.total = BigInt(0)
         record.free = BigInt(0)
         record.reserved = BigInt(0)
-        record.frozen = BigInt(0)
         record.timestamp = timestamp
         record.updateAtBlock = BigInt(0)
     }

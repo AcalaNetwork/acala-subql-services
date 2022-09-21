@@ -1,5 +1,5 @@
 {
-  "name": "@acala-subql-services/chain-states-subql",
+  "name": "@acala-subql-services/chain-stats-subql",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",

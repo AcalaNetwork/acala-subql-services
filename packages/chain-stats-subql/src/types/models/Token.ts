@@ -24,8 +24,6 @@ export class Token implements Entity {
 
     public reserved: bigint;
 
-    public frozen: bigint;
-
     public updateAtBlock?: bigint;
 
 

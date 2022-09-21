@@ -24,8 +24,6 @@ export class HourToken implements Entity {
 
     public reserved: bigint;
 
-    public frozen: bigint;
-
     public timestmap?: Date;
 
     public updateAtBlock?: bigint;
