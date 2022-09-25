@@ -24,6 +24,11 @@ dataSources:
     mapping:
       file: "./dist/index.js"
       handlers:
+        - handler: handleEnableTradingPair
+          kind: substrate/EventHandler
+          filter:
+            module: dex
+            method: EnableTradingPair
         - handler: handleProvisioningToEnabled
           kind: substrate/EventHandler
           filter:

@@ -166,7 +166,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-network/sdk@npm:^4.1.6-14":
+"@acala-network/sdk@npm:^4.1.6-30":
   version: 4.1.6-30
   resolution: "@acala-network/sdk@npm:4.1.6-30"
   dependencies:
@@ -194,33 +194,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-network/subql-utils@npm:^0.1.22":
-  version: 0.1.22
-  resolution: "@acala-network/subql-utils@npm:0.1.22"
+"@acala-network/subql-utils@npm:^0.1.23":
+  version: 0.1.23
+  resolution: "@acala-network/subql-utils@npm:0.1.23"
   dependencies:
-    "@acala-network/api": ^4.1.6-14
-    "@acala-network/sdk": ^4.1.6-14
-    "@acala-network/sdk-core": ^4.1.6-14
-    "@acala-network/types": ^4.1.6-14
+    "@acala-network/api": ^4.1.6-30
+    "@acala-network/sdk": ^4.1.6-30
+    "@acala-network/sdk-core": ^4.1.6-30
+    "@acala-network/types": ^4.1.6-30
     "@polkadot/api": ^8.10.1
     "@polkadot/dev": ^0.65.77
-    "@subql/node": ^0.29.1
+    "@subql/node": ^1.4.1
     "@subql/types": ^0.10.0
     dayjs: ^1.10.7
-  checksum: ecadd96b6179e0c0da743d583ab687832f633bb7bc547286b4d7cbe0354a4b3a5b92040446b1de9b8b3c044dc8d5cfb897427ca875e618a26f21c3073836e150
+  checksum: ff89c40af2dcce0494f2cd163bdc9c2cec62e449ce7566ce1b42683594cb35a31f59d6178b57fcbe59de4a257b8863e6b9e1fbe13c78dc2c43249985a68a0e12
   languageName: node
   linkType: hard
 
-"@acala-network/type-definitions@npm:4.1.4-3":
-  version: 4.1.4-3
-  resolution: "@acala-network/type-definitions@npm:4.1.4-3"
-  dependencies:
-    "@open-web3/orml-type-definitions": ^1.1.4
-  checksum: 9e8581c8d36b01635c2ab9f901df20f7be403d56357b003e8575e6f5651396f84bec3cca3bd42c0fed08b4df95a73a37ccdc46a6b3410da1d832a0da5b9e9cd3
-  languageName: node
-  linkType: hard
-
-"@acala-network/type-definitions@npm:4.1.6-30, @acala-network/type-definitions@npm:^4.1.6-30":
+"@acala-network/type-definitions@npm:^4.1.6-30":
   version: 4.1.6-30
   resolution: "@acala-network/type-definitions@npm:4.1.6-30"
   dependencies:
@@ -249,14 +240,13 @@ __metadata:
   dependencies:
     "@acala-network/sdk-core": ^4.1.6-30
     "@acala-network/sdk-wallet": ^4.1.6-30
-    "@acala-network/subql-utils": ^0.1.22
+    "@acala-network/subql-utils": ^0.1.23
     "@acala-network/type-definitions": ^4.1.6-30
     "@acala-network/types": ^4.1.6-30
     "@open-web3/util": ^1.1.4
-    "@polkadot/api": ^7.1.1
-    "@subql/cli": ^0.20.0
-    "@subql/node": ^1.4.1
-    "@subql/types": ^0.11.0
+    "@subql/cli": 1.0.2-0
+    "@subql/node": 1.1.2
+    "@subql/types": ^1.1.0
     dayjs: ^1.10.7
     typescript: 4.4.4
   languageName: unknown
@@ -4511,7 +4501,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/util@npm:8.7.1, @polkadot/util@npm:^8, @polkadot/util@npm:^8.7.1":
+"@polkadot/util@npm:8.7.1, @polkadot/util@npm:^8.7.1":
   version: 8.7.1
   resolution: "@polkadot/util@npm:8.7.1"
   dependencies:
@@ -4527,7 +4517,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/util@npm:9.7.2, @polkadot/util@npm:^9.0.1":
+"@polkadot/util@npm:9.7.2, @polkadot/util@npm:^9, @polkadot/util@npm:^9.0.1":
   version: 9.7.2
   resolution: "@polkadot/util@npm:9.7.2"
   dependencies:
@@ -5123,16 +5113,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@subql/cli@npm:^0.20.0":
-  version: 0.20.1
-  resolution: "@subql/cli@npm:0.20.1"
+"@subql/cli@npm:1.0.2-0":
+  version: 1.0.2-0
+  resolution: "@subql/cli@npm:1.0.2-0"
   dependencies:
     "@oclif/command": ^1.8.16
     "@oclif/config": ^1.18.3
     "@oclif/core": ^1.3.3
     "@oclif/plugin-help": ^3.2.3
-    "@subql/common": 0.17.0
-    "@subql/validator": 0.4.4
+    "@subql/common": 1.1.0
+    "@subql/common-substrate": 1.1.0
+    "@subql/common-terra": 0.6.0
+    "@subql/utils": 1.0.0
+    "@subql/validator": 1.1.0
     "@types/ejs": ^3.1.0
     "@types/inquirer": ^8.2.0
     cli-ux: ^6.0.9
@@ -5152,7 +5145,21 @@ __metadata:
     yaml-loader: ^0.6.0
   bin:
     subql: ./bin/run
-  checksum: 1b04c0404f1bfd13416e564584ecd7268de53860c87b92fb62a0e39341d20b08e267202554de522dea34b052cca4d47299bd1c62983ac8ea8c00a9edbf86391f
+  checksum: 0ca9621dee69c55d1d13f43cecb904d8fd9497c33a6b23acc61a266d86f8699d07403eb3868ddbdc67a87f3bc244177695620f67bcdf62bfb514b2800d69dae6
+  languageName: node
+  linkType: hard
+
+"@subql/common-substrate@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@subql/common-substrate@npm:1.1.0"
+  dependencies:
+    "@subql/common": 1.1.0
+    "@subql/types": 1.1.0
+    class-transformer: 0.4.0
+    class-validator: ^0.13.2
+    js-yaml: ^4.1.0
+    reflect-metadata: ^0.1.13
+  checksum: b5baa0ee37224c9c8f16270cd3e7992142691b8c87c779f09ea5d343c2f4d99808858b828fd533057a77dc2d5d6278aed7da622a32d90e5b10de6bd04523233b
   languageName: node
   linkType: hard
 
@@ -5170,57 +5177,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@subql/common@npm:0.17.0":
-  version: 0.17.0
-  resolution: "@subql/common@npm:0.17.0"
+"@subql/common-terra@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@subql/common-terra@npm:0.6.0"
   dependencies:
-    "@polkadot/util": ^8
-    "@subql/types": 0.14.0
-    "@subql/x-vm2": ^3.9.3-0.1.0
-    ansi-styles: ^6.1.0
-    bn.js: 5.2.0
-    chalk: ^4.1.2
-    class-transformer: 0.5.1
+    "@subql/types-terra": 0.4.0
+    class-transformer: 0.4.0
     class-validator: ^0.13.2
-    detect-port: ^1.3.0
-    flatted: ^3.2.5
-    graphql: ^15.8.0
-    graphql-tag: ^2.12.6
-    ipfs-http-client: ^52.0.3
     js-yaml: ^4.1.0
-    pino: ^6.13.3
     reflect-metadata: ^0.1.13
-    rotating-file-stream: ^3.0.2
-    sequelize: ^6.15.0
-    tar: ^6.1.11
-  checksum: c86a60d8e67daeb6f4b47f03136007d81663568afb1fc142322b3a0d0720c8a841fe305c5c24dc023bed90622b8e26e50196a0851640574fe9fae2749dc66a6f
+  checksum: 90e45b4dcac1f624d18395a3db928a7a7a86dd199d0a8f7594862ab62256dc39170b1488b0490a46139f25563178beb103eee2c8450c342bf49d7553399d5729
   languageName: node
   linkType: hard
 
-"@subql/common@npm:0.18.0":
-  version: 0.18.0
-  resolution: "@subql/common@npm:0.18.0"
+"@subql/common@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@subql/common@npm:1.1.0"
   dependencies:
-    "@polkadot/util": ^8
-    "@subql/types": 0.14.0
-    "@subql/x-vm2": ^3.9.3-0.1.0
-    ansi-styles: ^6.1.0
-    bn.js: 5.2.0
-    chalk: ^4.1.2
+    axios: ^0.27.2
     class-transformer: 0.5.1
     class-validator: ^0.13.2
-    detect-port: ^1.3.0
-    flatted: ^3.2.5
-    graphql: ^15.8.0
-    graphql-tag: ^2.12.6
-    ipfs-http-client: ^52.0.3
     js-yaml: ^4.1.0
-    pino: ^6.13.3
     reflect-metadata: ^0.1.13
-    rotating-file-stream: ^3.0.2
-    sequelize: ^6.15.0
-    tar: ^6.1.11
-  checksum: c50dcc185d0ce8548ab26d2f66436f8193898696ba76f581aa7cdaea5388daccbf024d54855e16c2f2caa2e612bf9d6623d6f9a31d740c641c11d38fce4cca41
+    semver: ^7.3.5
+  checksum: f54b39f90c8dcbc65a04f602fa42fcb945f3ac0a6000b20d4614160fc31ce4d4f0da260df2755cb96c94ca9cc7f9c0090570770216da8fddfa285c8ed3bdf7ef
   languageName: node
   linkType: hard
 
@@ -5276,9 +5256,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@subql/node@npm:^0.29.1":
-  version: 0.29.1
-  resolution: "@subql/node@npm:0.29.1"
+"@subql/node@npm:1.1.2":
+  version: 1.1.2
+  resolution: "@subql/node@npm:1.1.2"
   dependencies:
     "@apollo/client": 3.5.8
     "@nestjs/common": ^8.2.6
@@ -5286,14 +5266,16 @@ __metadata:
     "@nestjs/event-emitter": ^1.0.0
     "@nestjs/platform-express": ^8.2.6
     "@nestjs/schedule": ^1.0.2
-    "@polkadot/api": 7.9.1
-    "@subql/common": 0.18.0
-    "@subql/types": 0.14.0
-    "@subql/x-merkle-mountain-range": 2.0.0-0.1.1
-    "@subql/x-vm2": ^3.9.3-0.1.0
+    "@polkadot/api": 8.2.1
+    "@subql/common": 1.1.0
+    "@subql/common-substrate": 1.1.0
+    "@subql/types": 1.1.0
+    "@subql/utils": 1.0.0
+    "@subql/x-merkle-mountain-range": 2.0.0-0.1.2
     "@willsoto/nestjs-prometheus": ^4.4.0
     app-module-path: ^2.2.0
     dayjs: ^1.10.7
+    eventemitter2: ^6.4.5
     lodash: ^4.17.21
     merkle-tools: ^1.4.1
     parse-json: ^6.0.2
@@ -5302,13 +5284,14 @@ __metadata:
     reflect-metadata: ^0.1.13
     rimraf: ^3.0.2
     rxjs: ^7.5.2
-    sequelize: ^6.15.0
+    sequelize: 6.19.0
     tar: ^6.1.11
     typescript: ^4.4.4
+    vm2: ^3.9.9
     yargs: ^16.2.0
   bin:
     subql-node: ./bin/run
-  checksum: 2f29ad6fae4b5c97eff45181f5429b879c662971207284e42f3c90ee4aaac47f34bd28b4d9a1b6ae2e1cc045cd3877d46135dbe24b20b98e4f93f205c56cac73
+  checksum: 094571e2a7fac205bfdfedfdf34e1c4d3e30fde2086c946d3be4d688b848f1c6cb34dd36c16968011d509f945b2eb0ab0badd5ba8241a7057d539800df1a30e4
   languageName: node
   linkType: hard
 
@@ -5353,12 +5336,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@subql/types@npm:0.14.0":
-  version: 0.14.0
-  resolution: "@subql/types@npm:0.14.0"
+"@subql/types-terra@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@subql/types-terra@npm:0.4.0"
   peerDependencies:
-    "@polkadot/api": ^7
-  checksum: f926b588de1b903014c0da384dfce4b4ad423673b63a7821fcf1357c529ee55b34da8111787115da0aaab8c5f8ea0d3ef19540aad047ae13b30c033dd54c4014
+    "@terra-money/terra.js": ^3.0.8
+  checksum: 2ae60e624d3b57905f9f3f85b2a3538eabda8d87a19371a6e1808837e5cedbc0b5eddeccded84427d5346d1e0846c3d11e32733362bc27c64022dca0a6d73cc6
+  languageName: node
+  linkType: hard
+
+"@subql/types@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@subql/types@npm:1.1.0"
+  peerDependencies:
+    "@polkadot/api": ^8
+  checksum: fe2ee3c2d5bb97f44466cbaf2e3cf2158e88c1be6d8190e25fd8ff968efe5dcb6a02a97ba7af9e8d82032c03e932d7232e74b66904e85e7dbd0701c2dc47ec74
   languageName: node
   linkType: hard
 
@@ -5389,12 +5381,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@subql/types@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@subql/types@npm:0.11.0"
+"@subql/types@npm:^1.1.0":
+  version: 1.5.0
+  resolution: "@subql/types@npm:1.5.0"
   peerDependencies:
-    "@polkadot/api": ^6
-  checksum: 1b59bab883a631ab0e7adbf3ba559766f8891e4f57a729cd3f386c1c9c6feb6b789fa69e8513daea0fe81f680c3130d6d43a1d5a4acefdc6e474ebf6a1b10fc5
+    "@polkadot/api": ^9
+  checksum: beb7396b3e8451e3bcf3f8e551683d6eccb1e82908e39331b8466339531472cd7ac22ee984bc923898371e2466236514c663d30e9a77a1f116f28d02141d0674
+  languageName: node
+  linkType: hard
+
+"@subql/utils@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@subql/utils@npm:1.0.0"
+  dependencies:
+    "@polkadot/util": ^9
+    ansi-styles: ^6.1.0
+    axios: ^0.27.1
+    chalk: ^4.1.2
+    detect-port: ^1.3.0
+    flatted: ^3.2.5
+    graphql: ^15.8.0
+    graphql-tag: ^2.12.6
+    ipfs-http-client: ^52.0.3
+    pino: ^6.13.3
+    rotating-file-stream: ^3.0.2
+    semver: ^7.3.7
+    sequelize: ^6.15.0
+    tar: ^6.1.11
+  checksum: bebec303e4f34240465780d2b5ec74a667d7ed6fdd82fa2c81c3e004f512824a93154aad678675233d100cfca6e2a624e43152b1f0ad2cf539eea88ab0b20d05
   languageName: node
   linkType: hard
 
@@ -5419,31 +5433,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@subql/validator@npm:0.4.4":
-  version: 0.4.4
-  resolution: "@subql/validator@npm:0.4.4"
+"@subql/validator@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@subql/validator@npm:1.1.0"
   dependencies:
-    "@subql/common": 0.17.0
+    "@subql/common": 1.1.0
+    "@subql/common-substrate": 1.1.0
     axios: ^0.24.0
     ipfs-http-client: ^52.0.3
     js-yaml: ^4.1.0
     package-json-type: ^1.0.3
-  checksum: c71dc4ddd7f2686c8acb4d6b0cf536f401acc6624638572da3e8d80cde1615e68bcde3bd527f22a329d0f6f557f84b928726202c84df96ef8d6c72a45ee8ab4a
-  languageName: node
-  linkType: hard
-
-"@subql/x-merkle-mountain-range@npm:2.0.0-0.1.1":
-  version: 2.0.0-0.1.1
-  resolution: "@subql/x-merkle-mountain-range@npm:2.0.0-0.1.1"
-  dependencies:
-    bignumber.js: ^8.1.1
-    buffer: ^5.4.3
-    js-sha3: ^0.8.0
-    level: ^6.0.0
-    rlp: ^2.2.3
-    semaphore-async-await: ^1.5.1
-    sha.js: ^2.4.11
-  checksum: e7286aee9ae657c6952bc7e753253ca80a6f7ce4f12987b4a528b7c8acdedb2e4225484930fb21b2a130a1f11ad95846725de84b18c87ac8cb812b4071cf47c8
+  checksum: 1e935590127c210c3fd11d45b3b1e5022a7f308c669afa82d3567633d1d0f1b4ffb63847519753ea94ade64ec73b9680a724b236d69db77ecf99e41c7583e27c
   languageName: node
   linkType: hard
 
@@ -5459,15 +5459,6 @@ __metadata:
     semaphore-async-await: ^1.5.1
     sha.js: ^2.4.11
   checksum: 732eaa8441be71806dd197be6c5811f43bb14a3bc615c7d1be44a638b43ea53a5229d10edff12cf0ceec4ee9ca05938ce3a973dcdf31ce57e12cc30258342429
-  languageName: node
-  linkType: hard
-
-"@subql/x-vm2@npm:^3.9.3-0.1.0":
-  version: 3.9.3-0.1.0
-  resolution: "@subql/x-vm2@npm:3.9.3-0.1.0"
-  bin:
-    vm2: bin/vm2
-  checksum: 00dab297b1088714c86ae37a619d670c2899772bd632bf3fb0404158dfcb4f713aabbf5a8efd33536aac1a14dac4cfcbc180495347918eb75a9aa29b4a0a3bd1
   languageName: node
   linkType: hard
 
@@ -7392,13 +7383,6 @@ __metadata:
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
-  languageName: node
-  linkType: hard
-
-"bn.js@npm:5.2.0":
-  version: 5.2.0
-  resolution: "bn.js@npm:5.2.0"
-  checksum: 6117170393200f68b35a061ecbf55d01dd989302e7b3c798a3012354fa638d124f0b2f79e63f77be5556be80322a09c40339eda6413ba7468524c0b6d4b4cb7a
   languageName: node
   linkType: hard
 
@@ -18331,13 +18315,53 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>":
+"typescript@npm:^3.9.10, typescript@npm:^3.9.5, typescript@npm:^3.9.7":
+  version: 3.9.10
+  resolution: "typescript@npm:3.9.10"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 46c842e2cd4797b88b66ef06c9c41dd21da48b95787072ccf39d5f2aa3124361bc4c966aa1c7f709fae0509614d76751455b5231b12dbb72eb97a31369e1ff92
+  languageName: node
+  linkType: hard
+
+"typescript@npm:^4.4.4, typescript@npm:^4.6.3":
+  version: 4.8.3
+  resolution: "typescript@npm:4.8.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 8286a5edcaf3d68e65c451aa1e7150ad1cf53ee0813c07ec35b7abdfdb10f355ecaa13c6a226a694ae7a67785fd7eeebf89f845da0b4f7e4a35561ddc459aba0
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@4.4.4#~builtin<compat/typescript>":
   version: 4.4.4
   resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: bd629ad0da4a15d79aaad56baf3ee7d96f6a181760d430ae77f8c5325df7bffd9edee57544a3970e3651e8b796fe03a5838a7eb39c6d46cc3866c0b23d36a0dd
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^3.9.10#~builtin<compat/typescript>, typescript@patch:typescript@^3.9.5#~builtin<compat/typescript>, typescript@patch:typescript@^3.9.7#~builtin<compat/typescript>":
+  version: 3.9.10
+  resolution: "typescript@patch:typescript@npm%3A3.9.10#~builtin<compat/typescript>::version=3.9.10&hash=493e53"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: dc7141ab555b23a8650a6787f98845fc11692063d02b75ff49433091b3af2fe3d773650dea18389d7c21f47d620fb3b110ea363dab4ab039417a6ccbbaf96fc2
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.4.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>":
+  version: 4.8.3
+  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=493e53"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 0404a09c625df01934ef774b45ce1ca57ccae41cd625fcdbb82056715320d9329e70d9d75c2c732ec6ef947444ca978c189a332b71fa21f5c1437d5a83e24906
   languageName: node
   linkType: hard
 
