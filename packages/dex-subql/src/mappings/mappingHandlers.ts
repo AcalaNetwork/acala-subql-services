@@ -5,8 +5,6 @@ import { provisionToEnable } from "../handlers";
 export * from '../handlers/handleEnableTradingPair';
 
 export const handleProvisioningToEnabled = async (event: SubstrateEvent) => {
-
-
 	await provisionToEnable(event);
 };
 

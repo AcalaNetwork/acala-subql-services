@@ -24,8 +24,6 @@ dataSources:
     mapping:
       file: "./dist/index.js"
       handlers:
-        - handler: handleBlock
-          kind: substrate/BlockHandler
         - handler: handleEnableTradingPair
           kind: substrate/EventHandler
           filter:
