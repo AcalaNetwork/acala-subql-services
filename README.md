@@ -72,16 +72,15 @@ a collection of acala/karura sub-query services.
 | -------------- | ---------------------------------------------------------- |
 | Acala          | https://subql-query-acala.aca-api.network                  |
 | Karura         | https://subql-query-karura.aca-api.network                 |
-| Mandala        | https://subql-query-mandala.aca-dev.network                |
+| Mandala        | https://subql-query-mandala.aca-staging.network                |
 | Acala testnet  | https://subql-query-acala-testnet.aca-staging.network      |
 | Karura testnet | https://subql-query-karura-testnet.aca-staging.network     |
 
 - 4.3 includes:
 
-| Extrinsic  | events                                                                                                                                                                                                                |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|||
-
+| Extrinsic  | events                                                                        |
+| ---------- | ----------------------------------------------------------------------------- |
+| evm   | Created, Executed, CreatedFailed, ExecutedFailed |
 
 ## 5. Stats
 
