@@ -2,11 +2,11 @@ import { Collateral, DailyCollateral, HourlyCollateral } from "../types";
 
 export const updateCollateral = (
   collateral: Collateral,
-  collateralAdjustment: bigint,
-  debitAdjustment: bigint
+  depositAmount: bigint,
+  debitAmount: bigint
 ) => {
-  collateral.depositAmount = collateral.depositAmount + collateralAdjustment;
-  collateral.debitAmount = collateral.debitAmount + debitAdjustment;
+  collateral.depositAmount = depositAmount;
+  collateral.debitAmount = debitAmount;
   collateral.txCount = collateral.txCount + 1;
 }
 

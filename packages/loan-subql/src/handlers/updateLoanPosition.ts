@@ -4,6 +4,7 @@ import { getStableCoinCurrency, getStartOfDay, getStartOfHour, getTokenDecimals 
 import { getBlock, getAccount, getCollateral, getPriceBundle, getPosition, getHourlyPosition, getDailyPosition, getHourlyCollateral, getDailyCollateral, getExchangeBundle } from "../utils/record";
 import { updateCollateral, updateDailyCollateral, updateDailyPosition, updateHourlyCollateral, updateHourlyPosition, updatePosition, updateParams, createUpdatePositionHistroy, createConfiscatePositionHistory } from ".";
 import { getVolumeUSD } from '../utils/math';
+import { forceToCurrencyId } from "@acala-network/sdk-core";
 
 export const updateLoanPosition = async (
   rawBlock: SubstrateBlock,
@@ -32,9 +33,14 @@ export const updateLoanPosition = async (
   const depositChangedUSD = getVolumeUSD(depositChanged, collateral.decimals, priceBundle.price)
   const debitChangedUSD = getVolumeUSD(debitChanged, stableCoinDecimals, exchangeBundle.debitExchangeRate)
 
+  // get collateral on chain
+  const result = await api.query.loans.positions(forceToCurrencyId(api as any, collateral.id), owner.id)
+  const depositAmount = (result as any).collateral.toBigInt();
+  const debitAmount = (result as any).debit.toBigInt();
+
   // update collateral first
   if (shouldUpdatePosition) {
-    updateCollateral(collateral, depositChanged, debitChanged);
+    updateCollateral(collateral, depositAmount, debitAmount);
   }
 
   // recalculate volume
@@ -70,8 +76,8 @@ export const updateLoanPosition = async (
     updatePosition(
       position,
       block,
-      depositChanged,
-      debitChanged
+      depositAmount,
+      debitAmount
     )
   }
 
