@@ -6,6 +6,16 @@ import { updateCollateral, updateDailyCollateral, updateDailyPosition, updateHou
 import { getVolumeUSD } from '../utils/math';
 import { forceToCurrencyId } from "@acala-network/sdk-core";
 
+const toCurrencyId = (api: any, id: string) => {
+  if(!id.includes(':')) {
+    return {
+      Token: id
+    }
+  }
+
+  return forceToCurrencyId(api as any, id)
+}
+
 export const updateLoanPosition = async (
   rawBlock: SubstrateBlock,
   account: string,
@@ -34,7 +44,7 @@ export const updateLoanPosition = async (
   const debitChangedUSD = getVolumeUSD(debitChanged, stableCoinDecimals, exchangeBundle.debitExchangeRate)
 
   // get collateral on chain
-  const result = await api.query.loans.positions(forceToCurrencyId(api as any, collateral.id), owner.id)
+  const result = await api.query.loans.positions(toCurrencyId(api as any, collateral.id), owner.id)
   const depositAmount = (result as any).collateral.toBigInt();
   const debitAmount = (result as any).debit.toBigInt();
 
