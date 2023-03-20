@@ -2,14 +2,14 @@ import { SubstrateEvent } from "@subql/types";
 import { Account, Block, Collateral, DailyPosition, HourlyPosition, Position } from "../types";
 import { getBlock, getCollateral, getConfiscatePosition, getExtrinsic, getUpdatePosition } from "../utils/record";
 
-export const updatePosition = (
+export const updatePosition = async (
   position: Position,
   block: Block,
-  depositChanged: bigint,
-  debitChanged: bigint
+  depositAmount: bigint,
+  debitAmount: bigint
 ) => {
-  position.depositAmount = position.depositAmount + depositChanged;
-  position.debitAmount = position.debitAmount + debitChanged;
+  position.depositAmount = depositAmount;
+  position.debitAmount = debitAmount;
   position.updateAt = block.timestamp;
   position.updateAtBlockId = block.id;
   position.txCount = position.txCount + 1;
