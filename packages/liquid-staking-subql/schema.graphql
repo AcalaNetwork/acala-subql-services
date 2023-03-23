@@ -1,0 +1,33 @@
+type Summary @entity {
+  id: ID!
+  toBondPool: BigInt!
+  bonded: BigInt!
+  liquidIssuance: BigInt!
+  totalVoidLiquid: BigInt!
+
+  forceUpdateAt: BigInt
+  updateAt: BigInt
+  timestamp: Date
+}
+
+type DailySummary @entity {
+  id : ID! # `${timestamp}
+
+  toBondPool: BigInt!
+  bonded: BigInt
+  liquidIssuance: BigInt
+  totalVoidLiquid: BigInt
+
+  timestamp: Date!
+}
+
+type HourlySummary @entity {
+  id : ID! # `${timestamp}
+
+  toBondPool: BigInt!
+  bonded: BigInt
+  liquidIssuance: BigInt
+  totalVoidLiquid: BigInt
+
+  timestamp: Date!
+}

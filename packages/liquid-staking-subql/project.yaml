@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+name: acala-liquid-staking
+version: 1.0.0
+description: 'liquid protocal statistics'
+repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
+runner:
+  node:
+    name: "@subql/node"
+    version: "1.1.2"
+  query:
+    name: "@subql/query"
+    version: "1.1.1"
+schema: 
+    file: ./schema.graphql
+network:
+  chainId: "0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c"
+  dictionary: https://api.subquery.network/sq/subquery/acala-dictionary
+  endpoint: wss://acala.polkawallet.io
+  chaintypes:
+    file: './dist/chain-types.js'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 3000000
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: sync
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: Minted
+        - handler: sync
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: RedeemedByFastMatch
+        - handler: sync
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: RedeemedByUnbond
+        - handler: sync
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: CurrentEraBumped
+        - handler: sync
+          kind: substrate/EventHandler
+          filter:
+            module: homa
+            method: LedgerBondedReset
