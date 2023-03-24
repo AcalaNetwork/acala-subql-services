@@ -18,7 +18,10 @@ network:
   chaintypes:
     file: './dist/chain-types.js'
 dataSources:
-   file: "./dist/index.js"
+  - kind: substrate/Runtime
+    startBlock: 3800000
+    mapping:
+      file: "./dist/index.js"
       handlers:
         - handler: sync
           kind: substrate/EventHandler
