@@ -48,6 +48,8 @@ export class Pool implements Entity {
 
     public txCount?: bigint;
 
+    public updateAtBlockId?: string;
+
 
     async save(): Promise<void>{
         let id = this.id;
@@ -80,6 +82,13 @@ export class Pool implements Entity {
     static async getByToken1Id(token1Id: string): Promise<Pool[] | undefined>{
       
       const records = await store.getByField('Pool', 'token1Id', token1Id);
+      return records.map(record => Pool.create(record as PoolProps));
+      
+    }
+
+    static async getByUpdateAtBlockId(updateAtBlockId: string): Promise<Pool[] | undefined>{
+      
+      const records = await store.getByField('Pool', 'updateAtBlockId', updateAtBlockId);
       return records.map(record => Pool.create(record as PoolProps));
       
     }

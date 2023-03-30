@@ -1,18 +1,19 @@
-import { FixedPointNumber as FN, MaybeCurrency, Token } from "@acala-network/sdk-core";
+import { AnyApi, FixedPointNumber as FN, MaybeCurrency, Token } from "@acala-network/sdk-core";
+import { SubstrateBlock } from '@subql/types/dist/interfaces';
 import { getPool, getToken } from ".";
 import { getTokenName } from './getTokenName';
+import { queryPriceFromOracle } from "@acala-network/subql-utils";
 
-const getOtherPrice = async (token: string, stakingCurrency: string, StableCurrency: string) => {
+const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, stakingCurrency: string, StableCurrency: string) => {
 	const { rate: rateA, amount: _amountA } = await getPriceFromDexPool(token, stakingCurrency);
 	const { rate: rateB, amount: _amountB } = await getPriceFromDexPool(token, StableCurrency);
 
 	if (rateA.isZero() && rateB.isZero()) return FN.ZERO;
-
 	const amountA = FN.fromInner(_amountA.toString(), 18);
 	const amountB = FN.fromInner(_amountB.toString(), 18);
-	const StakingPrice = await getStakingCurrencyPrice(stakingCurrency, StableCurrency);
-	const StablePrice = await getStableCurrencyPrice();
-
+	const StakingPrice = stakingCurrency === 'DOT' ? await getDotMarketPrice(api, block) : await getKsmMarketPrice(api, block);
+	const StablePrice =  stakingCurrency === 'DOT' ? await getAusdMarketPrice(api, block) : await getKusdMarketPrice(api, block);
+	
 	const partA = rateA.mul(StakingPrice).times(amountA).div(amountA.add(amountB));
 	const partB = rateB.mul(StablePrice).times(amountB).div(amountA.add(amountB));
 
@@ -25,11 +26,14 @@ const getPriceFromDexPool = async (tokenA: string, tokenB: string) => {
 	const token1 = await getToken(_t1);
 	const pool = await getPool(token0.name, token1.name);
 
-	if (!pool || pool.txCount == BigInt(0)) return {
-		rate: FN.ZERO,
-		amount: BigInt(1)
-	};
+	if (!pool || pool.txCount == BigInt(0)) {
+		return {
+			rate: FN.ZERO,
+			amount: BigInt(1)
+		};
+	} 
 
+	
 	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
 	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
 
@@ -44,30 +48,67 @@ const getPriceFromDexPool = async (tokenA: string, tokenB: string) => {
 	}
 }
 
-const getStableCurrencyPrice = () => {
-	return new FN(1, 18);
+const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
+	const stakingCurrencyMarketPrice = await getKsmMarketPrice(api, block)
+	
+	const stakingCurrency = api.consts.prices.getStakingCurrencyId;
+
+	const stableCurrency = api.consts.prices.getStableCurrencyId;
+	const stakingCurrencyName = getTokenName(stakingCurrency as any);
+	const stableCurrencyName = getTokenName(stableCurrency as any);
+
+	const pool = await getPool(stakingCurrencyName, stableCurrencyName)
+	
+	const token0 = await getToken(pool.token0Id);
+	const token1 = await getToken(pool.token1Id);
+
+	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
+	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
+
+	const stakingAmount = pool.token0Id === stakingCurrencyName ? amount0 : amount1;
+	const stableAmount = pool.token0Id === stableCurrencyName ? amount0 : amount1;
+
+	return stakingCurrencyMarketPrice.mul(stableAmount.div(stakingAmount));
 }
 
-const getStakingCurrencyPrice = async (stakingCurrency: string, StableCurrency: string) => {
-	const result = await getPriceFromDexPool(stakingCurrency, StableCurrency);
-	return result.rate;
+const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
+	const acaPrice = await queryPriceFromOracle(api, block, 'ACA')
+	
+	const pool = await getPool('ACA', 'AUSD')
+	
+	const token0 = await getToken(pool.token0Id); // ACA
+	const token1 = await getToken(pool.token1Id); // AUSD
+
+	
+	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals); // ACA
+	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals); // AUSD
+
+	return !amount0.isZero() ? acaPrice.mul(amount0.div(amount1)) : FN.ZERO;
 }
 
-const getDOTPrice = async () => {
+const getKsmMarketPrice = (api: AnyApi, block: SubstrateBlock) => {
+	const stakingCurrency = api.consts.prices.getStakingCurrencyId;
+	const stakingCurrencyName = getTokenName(stakingCurrency as any);
+
+	return queryPriceFromOracle(api, block, stakingCurrencyName)
+}
+
+const getDotMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
+	const ausdPrice = await getAusdMarketPrice(api, block)
 	const lc13Price = await getPriceFromDexPool('lc://13', 'AUSD');
 	const dotPrice = await getPriceFromDexPool('DOT', 'lc://13');
-	return dotPrice.rate.mul(lc13Price.rate);
+	return dotPrice.rate.mul(lc13Price.rate).mul(ausdPrice);
 }
 
-const getTAIPrice = async (stakingCurrency: string, stableCurrency: string) => {
+const getTaiMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	// Use KSM price for taiKSM
-	const ksmPrice = await getStakingCurrencyPrice(stakingCurrency, stableCurrency);
+	const ksmPrice = await getKsmMarketPrice(api, block);
 	const taiPrice = await getPriceFromDexPool('TAI', 'sa://0');
 
 	return taiPrice.rate.mul(ksmPrice);
 }
 
-export const circulatePrice = async (name: MaybeCurrency) => {
+export const circulatePrice = async (api: AnyApi, block: SubstrateBlock, name: MaybeCurrency) => {
 	const _name = getTokenName(name);
 
 	const stakingCurrency = api.consts.prices.getStakingCurrencyId;
@@ -75,20 +116,23 @@ export const circulatePrice = async (name: MaybeCurrency) => {
 	const stakingCurrencyName = getTokenName(stakingCurrency as any);
 	const stableCurrencyName = getTokenName(stableCurrency as any);
 
-	if (_name === "KUSD" || _name === "AUSD") return getStableCurrencyPrice();
+	if (_name === "KUSD") return getKusdMarketPrice(api, block);
 
-	else if (_name === 'KSM') return getStakingCurrencyPrice(stakingCurrencyName, stableCurrencyName);
+	else if (_name === "AUSD") return getAusdMarketPrice(api, block);
 
-	else if (_name === 'DOT') return getDOTPrice();
+	else if (_name === 'KSM') return getKsmMarketPrice(api, block);
+	
+	else if (_name === 'DOT') return getDotMarketPrice(api, block);
 
-	else if (_name === "TAI") return getTAIPrice(stakingCurrencyName, stableCurrencyName);
+	else if (_name === "TAI") return getTaiMarketPrice(api, block);
 
-	else return getOtherPrice(_name, stakingCurrencyName, stableCurrencyName);
+	else return getOtherPrice(api, block, _name, stakingCurrencyName, stableCurrencyName);
 }
 
-export const queryPrice = async (token: string) => {
+export const queryPrice = async (api: any, block: SubstrateBlock, token: string) => {
 	const queryToken = token == 'sa://0' ? 'KSM' : token;
-	const price = await circulatePrice(queryToken);
+	const price = await circulatePrice(api as any, block, queryToken);
+
 	price.setPrecision(18);
 
 	const tokenData = await getToken(token);

@@ -71,8 +71,8 @@ const swapByRuntimeLt1008 = async (event: SubstrateEvent) => {
 				tokenSwapAmountPath += token0Amount > 0 ? `,${token1Amount.toString()}` : `,${token0Amount.toString()}`;
 			}
 		}
-		const oldPrice0 = await queryPrice(token0Name);
-		const oldPrice1 = await queryPrice(token1Name);
+		const oldPrice0 = await queryPrice(api, event.block, token0Name);
+		const oldPrice1 = await queryPrice(api, event.block, token1Name);
 
 		const token0Changed = BigInt(token0Amount) > 0 ? BigInt(token0Amount) : -BigInt(token0Amount);
 		const token1Changed = BigInt(token1Amount) > 0 ? BigInt(token1Amount) : -BigInt(token1Amount);
@@ -98,10 +98,11 @@ const swapByRuntimeLt1008 = async (event: SubstrateEvent) => {
 		pool.token1TradeVolume = pool.token1TradeVolume + token1Changed;
 		pool.tradeVolumeUSD = pool.tradeVolumeUSD + BigInt(totoalChangedUSD.toChainData());
 		pool.txCount = pool.txCount + BigInt(1);
+		pool.updateAtBlockId = blockData.id;
 		await pool.save();
 
-		const newPrice0 = await queryPrice(token0Name);
-		const newPrice1 = await queryPrice(token1Name);
+		const newPrice0 = await queryPrice(api, event.block, token0Name);
+		const newPrice1 = await queryPrice(api, event.block, token1Name);
 
 		const newPool = await getPool(token0Name, token1Name, poolId);
 		newPool.token0TVL = BigInt(newPrice0.times(FN.fromInner(newPool.token0Amount.toString(), token0.decimals)).toChainData());
@@ -259,8 +260,8 @@ const swapByRuntimeGt1008 = async (event: SubstrateEvent) => {
 		const pool = await getPool(token0Name, token1Name, poolId);
 		const dex = await getDex();
 
-		const oldPrice0 = await queryPrice(token0Name);
-		const oldPrice1 = await queryPrice(token1Name);
+		const oldPrice0 = await queryPrice(api, event.block, token0Name);
+		const oldPrice1 = await queryPrice(api, event.block, token1Name);
 
 		const token0Amount = token0Name === supplyTokenName ? result0.toString() : `-${result1.toString()}`;
 		const token1Amount = token1Name === supplyTokenName ? result0.toString() : `-${result1.toString()}`;
@@ -296,10 +297,11 @@ const swapByRuntimeGt1008 = async (event: SubstrateEvent) => {
 		pool.token1TradeVolume = pool.token1TradeVolume + token1Changed;
 		pool.tradeVolumeUSD = pool.tradeVolumeUSD + BigInt(totoalChangedUSD.toChainData())
 		pool.txCount = pool.txCount + BigInt(1);
+		pool.updateAtBlockId = blockData.id;
 		await pool.save();
 
-		const newPrice0 = await queryPrice(token0Name);
-		const newPrice1 = await queryPrice(token1Name);
+		const newPrice0 = await queryPrice(api, event.block, token0Name);
+		const newPrice1 = await queryPrice(api, event.block, token1Name);
 
 		const newPool = await getPool(token0Name, token1Name, poolId);
 		newPool.token0TVL = BigInt(newPrice0.times(FN.fromInner(newPool.token0Amount.toString(), token0.decimals)).toChainData());
@@ -397,6 +399,7 @@ const swapByRuntimeGt1008 = async (event: SubstrateEvent) => {
 		token0.tradeVolume = token0.tradeVolume + token0Changed;
 		token0.tradeVolumeUSD = token0.tradeVolumeUSD + BigInt(totoalChangedUSD.toChainData())
 		token0.txCount = token0.txCount + BigInt(1);
+		token0.updateAtBlockId = blockData.id;
 		token0.price = BigInt(newPrice0.toChainData());
 		token1.amount = token1.amount + BigInt(token1Amount);
 		token1.tvl = BigInt(newPrice1.times(FN.fromInner(token1.amount.toString(), token1.decimals)).toChainData());
@@ -404,6 +407,7 @@ const swapByRuntimeGt1008 = async (event: SubstrateEvent) => {
 		token1.tradeVolumeUSD = token1.tradeVolumeUSD + BigInt(token1ChangedUSD.toChainData());
 		token1.txCount = token1.txCount + BigInt(1);
 		token1.price = BigInt(newPrice1.toChainData());
+		token1.updateAtBlockId = blockData.id;
 
 		dailyToken0.tokenId = token0Name;
 		dailyToken0.amount = token0.amount;
@@ -471,8 +475,8 @@ const createSwapHistory = async (event: SubstrateEvent, amounts: string) => {
 
 	await getToken(poolId)
 
-	const price0 = await queryPrice(getTokenName(token0))
-	const price1 = await queryPrice(getTokenName(token1))
+	const price0 = await queryPrice(api, event.block, getTokenName(token0))
+	const price1 = await queryPrice(api, event.block, getTokenName(token1))
 
 	history.addressId = who.toString();
 	history.poolId = poolId;

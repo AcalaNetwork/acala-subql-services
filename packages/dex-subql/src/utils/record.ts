@@ -225,7 +225,6 @@ export const getPool = async (token0: string, token1: string, poolId?: string) =
 	if (!record) {
 		const newRecord = new Pool(id);
 		const feeData = api.consts.dex.getExchangeFee;
-
 		newRecord.token0Id = token0;
 		newRecord.token1Id = token1;
 		newRecord.token0Amount = BigInt("0");

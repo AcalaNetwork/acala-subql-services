@@ -12,8 +12,8 @@ export async function handleEnableTradingPair(event: SubstrateEvent) {
   pool.token0Amount = rawData[0].toString();
   pool.token1Amount = rawData[1].toString()
 
-  const price0 = await queryPrice(pool.token0Id);
-  const price1 = await queryPrice(pool.token1Id);
+  const price0 = await queryPrice(api, event.block, pool.token0Id);
+  const price1 = await queryPrice(api, event.block, pool.token1Id);
   const token0 = await getToken(pool.token0Id);
   const token1 = await getToken(pool.token1Id);
 

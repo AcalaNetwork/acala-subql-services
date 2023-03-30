@@ -33,8 +33,8 @@ export const createPool = async (event: SubstrateEvent) => {
 	const [poolId, token0Id, token1Id] = getPoolId(tradingPair[0], tradingPair[1]);
 	const pool = await getPool(token0Id, token1Id, poolId);
 
-	const price0 = await queryPrice(token0Id);
-	const price1 = await queryPrice(token1Id);
+	const price0 = await queryPrice(api, event.block, token0Id);
+	const price1 = await queryPrice(api, event.block, token1Id);
 
 	const token0 = await getToken(token0Id);
 	const token1 = await getToken(token1Id);
