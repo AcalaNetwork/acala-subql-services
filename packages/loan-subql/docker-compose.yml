@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
   subquery-node:
-    image: onfinality/subql-node:latest
+    image: onfinality/subql-node:v1.21.1
     depends_on:
       - "postgres"
     restart: always
@@ -27,6 +27,7 @@ services:
       - --subquery=/app
       - --db-schema=acala-loan
       - --schema=acala-loan
+      - --disable-historical=true
 
   graphql-engine:
     image: onfinality/subql-query:latest
@@ -43,6 +44,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=acala-loans
+      - --name=acala-loan
       - --playground
       - --indexer=http://subquery-node:3000

@@ -6,7 +6,7 @@ repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 runner:
   node:
     name: "@subql/node"
-    version: "1.1.2"
+    version: "1.21.1"
   query:
     name: "@subql/query"
     version: "1.1.1"
