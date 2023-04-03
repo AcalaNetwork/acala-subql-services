@@ -19,6 +19,7 @@ import {
   UpdatePosition,
   ConfiscatePosition,
   CloseByDex,
+  Status,
 } from "../types";
 import { getDebitPool } from './getDebitPool';
 
@@ -416,6 +417,18 @@ export const getConfiscatePosition = async (id: string) => {
     record.debitAdjustment = BigInt(0);
     record.collateralAdjustmentUSD = BigInt(0);
     record.debitAdjustmentUSD = BigInt(0);
+  }
+
+  return record;
+}
+
+export const getStatus = async () => {
+  let record = await Status.get('status');
+
+  if (!record) {
+    record = new Status('status');
+
+    record.initialized = false;
   }
 
   return record;

@@ -2,6 +2,8 @@
 
 // Auto-generated , DO NOT EDIT
 
+export {Status} from "./Status"
+
 export {Block} from "./Block"
 
 export {Extrinsic} from "./Extrinsic"

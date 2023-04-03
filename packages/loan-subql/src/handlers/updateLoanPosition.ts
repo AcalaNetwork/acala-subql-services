@@ -176,11 +176,6 @@ export async function handleConfiscate (event: SubstrateEvent) {
   const depositChanged = -BigInt(_collateralChanged.toString())
   const debitChanged = -BigInt(_debitChanged.toString())
 
-  // // should update position in the the old version beacuse confiscate will not create PositionUpdated event
-  // const shouldUpdate = !event.extrinsic?.events.find((item) => {
-  //   return item.event.section === 'loans' && item.event.method === 'PositionUpdated';
-  // })
-
   let debitPool
 
   try {
@@ -190,14 +185,14 @@ export async function handleConfiscate (event: SubstrateEvent) {
     debitPool = BigInt(0)
   }
 
-  // const data = await updateLoanPosition(
-  //   event.block,
-  //   owner.toString(),
-  //   forceToCurrencyName(collateral),
-  //   depositChanged,
-  //   debitChanged,
-  //   shouldUpdate
-  // );
+  const data = await updateLoanPosition(
+    event.block,
+    owner.toString(),
+    forceToCurrencyName(collateral),
+    depositChanged,
+    debitChanged,
+    false
+  );
 
   await createConfiscatePositionHistory(
     event,
