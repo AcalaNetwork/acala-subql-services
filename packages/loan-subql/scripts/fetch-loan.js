@@ -45,9 +45,13 @@ async function fetchLoan(chain, height) {
     getDataFilePath(`${chain}-${height}.json`),
     JSON.stringify(formated, undefined, 2), { encoding: 'utf-8' }
   );
+  fs.writeFileSync(
+    path.join('../dist/data', getDataFilePath(`${chain}-${height}.json`)),
+    JSON.stringify(formated, undefined, 2), { encoding: 'utf-8' }
+  );
 }
 
 (async () => {
-  await fetchLoan('acala', 3070000);
-  await fetchLoan('karura', 3827500);
+  await fetchLoan('acala', 3070895);
+  await fetchLoan('karura', 3828505);
 })();

@@ -1,6 +1,5 @@
 import { FixedPointNumber, getCurrencyObject } from "@acala-network/sdk-core";
 import { getTokenDecimals, queryPriceFromOracle } from "@acala-network/subql-utils";
-import { Option } from "@polkadot/types"
 import { SubstrateBlock, SubstrateExtrinsic } from "@subql/types";
 import { queryExchangeRate } from ".";
 import {
@@ -268,7 +267,7 @@ export const getPriceBundle = async (token: string, block: SubstrateBlock) => {
   let record = await PriceBundle.get(id);
 
   if (!record) {
-    const price = await queryPriceFromOracle(api as any, block, token)
+    const price = await queryPriceFromOracle(api as any, block as any, token)
       .catch(() => Promise.resolve(FixedPointNumber.ZERO));
 
     record = new PriceBundle(id);

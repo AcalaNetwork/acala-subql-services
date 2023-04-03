@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=1 --port=3123",
-    "build": "tsc -b",
+    "build": "tsc -b && cp -r src/data dist",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen"
