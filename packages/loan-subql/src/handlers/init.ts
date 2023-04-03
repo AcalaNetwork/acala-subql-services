@@ -16,10 +16,10 @@ async function initPositions (event: SubstrateEvent) {
   if (!positions) throw new Error(`can'not read init data`);
 
   for (const i of positions) {
-    const owner = i[3];
-    const collateral = i[0];
-    const deposit = BigInt(i[1]);
-    const debit = BigInt(i[2]);
+    const owner = i.address;
+    const collateral = i.token;
+    const deposit = BigInt(i.collatearl);
+    const debit = BigInt(i.debit);
 
     await updateLoanPosition(
       event.block,

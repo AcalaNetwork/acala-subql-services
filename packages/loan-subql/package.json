@@ -20,7 +20,6 @@
   "author": "shenger",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@polkadot/api": "^7.1.1",
     "@subql/cli": "^1.0.1",
     "@subql/node": "1.1.2",
     "@subql/types": "^0.11.0",
@@ -39,8 +38,6 @@
     "@acala-network/types": "4.1.6-30",
     "@acala-network/sdk-core": "4.1.6-30",
     "@acala-network/sdk-wallet": "4.1.6-30",
-    "@acala-network/type-definitions": "^4.1.6-30",
-    "@polkadot/api": "^7.1.1",
-    "@polkadot/types": "^7.1.1"
+    "@acala-network/type-definitions": "^4.1.6-30"
   }
 }
