@@ -40,19 +40,19 @@ export const transferLoan = async (event: SubstrateEvent) => {
   await toAccount.save();
   await fromPosition.save();
 
-  await updateLoanPosition(
-    event.block,
-    fromAccount.address,
-    tokenName,
-    -fromPosition.depositAmount,
-    -fromPosition.debitAmount
-  );
-  await updateLoanPosition(
-    event.block,
-    toAccount.address,
-    tokenName,
-    fromPosition.depositAmount,
-    fromPosition.debitAmount
-  );
+  // await updateLoanPosition(
+  //   event.block,
+  //   fromAccount.address,
+  //   tokenName,
+  //   -fromPosition.depositAmount,
+  //   -fromPosition.debitAmount
+  // );
+  // await updateLoanPosition(
+  //   event.block,
+  //   toAccount.address,
+  //   tokenName,
+  //   fromPosition.depositAmount,
+  //   fromPosition.debitAmount
+  // );
   await createTransferLoanHistory(event, token, from.toString(), to.toString());
 }
