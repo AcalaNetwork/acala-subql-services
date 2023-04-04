@@ -53,6 +53,8 @@ type Token @entity {
   provisionPoolQuote: [ProvisionPool] @derivedFrom(field: "token1")
   poolBase: [Pool] @derivedFrom(field: "token0")
   poolQuote: [Pool] @derivedFrom(field: "token1")
+
+  updateAtBlock: Block
 }
 
 type TokenDailyData @entity {
@@ -148,6 +150,8 @@ type Pool @entity {
 
   hourlyData: [HourlyPool] @derivedFrom(field: "pool")
   dayData: [DailyPool] @derivedFrom(field: "pool")
+
+  updateAtBlock: Block
 }
 
 type HourlyPool @entity {

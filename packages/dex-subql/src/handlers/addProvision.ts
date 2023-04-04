@@ -1,7 +1,7 @@
 import { AccountId, Balance, CurrencyId } from "@acala-network/types/interfaces";
 import { SubstrateEvent } from "@subql/types";
 import { ensureBlock, ensureExtrinsic } from ".";
-import { getAccount, getAddProvision, getProvisionPool, getProvisionPoolHourlyData, getStartOfDay, getStartOfHour, getToken, getTokenDailyData, getUserProvision, queryPrice } from "../utils";
+import { getAccount, getAddProvision, getProvisionPool, getProvisionPoolHourlyData, getStartOfHour, getToken, getUserProvision } from "../utils";
 import { getPoolId } from "../utils/getPoolId";
 
 export const addProvision = async (event: SubstrateEvent) => {

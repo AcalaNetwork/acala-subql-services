@@ -15,8 +15,8 @@ export const removeLiquidity = async (event: SubstrateEvent) => {
 	const [poolId, token0Name, token1Name] = getPoolId(currency0, currency1);
 	const token0Decrement = (token0Name === getTokenName(currency0) ? pool0Decrement : pool1Decrement).toString();
   const token1Decrement = (token1Name === getTokenName(currency0) ? pool0Decrement : pool1Decrement).toString();
-	const oldPrice0 = await queryPrice(token0Name);
-	const oldPrice1 = await queryPrice(token1Name);
+	const oldPrice0 = await queryPrice(api, event.block, token0Name);
+	const oldPrice1 = await queryPrice(api, event.block, token1Name);
 	const hourTime = getStartOfHour(blockData.timestamp);
 	const dailyTime = getStartOfDay(blockData.timestamp);
 
@@ -45,10 +45,11 @@ export const removeLiquidity = async (event: SubstrateEvent) => {
 	pool.token1TradeVolume = pool.token1TradeVolume + BigInt(token1Changed);
 	pool.tradeVolumeUSD = pool.tradeVolumeUSD + BigInt(token0ChangedUSD.toChainData()) + BigInt(token1ChangedUSD.toChainData());
 	pool.txCount = pool.txCount + BigInt(1);
+	pool.updateAtBlockId = blockData.id;
 	await pool.save();
 
-	const newPrice0 = await queryPrice(token0Name);
-	const newPrice1 = await queryPrice(token1Name);
+	const newPrice0 = await queryPrice(api, event.block, token0Name);
+	const newPrice1 = await queryPrice(api, event.block, token1Name);
 
 	const newPool = await getPool(token0Name, token1Name, poolId);
 	newPool.token0TVL = BigInt(newPrice0.times(FN.fromInner(newPool.token0Amount.toString(), token0.decimals)).toChainData());
@@ -140,6 +141,7 @@ export const removeLiquidity = async (event: SubstrateEvent) => {
 	token0.tradeVolume = token0.tradeVolume + token0Changed;
 	token0.tradeVolumeUSD = token0.tradeVolumeUSD + BigInt(token0ChangedUSD.toChainData())
 	token0.txCount = token0.txCount + BigInt(1);
+	token0.updateAtBlockId = blockData.id;
 	token0.price = BigInt(newPrice0.toChainData())
 	token1.amount = token1.amount - token1Changed;
 	token1.tvl = BigInt(newPrice1.times(FN.fromInner(token1.amount.toString(), token1.decimals)).toChainData());
@@ -147,6 +149,7 @@ export const removeLiquidity = async (event: SubstrateEvent) => {
 	token1.tradeVolumeUSD = token1.tradeVolumeUSD + BigInt(token1ChangedUSD.toChainData());
 	token1.txCount = token1.txCount + BigInt(1);
 	token1.price = BigInt(newPrice1.toChainData())
+	token1.updateAtBlockId = blockData.id;
 
 	Dailytoken0.tokenId = token0Name;
 	Dailytoken0.amount = token0.amount;
