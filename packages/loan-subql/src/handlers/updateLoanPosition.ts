@@ -50,7 +50,7 @@ export const updateLoanPosition = async (
 
   // update collateral first
   if (shouldUpdatePosition) {
-    updateCollateral(collateral, depositChangedUSD, debitChangedUSD);
+    updateCollateral(collateral, depositChanged, debitChanged);
   }
 
   // recalculate volume
