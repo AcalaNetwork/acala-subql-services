@@ -2,19 +2,9 @@ import { forceToCurrencyName } from "@acala-network/sdk-core";
 import { SubstrateBlock, SubstrateEvent } from "@subql/types"
 import { getStableCoinCurrency, getStartOfDay, getStartOfHour, getTokenDecimals } from '@acala-network/subql-utils';
 import { getBlock, getAccount, getCollateral, getPriceBundle, getPosition, getHourlyPosition, getDailyPosition, getHourlyCollateral, getDailyCollateral, getExchangeBundle } from "../utils/record";
-import { updateCollateral, updateDailyCollateral, updateDailyPosition, updateHourlyCollateral, updateHourlyPosition, updatePosition, updateParams, createUpdatePositionHistroy, createConfiscatePositionHistory } from ".";
+import { updateDailyCollateral, updateDailyPosition, updateHourlyCollateral, updateHourlyPosition, createUpdatePositionHistroy, createConfiscatePositionHistory } from ".";
 import { getVolumeUSD } from '../utils/math';
 import { forceToCurrencyId } from "@acala-network/sdk-core";
-
-const toCurrencyId = (api: any, id: string) => {
-  if(!id.includes(':')) {
-    return {
-      Token: id
-    }
-  }
-
-  return forceToCurrencyId(api as any, id)
-}
 
 export const updateLoanPosition = async (
   rawBlock: SubstrateBlock,
@@ -22,7 +12,6 @@ export const updateLoanPosition = async (
   collateralName: string,
   depositChanged: bigint,
   debitChanged: bigint, 
-  shouldUpdatePosition = true
 ) => {
   const timestamp = rawBlock.timestamp;
   const startHour = getStartOfHour(timestamp);
@@ -43,86 +32,72 @@ export const updateLoanPosition = async (
   const depositChangedUSD = getVolumeUSD(depositChanged, collateral.decimals, priceBundle.price)
   const debitChangedUSD = getVolumeUSD(debitChanged, stableCoinDecimals, exchangeBundle.debitExchangeRate)
 
-  // get collateral on chain
-  const result = await api.query.loans.positions(toCurrencyId(api as any, collateral.id), owner.id)
-  const depositAmount = (result as any).collateral.toBigInt();
-  const debitAmount = (result as any).debit.toBigInt();
-
-  // update collateral first
-  if (shouldUpdatePosition) {
-    updateCollateral(collateral, depositAmount, debitAmount);
-  }
+  // update collateral record 
+  collateral.debitAmount = collateral.debitAmount + debitChanged;
+  collateral.depositAmount = collateral.depositAmount + depositChanged;
 
   // recalculate volume
   const depositVolumeUSD = getVolumeUSD(collateral.depositAmount, collateral.decimals, priceBundle.price)
   const debitVolumeUSD = getVolumeUSD(collateral.debitAmount, stableCoinDecimals, exchangeBundle.debitExchangeRate)
 
   // update collatearl daily/hourly record
-  if (shouldUpdatePosition) {
-    updateHourlyCollateral(
-      collateral,
-      hourlyCollateral,
-      exchangeBundle.debitExchangeRate,
-      depositVolumeUSD,
-      debitVolumeUSD,
-      depositChanged,
-      debitChanged,
-      depositChangedUSD,
-      debitChangedUSD
-    );
-    updateDailyCollateral(
-      collateral,
-      dailyCollateral,
-      exchangeBundle.debitExchangeRate,
-      depositVolumeUSD,
-      debitVolumeUSD,
-      depositChanged,
-      debitChanged,
-      depositChangedUSD,
-      debitChangedUSD
-    );
+  updateHourlyCollateral(
+    collateral,
+    hourlyCollateral,
+    exchangeBundle.debitExchangeRate,
+    depositVolumeUSD,
+    debitVolumeUSD,
+    depositChanged,
+    debitChanged,
+    depositChangedUSD,
+    debitChangedUSD
+  );
+  updateDailyCollateral(
+    collateral,
+    dailyCollateral,
+    exchangeBundle.debitExchangeRate,
+    depositVolumeUSD,
+    debitVolumeUSD,
+    depositChanged,
+    debitChanged,
+    depositChangedUSD,
+    debitChangedUSD
+  );
 
-    // update user position
-    updatePosition(
-      position,
-      block,
-      depositAmount,
-      debitAmount
-    )
-  }
+
+  position.depositAmount = position.depositAmount + depositChanged;
+  position.debitAmount = position.debitAmount + debitChanged;
+  position.updateAt = block.timestamp;
+  position.updateAtBlockId = block.id;
+  position.txCount = position.txCount + 1;
+  owner.txCount = owner.txCount + 1;
 
   const depositVolumeUSDInPosition = getVolumeUSD(position.depositAmount, collateral.decimals, priceBundle.price);
   const debitVolumeUSDInPosition = getVolumeUSD(position.debitAmount, stableCoinDecimals, exchangeBundle.debitExchangeRate);
 
-  if (shouldUpdatePosition) {
-    updateHourlyPosition(
-      hourlyPosition,
-      position,
-      exchangeBundle.debitExchangeRate,
-      depositVolumeUSDInPosition,
-      debitVolumeUSDInPosition,
-      depositChanged,
-      debitChanged,
-      depositChangedUSD,
-      debitChangedUSD
-    )
+  updateHourlyPosition(
+    hourlyPosition,
+    position,
+    exchangeBundle.debitExchangeRate,
+    depositVolumeUSDInPosition,
+    debitVolumeUSDInPosition,
+    depositChanged,
+    debitChanged,
+    depositChangedUSD,
+    debitChangedUSD
+  );
 
-    updateDailyPosition(
-      dailyPosition,
-      position,
-      exchangeBundle.debitExchangeRate,
-      depositVolumeUSDInPosition,
-      debitVolumeUSDInPosition,
-      depositChanged,
-      debitChanged,
-      depositChangedUSD,
-      debitChangedUSD
-    )
-  }
-
-  owner.txCount = owner.txCount + 1;
-  position.updateAt = block.timestamp;
-  position.updateAtBlockId = block.id;
+  updateDailyPosition(
+    dailyPosition,
+    position,
+    exchangeBundle.debitExchangeRate,
+    depositVolumeUSDInPosition,
+    debitVolumeUSDInPosition,
+    depositChanged,
+    debitChanged,
+    depositChangedUSD,
+    debitChangedUSD
+  );
 
   await owner.save();
   await collateral.save();
@@ -145,22 +120,24 @@ export const updateLoanPosition = async (
 }
 
 export async function handleLoanPositionUpdate (event: SubstrateEvent) {
-  const [owner, collateral, _collateralChanged, _debitChanged] = event.event.data;
+  const [owner, collateral, collateralChanged, debitChanged] = event.event.data;
 
-  const depositChanged = BigInt(_collateralChanged.toString())
-  const debitChanged = BigInt(_debitChanged.toString())
+  const collateralChangedBN = BigInt(collateralChanged.toString())
+  const debitChangedBN = BigInt(debitChanged.toString())
+  const collateralName = forceToCurrencyName(collateral);
 
   const data = await updateLoanPosition(
     event.block,
     owner.toString(),
-    forceToCurrencyName(collateral),
-    depositChanged,
-    debitChanged
+    collateralName,
+    collateralChangedBN,
+    debitChangedBN
   );
+
   await createUpdatePositionHistroy(
     event,
     data.owner,
-    forceToCurrencyName(collateral),
+    collateralName,
     data.depositChanged,
     data.debitChanged,
     data.depositChangedUSD,
@@ -171,12 +148,22 @@ export async function handleLoanPositionUpdate (event: SubstrateEvent) {
 }
 
 export async function handleConfiscate (event: SubstrateEvent) {
-  const [owner, collateral, _collateralChanged, _debitChanged] = event.event.data;
+  const [address, token, collateralChanged, debitChanged] = event.event.data;
 
-  const depositChanged = -BigInt(_collateralChanged.toString())
-  const debitChanged = -BigInt(_debitChanged.toString())
+  const collateralChangedBN = -BigInt(collateralChanged.toString());
+  const debitChangedBN = -BigInt(debitChanged.toString());
+  const collateralName = forceToCurrencyName(token);
+  const rawBlock = event.block; 
+  const owner = await getAccount(address.toString());
+  const collateral = await getCollateral(collateralName);
+  const stableCoinDecimals = await getTokenDecimals(api as any, getStableCoinCurrency(api as any));
+  const priceBundle = await getPriceBundle(collateralName, rawBlock);
+  const exchangeBundle = await getExchangeBundle(collateralName, rawBlock);
 
-  let debitPool
+  const collateralVolumeUSD = getVolumeUSD(collateralChangedBN, collateral.decimals, priceBundle.price);
+  const debitVolumeUSD = getVolumeUSD(debitChangedBN, stableCoinDecimals, exchangeBundle.debitExchangeRate);
+
+  let debitPool = BigInt(0);
 
   try {
     const _pool = await api.query.cdpTreasury.debitPool();
@@ -185,23 +172,14 @@ export async function handleConfiscate (event: SubstrateEvent) {
     debitPool = BigInt(0)
   }
 
-  const data = await updateLoanPosition(
-    event.block,
-    owner.toString(),
-    forceToCurrencyName(collateral),
-    depositChanged,
-    debitChanged,
-    false
-  );
-
   await createConfiscatePositionHistory(
     event,
-    data.owner,
-    data.collateral,
-    data.depositChanged,
-    data.debitChanged,
-    data.depositChangedUSD,
-    data.debitChangedUSD,
+    owner,
+    collateral,
+    collateralChangedBN,
+    debitChangedBN,
+    collateralVolumeUSD,
+    debitVolumeUSD,
     debitPool
-  )
+  );
 }

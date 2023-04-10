@@ -3,7 +3,7 @@ import { getStatus } from "../utils";
 import { updateLoanPosition } from "./updateLoanPosition";
 
 const INIT_BLOCKS = {
-  acala:  3070859,
+  acala:  3070895,
   karura: 3828505
 }
 
@@ -15,11 +15,13 @@ async function initPositions (event: SubstrateEvent) {
 
   if (!positions) throw new Error(`can'not read init data`);
 
-  for (const i of positions) {
-    const owner = i.address;
-    const collateral = i.token;
-    const deposit = BigInt(i.collatearl || 0);
-    const debit = BigInt(i.debit || 0);
+  for (const [i, item] of positions.entries()) {
+    const owner = item.address;
+    const collateral = item.token;
+    const deposit = BigInt(item.collateral || 0);
+    const debit = BigInt(item.debit || 0);
+
+    logger.info(`${i} ${owner} ${collateral} ${deposit} ${debit}`)
 
     await updateLoanPosition(
       event.block,

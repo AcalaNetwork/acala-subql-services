@@ -1,8 +1,7 @@
 import { forceToCurrencyName } from "@acala-network/sdk-core";
 import { AccountId, CurrencyId } from "@acala-network/types/interfaces";
 import { SubstrateEvent } from "@subql/types";
-import { getAccount, getBlock, getExtrinsic, getPosition, getTransferPosition } from "../utils";
-import { updateLoanPosition } from './updateLoanPosition';
+import { getAccount, getBlock, getExtrinsic, getTransferPosition } from "../utils";
 
 export const createTransferLoanHistory = async (
   event: SubstrateEvent,
@@ -31,28 +30,10 @@ export const createTransferLoanHistory = async (
 
 export const transferLoan = async (event: SubstrateEvent) => {
   const [from, to, token] = event.event.data as unknown as [AccountId, AccountId, CurrencyId];
-  const tokenName = forceToCurrencyName(token);
   const fromAccount = await getAccount(from.toString());
-  const toAccount = await getAccount(to.toString());
-  const fromPosition = await getPosition(tokenName, fromAccount.id);
+
+  fromAccount.txCount + 1;
 
   await fromAccount.save();
-  await toAccount.save();
-  await fromPosition.save();
-
-  // await updateLoanPosition(
-  //   event.block,
-  //   fromAccount.address,
-  //   tokenName,
-  //   -fromPosition.depositAmount,
-  //   -fromPosition.debitAmount
-  // );
-  // await updateLoanPosition(
-  //   event.block,
-  //   toAccount.address,
-  //   tokenName,
-  //   fromPosition.depositAmount,
-  //   fromPosition.debitAmount
-  // );
   await createTransferLoanHistory(event, token, from.toString(), to.toString());
 }

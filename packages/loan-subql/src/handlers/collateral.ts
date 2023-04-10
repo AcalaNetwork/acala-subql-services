@@ -1,15 +1,5 @@
 import { Collateral, DailyCollateral, HourlyCollateral } from "../types";
 
-export const updateCollateral = (
-  collateral: Collateral,
-  depositAmount: bigint,
-  debitAmount: bigint
-) => {
-  collateral.depositAmount = depositAmount;
-  collateral.debitAmount = debitAmount;
-  collateral.txCount = collateral.txCount + 1;
-}
-
 export const updateHourlyCollateral = (
   collateral: Collateral,
   hourly: HourlyCollateral,
