@@ -8,9 +8,16 @@ const cache = new CacheDate<FixedPointNumber>()
 
 // query price via oracle feed
 const queryFeedPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
-    const result = await api.query.acalaOracle.values(forceToCurrencyId(api as any, token));
+    if(api?.query?.acalaOracle?.values) {
+        const result = await api.query.acalaOracle.values(forceToCurrencyId(api as any, token));
 
-    return FixedPointNumber.fromInner(result?.value?.value?.toString() || result?.value?.toString() || 0, 18);
+        return FixedPointNumber.fromInner(result?.value?.value?.toString() || result?.value?.toString() || 0, 18)
+    } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result = (await (api.rpc as any).oracle.getValue('Aggregated', forceToCurrencyId(api, token))) as any
+    
+        return FixedPointNumber.fromInner(result?.value?.value?.toString() || result?.value?.toString() || 0, 18)
+    }
 }
 
 // query liquid token price via homa lite
