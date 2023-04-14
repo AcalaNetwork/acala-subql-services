@@ -3,6 +3,7 @@ import { SubstrateBlock } from '@subql/types/dist/interfaces';
 import { getPool, getToken } from ".";
 import { getTokenName } from './getTokenName';
 import { queryPriceFromOracle } from "@acala-network/subql-utils";
+import { PriceBundle } from "../types";
 
 const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, stakingCurrency: string, StableCurrency: string) => {
 	const { rate: rateA, amount: _amountA } = await getPriceFromDexPool(token, stakingCurrency);
@@ -57,18 +58,15 @@ const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	const stakingCurrencyName = getTokenName(stakingCurrency as any);
 	const stableCurrencyName = getTokenName(stableCurrency as any);
 
-	const pool = await getPool(stakingCurrencyName, stableCurrencyName)
+	const pool = await getPool(stableCurrencyName, stakingCurrencyName)
 	
 	const token0 = await getToken(pool.token0Id);
 	const token1 = await getToken(pool.token1Id);
 
-	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
-	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
+	const stableAmount = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
+	const stakingAmount = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
 
-	const stakingAmount = pool.token0Id === stakingCurrencyName ? amount0 : amount1;
-	const stableAmount = pool.token0Id === stableCurrencyName ? amount0 : amount1;
-
-	return stakingCurrencyMarketPrice.mul(stableAmount.div(stakingAmount));
+	return stakingCurrencyMarketPrice.mul(stakingAmount.div(stableAmount));
 }
 
 const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
@@ -116,9 +114,9 @@ export const circulatePrice = async (api: AnyApi, block: SubstrateBlock, name: M
 	const stakingCurrencyName = getTokenName(stakingCurrency as any);
 	const stableCurrencyName = getTokenName(stableCurrency as any);
 
-	if (_name === "KUSD") return getKusdMarketPrice(api, block);
+	if (_name === "KUSD") return getStablePriceBundle(api, block, 'KUSD');
 
-	else if (_name === "AUSD") return getAusdMarketPrice(api, block);
+	else if (_name === "AUSD") return getStablePriceBundle(api, block, 'AUSD');
 
 	else if (_name === 'KSM') return getKsmMarketPrice(api, block);
 	
@@ -147,3 +145,24 @@ export const queryPrice = async (api: any, block: SubstrateBlock, token: string)
 	await tokenData.save();
 	return price
 };
+
+
+export const getStablePriceBundle = async (api: AnyApi, block: SubstrateBlock, token: 'KUSD' | 'AUSD') => {
+	const id = `${block.block.header.number.toString()}-${token}`
+
+	let record = await PriceBundle.get(id);
+
+	if (!record) {
+		const price = token === 'KUSD' ? await getKusdMarketPrice(api, block) : await getAusdMarketPrice(api, block);
+
+		record = new PriceBundle(id);
+
+		record.tokenId = token
+		record.blockId = block.block.header.number.toString();
+		record.price = BigInt((price || FN.ZERO).toChainData())
+
+		await record.save();
+	}
+
+	return FN.fromInner(record.price?.toString() || "0", 12) 
+}
