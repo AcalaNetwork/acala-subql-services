@@ -18,7 +18,7 @@ export class PriceBundle implements Entity {
 
     public blockId?: string;
 
-    public TokenId?: string;
+    public tokenId?: string;
 
     public price?: bigint;
 
@@ -51,9 +51,9 @@ export class PriceBundle implements Entity {
       
     }
 
-    static async getByTokenId(TokenId: string): Promise<PriceBundle[] | undefined>{
+    static async getByTokenId(tokenId: string): Promise<PriceBundle[] | undefined>{
       
-      const records = await store.getByField('PriceBundle', 'TokenId', TokenId);
+      const records = await store.getByField('PriceBundle', 'tokenId', tokenId);
       return records.map(record => PriceBundle.create(record as PriceBundleProps));
       
     }

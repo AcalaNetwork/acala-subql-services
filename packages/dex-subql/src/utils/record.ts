@@ -287,7 +287,7 @@ export const getPriceBundle = async (id: string) => {
 	if (!record) {
 		const newRecord = new PriceBundle(id);
 
-		newRecord.TokenId = "";
+		newRecord.tokenId = "";
 		newRecord.blockId = "";
 		newRecord.price = BigInt(0);
 
