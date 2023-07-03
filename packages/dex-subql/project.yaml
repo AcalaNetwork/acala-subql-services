@@ -59,3 +59,8 @@ dataSources:
           filter:
             module: dex
             method: AddProvision
+        - handler: handleStableAssetSwap
+          kind: substrate/EventHandler
+          filter:
+            module: stableAsset
+            method: TokenSwapped
