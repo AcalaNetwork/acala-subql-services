@@ -5,3 +5,4 @@ export * from "./provisionToEnable";
 export * from "./addLiquidity";
 export * from "./removeLiquidity";
 export * from "./swap";
+export * from "./stableAssetSwap";

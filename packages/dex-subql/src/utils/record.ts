@@ -18,9 +18,11 @@ import {
 	ProvisionToEnabled,
 	RemoveLiquidity,
 	Swap,
+	StableAssetSwap,
 	Token,
 	TokenDailyData,
-	UserProvision
+	UserProvision,
+	StableAssetPoolHourlyData
 } from "../types";
 
 export const getAccount = async (address: string) => {
@@ -465,6 +467,46 @@ export const getTokenDailyData = async (id: string) => {
 		newRecord.timestamp = new Date();
 		newRecord.updateAtBlockId = "";
 		newRecord.price = BigInt(0);
+		return newRecord;
+	} else {
+		return record;
+	}
+};
+
+export const getStableAssetSwap = async (id: string) => {
+	const record = await StableAssetSwap.get(id);
+
+	if (!record) {
+		const newRecord = new StableAssetSwap(id);
+        newRecord.feeAmount = BigInt(0);
+        newRecord.yieldAmount = BigInt(0);
+		newRecord.exchangeRate = 0
+        newRecord.totalStaking = BigInt(0);
+        newRecord.totalLiquidity = BigInt(0);
+        newRecord.price = BigInt(0);
+		return newRecord;
+	} else {
+		return record;
+	}
+};
+
+export const getStableAssetPoolHourlyData = async (poolId: number, hourTime: Date) => {
+	const id = `${poolId}-${hourTime.getTime()}`;
+	const record = await StableAssetPoolHourlyData.get(id);
+
+	if (!record) {
+		const newRecord = new StableAssetPoolHourlyData(id);
+		newRecord.poolId = poolId;
+		newRecord.timestamp = hourTime;
+        newRecord.token0Id = '';
+        newRecord.token1Id = '';
+        newRecord.totalTx = 0;
+        newRecord.hourlyToken0TradeVolume = BigInt(0);
+        newRecord.hourlyToken1TradeVolume = BigInt(0);
+        newRecord.priceHigh = BigInt(0);
+        newRecord.priceLow = BigInt(0);
+        newRecord.updateAtBlockId = '';
+        
 		return newRecord;
 	} else {
 		return record;

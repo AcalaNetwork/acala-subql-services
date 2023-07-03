@@ -1,5 +1,5 @@
 import { SubstrateEvent } from "@subql/types";
-import { addLiquidity, addProvision, listProvision, removeLiquidity, swap } from "../handlers";
+import { addLiquidity, addProvision, listProvision, removeLiquidity, swap, stableAssetSwap } from "../handlers";
 import { provisionToEnable } from "../handlers";
 
 export * from '../handlers/handleEnableTradingPair';
@@ -27,3 +27,7 @@ export const handleListProvision = async (event: SubstrateEvent) => {
 export const handleAddProvision = async (event: SubstrateEvent) => {
 	await addProvision(event);
 };
+
+export async function handleStableAssetSwap(event: SubstrateEvent): Promise<void> {
+    await stableAssetSwap(event);
+}
