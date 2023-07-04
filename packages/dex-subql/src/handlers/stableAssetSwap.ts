@@ -110,7 +110,9 @@ export const stableAssetSwap = async (event: SubstrateEvent) => {
     hourlyData.token1Id = token1Name;
     hourlyData.totalTx = hourlyData.totalTx + 1;
     hourlyData.hourlyToken0TradeVolume = hourlyData.hourlyToken0TradeVolume + token0Amount;
-	hourlyData.hourlyToken1TradeVolume = hourlyData.hourlyToken1TradeVolume + token1Amount;
+    hourlyData.hourlyToken1TradeVolume = swap.totalStaking && swap.totalLiquidity ? 
+        hourlyData.hourlyToken1TradeVolume + token1Amount * swap.totalLiquidity / swap.totalStaking :
+        BigInt(0);
     hourlyData.priceHigh = hourlyData.priceHigh > swap.price ? hourlyData.priceHigh : swap.price;
 	hourlyData.priceLow = hourlyData.priceLow === BigInt(0) ? swap.price : (hourlyData.priceLow < swap.price ? hourlyData.priceLow : swap.price);
 
