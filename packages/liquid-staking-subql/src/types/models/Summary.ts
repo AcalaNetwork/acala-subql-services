@@ -5,12 +5,41 @@ import assert from 'assert';
 
 
 
-type SummaryProps = Omit<Summary, NonNullable<FunctionPropertyNames<Summary>>>;
+export type SummaryProps = Omit<Summary, NonNullable<FunctionPropertyNames<Summary>>| '_name'>;
 
 export class Summary implements Entity {
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(
+        
+            id: string,
+        
+            toBondPool: bigint,
+        
+            bonded: bigint,
+        
+            liquidIssuance: bigint,
+        
+            totalVoidLiquid: bigint,
+        
+            exchangeRate: bigint,
+        
+        
+        
+        
+    ) {
+        
+            this.id = id;
+        
+            this.toBondPool = toBondPool;
+        
+            this.bonded = bonded;
+        
+            this.liquidIssuance = liquidIssuance;
+        
+            this.totalVoidLiquid = totalVoidLiquid;
+        
+            this.exchangeRate = exchangeRate;
+        
     }
 
 
@@ -24,12 +53,18 @@ export class Summary implements Entity {
 
     public totalVoidLiquid: bigint;
 
+    public exchangeRate: bigint;
+
     public forceUpdateAt?: bigint;
 
     public updateAt?: bigint;
 
     public timestamp?: Date;
 
+
+    get _name(): string {
+        return 'Summary';
+    }
 
     async save(): Promise<void>{
         let id = this.id;
@@ -45,7 +80,7 @@ export class Summary implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Summary entity without an ID");
         const record = await store.get('Summary', id.toString());
         if (record){
-            return Summary.create(record as SummaryProps);
+            return this.create(record as SummaryProps);
         }else{
             return;
         }
@@ -55,7 +90,20 @@ export class Summary implements Entity {
 
     static create(record: SummaryProps): Summary {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Summary(record.id);
+        let entity = new this(
+        
+            record.id,
+        
+            record.toBondPool,
+        
+            record.bonded,
+        
+            record.liquidIssuance,
+        
+            record.totalVoidLiquid,
+        
+            record.exchangeRate,
+        );
         Object.assign(entity,record);
         return entity;
     }

@@ -5,12 +5,37 @@ import assert from 'assert';
 
 
 
-type HourlySummaryProps = Omit<HourlySummary, NonNullable<FunctionPropertyNames<HourlySummary>>>;
+export type HourlySummaryProps = Omit<HourlySummary, NonNullable<FunctionPropertyNames<HourlySummary>>| '_name'>;
 
 export class HourlySummary implements Entity {
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(
+        
+            id: string,
+        
+            toBondPool: bigint,
+        
+        
+        
+        
+            exchangeRate: bigint,
+        
+            timestamp: Date,
+        
+            updateAt: bigint,
+        
+    ) {
+        
+            this.id = id;
+        
+            this.toBondPool = toBondPool;
+        
+            this.exchangeRate = exchangeRate;
+        
+            this.timestamp = timestamp;
+        
+            this.updateAt = updateAt;
+        
     }
 
 
@@ -24,8 +49,16 @@ export class HourlySummary implements Entity {
 
     public totalVoidLiquid?: bigint;
 
+    public exchangeRate: bigint;
+
     public timestamp: Date;
 
+    public updateAt: bigint;
+
+
+    get _name(): string {
+        return 'HourlySummary';
+    }
 
     async save(): Promise<void>{
         let id = this.id;
@@ -41,7 +74,7 @@ export class HourlySummary implements Entity {
         assert((id !== null && id !== undefined), "Cannot get HourlySummary entity without an ID");
         const record = await store.get('HourlySummary', id.toString());
         if (record){
-            return HourlySummary.create(record as HourlySummaryProps);
+            return this.create(record as HourlySummaryProps);
         }else{
             return;
         }
@@ -51,7 +84,18 @@ export class HourlySummary implements Entity {
 
     static create(record: HourlySummaryProps): HourlySummary {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new HourlySummary(record.id);
+        let entity = new this(
+        
+            record.id,
+        
+            record.toBondPool,
+        
+            record.exchangeRate,
+        
+            record.timestamp,
+        
+            record.updateAt,
+        );
         Object.assign(entity,record);
         return entity;
     }
