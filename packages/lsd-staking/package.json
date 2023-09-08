@@ -1,0 +1,38 @@
+{
+    "name": "@acala-subql-services/lsd-subql-staking",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc -b",
+        "prepack": "rm -rf dist && npm build",
+        "test": "jest",
+        "codegen": "./node_modules/.bin/subql codegen"
+    },
+    "homepage": "https://github.com/subquery/subql-starter",
+    "repository": "github:subquery/subql-starter",
+    "files": [
+        "dist",
+        "schema.graphql",
+        "project.yaml"
+    ],
+    "author": "shenger",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "@acala-network/type-definitions": "5.1.1",
+        "@polkadot/api": "^10.7.2",
+        "@polkadot/types": "^10.7.2",
+        "@subql/acala-evm-processor": "^0.1.4",
+        "@subql/cli": "latest",
+        "@subql/node": "latest",
+        "@subql/testing": "latest",
+        "@subql/types": "latest",
+        "@subql/types-ethereum": "latest"
+    },
+    "dependencies": {
+        "@acala-network/api": "5.1.1",
+        "@acala-network/type-definitions": "5.1.1",
+        "@polkadot/api": "^10.7.2",
+        "@polkadot/types": "^10.7.2"
+    }
+}

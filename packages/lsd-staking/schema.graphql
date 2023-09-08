@@ -1,0 +1,139 @@
+type Pool @entity {
+  id: ID!
+
+  shareType: String
+
+  rewardsDeductionRate: BigInt
+
+  totalShare: BigInt
+
+  convertedType: String
+
+  convertedExchangeRate: BigInt
+}
+
+type RewardRule @entity {
+  id: ID!
+
+  poolId: BigInt!
+
+  rewardType: String!
+
+  rewardRate: BigInt
+
+  endTime: BigInt
+}
+
+type ClaimedReward @entity {
+  id: ID!
+
+  totalAmount: BigInt
+}
+
+type RewardSupply @entity {
+  id: ID!
+
+  amount: BigInt
+}
+
+type NewPoolRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  poolId: BigInt!
+
+  shareType: String!
+}
+
+type RewardsDeductionRateSetRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  poolId: BigInt!
+
+  rewardsDeductionRate: BigInt!
+}
+
+type RewardRuleUpdateRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  poolId: BigInt!
+  
+  rewardType: String!
+  
+  rewardRate: BigInt!
+  
+  endTime: BigInt!
+}
+
+type StakeRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  sender: String!
+
+  poolId: BigInt!
+  
+  amount: BigInt!
+}
+
+type UnstakeRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  sender: String!
+
+  poolId: BigInt!
+  
+  amount: BigInt!
+}
+
+type ClaimRewardRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  sender: String!
+
+  poolId: BigInt!
+
+  rewardType: String!
+  
+  amount: BigInt!
+}
+
+type LSDPoolConvertedRecord @entity {
+  id: ID!
+
+  blockTimestamp: Date!
+
+  from: String!
+
+  poolId: BigInt!
+
+  beforeShareType: String!
+
+  afterShareType: String!
+  
+  beforeShareTokenAmount: BigInt!
+
+  afterShareTokenAmount: BigInt!
+}
