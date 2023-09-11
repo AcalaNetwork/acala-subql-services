@@ -1,0 +1,30 @@
+specVersion: 1.0.0
+name: acala-earn-subql
+version: 1.0.0
+description: 'Acala Earn Subquery'
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
+runner:
+  node:
+    name: "@subql/node"
+    version: "2.9.2"
+  query:
+    name: "@subql/query"
+    version: "2.3.0"
+schema: 
+    file: ./schema.graphql
+network:
+  chainId: "0x3035b88c212be330a1a724c675d56d53a5016ec32af1790738832db0227ac54c"
+  endpoint: wss://mandala-tc9-rpc.aca-staging.network
+  chaintypes:
+    file: './dist/chain-types.js'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 3000000
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleClaimRewards
+          kind: substrate/EventHandler
+          filter:
+            module: incentives
+            method: ClaimRewards

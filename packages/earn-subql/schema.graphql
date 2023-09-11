@@ -1,0 +1,13 @@
+type Reward @jsonField {
+  token: String!
+  amount: BigInt!
+}
+
+type LoyaltyBonusPool @entity {
+  id: ID! # `${poolId}`
+
+  rewards: [Reward]!
+
+  timestamp: Date!
+  updatedAt: BigInt!
+}
