@@ -1,0 +1,68 @@
+specVersion: 1.0.0
+name: acala-lsd-staking
+version: 1.0.0
+description: 'Acala LSD Staking Subquery'
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
+runner:
+  node:
+    name: "@subql/node"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+schema: 
+    file: ./schema.graphql
+network:
+  chainId: "0x3035b88c212be330a1a724c675d56d53a5016ec32af1790738832db0227ac54c"
+  endpoint: wss://mandala-tc9-rpc.aca-staging.network
+  chaintypes:
+    file: './dist/chain-types.js'
+dataSources:
+  - kind: substrate/AcalaEvm
+    startBlock: 560000
+    processor:
+      file: "./node_modules/@subql/acala-evm-processor/dist/bundle.js"
+      options:
+        abi: lsd
+        address: "0x6dd151013dfce4a6bd3353c89373227ae90d9aa1"
+    assets:
+      lsd:
+        file: "./lsd.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleNewPool
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - NewPool(uint256 poolId, address shareType)
+        - handler: handleRewardsDeductionRateSet
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - RewardsDeductionRateSet(uint256 poolId, uint256 rate)
+        - handler: handleRewardRuleUpdate
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - RewardRuleUpdate(uint256 poolId, address rewardType, uint256 rewardRate, uint256 endTime)
+        - handler: handleStake
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - Stake(address indexed sender, uint256 poolId, uint256 amount)
+        - handler: handleUnstake
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - Unstake(address indexed sender, uint256 poolId, uint256 amount)
+        - handler: handleClaimReward
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - ClaimReward(address sender, uint256 poolId, IERC20 rewardType, uint256 amount)
+        - handler: handleLSDPoolConverted
+          kind: substrate/AcalaEvmEvent
+          filter:
+            topics:
+              - LSDPoolConverted(uint256 poolId, address beforeShareType, address afterShareType, uint256 beforeShareTokenAmount, uint256 afterShareTokenAmount)
