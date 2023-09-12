@@ -17,7 +17,7 @@ export class LoyaltyBonusPool implements Entity {
         
             id: string,
         
-            rewards: Reward,
+            rewards: Reward[],
         
             timestamp: Date,
         

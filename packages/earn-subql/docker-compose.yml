@@ -2,18 +2,26 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:latest
+    build:
+      context: .
+      dockerfile: ./docker/pg-Dockerfile
     ports:
       - 5432:5432
     volumes:
       - .data/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   subquery-node:
-    image: onfinality/subql-node:v1.21.1
+    image: onfinality/subql-node:latest
     depends_on:
-      - "postgres"
+      "postgres":
+        condition: service_healthy
     restart: always
     environment:
       DB_USER: postgres
@@ -24,17 +32,19 @@ services:
     volumes:
       - ./:/app
     command:
-      - --subquery=/app
-      - --db-schema=acala-loan
-      - --schema=acala-loan
+      - -f=/app
+      - --db-schema=app
+      - --workers=4
+      - --batch-size=30
+      - --unfinalized-blocks=true
 
   graphql-engine:
     image: onfinality/subql-query:latest
     ports:
       - 3000:3000
     depends_on:
-      - "postgres"
-      - "subquery-node"
+      "postgres":
+        condition: service_healthy
     restart: always
     environment:
       DB_USER: postgres
@@ -43,6 +53,6 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
     command:
-      - --name=acala-loans
+      - --name=app
       - --playground
       - --indexer=http://subquery-node:3000

@@ -6,7 +6,7 @@ repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 runner:
   node:
     name: "@subql/node"
-    version: "2.9.2"
+    version: "2.12.6"
   query:
     name: "@subql/query"
     version: "2.3.0"
@@ -19,7 +19,7 @@ network:
     file: './dist/chain-types.js'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 3000000
+    startBlock: 300000
     mapping:
       file: "./dist/index.js"
       handlers:

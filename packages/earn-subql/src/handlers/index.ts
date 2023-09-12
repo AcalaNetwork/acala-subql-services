@@ -1,1 +1,1 @@
-export * from './sync';
+export * from './claim-rewards';
