@@ -25,12 +25,6 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
   // modify total_share, actural_amount, deduction_amount, user_share to bigint
   const totalShareBigInt = BigInt(totalShare);
   const userShareBigInt = BigInt(userShare);
-  const actualAmountBigInt = BigInt(actual_amount.toString());
-  const deductionAmountBigInt = BigInt(deduction_amount.toString());
-  // get total reward amount in current event
-  const totalRewardAmount = actualAmountBigInt * deductionAmountBigInt;
-  // get user withdraw reward amount form loyalty bonus pool
-  const userWithdrawRewardAmount = totalRewardAmount * userShareBigInt / totalShareBigInt;
 
   let poolEntity = await LoyaltyBonusPool.get(poolId);
 
@@ -38,7 +32,6 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
     poolEntity = new LoyaltyBonusPool(poolId, [] as any, timestamp, BigInt(blockNumber));
   }
 
-  // update pool rewards
   // get reward token id
   const rewardTokenId = forceToCurrencyName(reward_currency_id);
   const deductionAmount = BigInt(deduction_amount.toString()); 
@@ -48,7 +41,11 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
     // get current reward field
     const currentRewardIndex = poolEntity.rewards.findIndex((reward) => reward.token === rewardTokenId);
     const prevRewardAmount = currentRewardIndex === -1 ? BigInt(0) : poolEntity.rewards[currentRewardIndex].amount;
-    const currentRewardAmount = prevRewardAmount - userWithdrawRewardAmount + deductionAmount;
+    // when prevRewardAmount is zero, currentRewardAmount is equal to deductionAmount, otherwise, calculate currentRewardAmount
+    const currentRewardAmount = prevRewardAmount === BigInt(0)
+      ? deductionAmount
+      // user will withdraw some rewards and then put new deductionAmount into pool, so we need to deduct the userShare from totalShare
+      : prevRewardAmount - prevRewardAmount * (userShareBigInt / totalShareBigInt) + deductionAmount;
 
     // if currentRewardIndex is -1, push new reward
     if (currentRewardIndex === -1) {
