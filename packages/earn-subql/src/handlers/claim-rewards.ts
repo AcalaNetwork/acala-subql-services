@@ -34,26 +34,23 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
 
   // get reward token id
   const rewardTokenId = forceToCurrencyName(reward_currency_id);
-  const deductionAmount = BigInt(deduction_amount.toString()); 
+  const deductionAmount = BigInt(deduction_amount.toString() || 0); 
 
-  // if decuctionAmount is not zero
-  if (deductionAmount > BigInt(0)) {
-    // get current reward field
-    const currentRewardIndex = poolEntity.rewards.findIndex((reward) => reward.token === rewardTokenId);
-    const prevRewardAmount = currentRewardIndex === -1 ? BigInt(0) : poolEntity.rewards[currentRewardIndex].amount;
-    // when prevRewardAmount is zero, currentRewardAmount is equal to deductionAmount, otherwise, calculate currentRewardAmount
-    const currentRewardAmount = prevRewardAmount === BigInt(0)
-      ? deductionAmount
-      // user will withdraw some rewards and then put new deductionAmount into pool, so we need to deduct the userShare from totalShare
-      : prevRewardAmount - prevRewardAmount * (userShareBigInt / totalShareBigInt) + deductionAmount;
+  // get current reward field
+  const currentRewardIndex = poolEntity.rewards.findIndex((reward) => reward.token === rewardTokenId);
+  const prevRewardAmount = currentRewardIndex === -1 ? BigInt(0) : poolEntity.rewards[currentRewardIndex].amount;
+  // when prevRewardAmount is zero, currentRewardAmount is equal to deductionAmount, otherwise, calculate currentRewardAmount
+  const currentRewardAmount = prevRewardAmount === BigInt(0)
+    ? deductionAmount
+    // user will withdraw some rewards and then put new deductionAmount into pool, so we need to deduct the userShare from totalShare
+    : prevRewardAmount - prevRewardAmount * (userShareBigInt / totalShareBigInt) + deductionAmount;
 
-    // if currentRewardIndex is -1, push new reward
-    if (currentRewardIndex === -1) {
-      poolEntity.rewards.push({ token: rewardTokenId, amount: currentRewardAmount });
-    } else {
-      // update reward amount
-      poolEntity.rewards[currentRewardIndex].amount = currentRewardAmount;
-    }
+  // if currentRewardIndex is -1, push new reward
+  if (currentRewardIndex === -1) {
+    poolEntity.rewards.push({ token: rewardTokenId, amount: currentRewardAmount });
+  } else {
+    // update reward amount
+    poolEntity.rewards[currentRewardIndex].amount = currentRewardAmount;
   }
 
 
