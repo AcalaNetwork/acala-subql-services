@@ -22,5 +22,5 @@ export {UnstakeRecord} from "./UnstakeRecord"
 
 export {ClaimRewardRecord} from "./ClaimRewardRecord"
 
-export {LSDPoolConvertedRecord} from "./LSDPoolConvertedRecord"
+export {LSTPoolConvertedRecord} from "./LSTPoolConvertedRecord"
 

@@ -1,6 +1,6 @@
 import { AcalaEvmEvent } from '@subql/acala-evm-processor';
-import { NewPoolEvent, RewardsDeductionRateSetEvent, RewardRuleUpdateEvent, StakeEvent, UnstakeEvent, ClaimRewardEvent, LSDPoolConvertedEvent } from '../types/contracts/LsdAbi';
-import { Pool, RewardRule, ClaimedReward, RewardSupply, NewPoolRecord, RewardsDeductionRateSetRecord, RewardRuleUpdateRecord, StakeRecord, UnstakeRecord, ClaimRewardRecord, LSDPoolConvertedRecord } from '../types';
+import { NewPoolEvent, RewardsDeductionRateSetEvent, RewardRuleUpdateEvent, StakeEvent, UnstakeEvent, ClaimRewardEvent, LSTPoolConvertedEvent } from '../types/contracts/LsdAbi';
+import { Pool, RewardRule, ClaimedReward, RewardSupply, NewPoolRecord, RewardsDeductionRateSetRecord, RewardRuleUpdateRecord, StakeRecord, UnstakeRecord, ClaimRewardRecord, LSTPoolConvertedRecord } from '../types';
 
 export async function handleNewPool(
   event: AcalaEvmEvent<NewPoolEvent['args']>
@@ -116,18 +116,18 @@ export async function handleClaimReward(
   await claimRewardRecordEntity.save();
 }
 
-export async function handleLSDPoolConverted(
-  event: AcalaEvmEvent<LSDPoolConvertedEvent['args']>
+export async function handleLSTPoolConverted(
+  event: AcalaEvmEvent<LSTPoolConvertedEvent['args']>
 ): Promise<void> {
 
   const [poolId, beforeShareType, afterShareType, beforeShareTokenAmount, afterShareTokenAmount] = event.args;
-  logger.info('LSDPoolConverted: {}', [poolId, beforeShareType, afterShareType, beforeShareTokenAmount, afterShareTokenAmount]);
+  logger.info('LSTPoolConverted: {}', [poolId, beforeShareType, afterShareType, beforeShareTokenAmount, afterShareTokenAmount]);
 
   const poolIdEntity = await Pool.get(poolId.toString());
   poolIdEntity.convertedType = afterShareType.toString();
   poolIdEntity.convertedExchangeRate = afterShareTokenAmount.toBigInt() * BigInt(10 ^ 18) / beforeShareTokenAmount.toBigInt();
   await poolIdEntity.save();
 
-  const lsdPoolConvertedRecordEntity = new LSDPoolConvertedRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, poolId.toBigInt(), beforeShareType.toString(), afterShareType.toString(), beforeShareTokenAmount.toBigInt(), afterShareTokenAmount.toBigInt());
+  const lsdPoolConvertedRecordEntity = new LSTPoolConvertedRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, poolId.toBigInt(), beforeShareType.toString(), afterShareType.toString(), beforeShareTokenAmount.toBigInt(), afterShareTokenAmount.toBigInt());
   await lsdPoolConvertedRecordEntity.save();
 }

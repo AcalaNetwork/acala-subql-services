@@ -13,8 +13,8 @@ runner:
 schema: 
     file: ./schema.graphql
 network:
-  chainId: "0x3035b88c212be330a1a724c675d56d53a5016ec32af1790738832db0227ac54c"
-  endpoint: wss://mandala-tc9-rpc.aca-staging.network
+  chainId: "0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c"
+  endpoint: wss://acala-rpc-1.aca-api.network
   chaintypes:
     file: './dist/chain-types.js'
 dataSources:
@@ -61,8 +61,8 @@ dataSources:
           filter:
             topics:
               - ClaimReward(address sender, uint256 poolId, IERC20 rewardType, uint256 amount)
-        - handler: handleLSDPoolConverted
+        - handler: handleLSTPoolConverted
           kind: substrate/AcalaEvmEvent
           filter:
             topics:
-              - LSDPoolConverted(uint256 poolId, address beforeShareType, address afterShareType, uint256 beforeShareTokenAmount, uint256 afterShareTokenAmount)
+              - LSTPoolConverted(uint256 poolId, address beforeShareType, address afterShareType, uint256 beforeShareTokenAmount, uint256 afterShareTokenAmount)
