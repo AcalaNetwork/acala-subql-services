@@ -24,7 +24,7 @@ dataSources:
       file: "./node_modules/@subql/acala-evm-processor/dist/bundle.js"
       options:
         abi: lsd
-        address: "0x6dd151013dfce4a6bd3353c89373227ae90d9aa1"
+        address: "0x7fe92ec600f15cd25253b421bc151c51b0276b7d"
     assets:
       lsd:
         file: "./lsd.abi.json"
