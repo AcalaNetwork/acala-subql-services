@@ -9,7 +9,7 @@ import {
 
   InitializedEvent,
 
-  LSDPoolConvertedEvent,
+  LSTPoolConvertedEvent,
 
   NewPoolEvent,
 
@@ -37,7 +37,7 @@ import {
 
   export type InitializedLog = EthereumLog<InitializedEvent["args"]>
 
-  export type LSDPoolConvertedLog = EthereumLog<LSDPoolConvertedEvent["args"]>
+  export type LSTPoolConvertedLog = EthereumLog<LSTPoolConvertedEvent["args"]>
 
   export type NewPoolLog = EthereumLog<NewPoolEvent["args"]>
 
@@ -84,7 +84,7 @@ import {
 
   export type ConvertInfosTransaction = EthereumTransaction<Parameters<LsdAbi['functions']['convertInfos']>>
 
-  export type ConvertLSDPoolTransaction = EthereumTransaction<Parameters<LsdAbi['functions']['convertLSDPool']>>
+  export type ConvertLSTPoolTransaction = EthereumTransaction<Parameters<LsdAbi['functions']['convertLSTPool']>>
 
   export type EarnedTransaction = EthereumTransaction<Parameters<LsdAbi['functions']['earned']>>
 

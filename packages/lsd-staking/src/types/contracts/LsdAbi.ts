@@ -27,7 +27,7 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export declare namespace UpgradeableStakingLSD {
+export declare namespace UpgradeableStakingLST {
   export type ConvertInfoStruct = {
     convertedShareType: PromiseOrValue<string>;
     convertedExchangeRate: PromiseOrValue<BigNumberish>;
@@ -75,7 +75,7 @@ export interface LsdAbiInterface extends utils.Interface {
     "addPool(address)": FunctionFragment;
     "claimRewards(uint256)": FunctionFragment;
     "convertInfos(uint256)": FunctionFragment;
-    "convertLSDPool(uint256,uint8)": FunctionFragment;
+    "convertLSTPool(uint256,uint8)": FunctionFragment;
     "earned(uint256,address,address)": FunctionFragment;
     "exit(uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
@@ -120,7 +120,7 @@ export interface LsdAbiInterface extends utils.Interface {
       | "addPool"
       | "claimRewards"
       | "convertInfos"
-      | "convertLSDPool"
+      | "convertLSTPool"
       | "earned"
       | "exit"
       | "initialize()"
@@ -185,7 +185,7 @@ export interface LsdAbiInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "convertLSDPool",
+    functionFragment: "convertLSTPool",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -344,7 +344,7 @@ export interface LsdAbiInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "convertLSDPool",
+    functionFragment: "convertLSTPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "earned", data: BytesLike): Result;
@@ -423,7 +423,7 @@ export interface LsdAbiInterface extends utils.Interface {
   events: {
     "ClaimReward(address,uint256,address,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
-    "LSDPoolConverted(uint256,address,address,uint256,uint256)": EventFragment;
+    "LSTPoolConverted(uint256,address,address,uint256,uint256)": EventFragment;
     "NewPool(uint256,address)": EventFragment;
     "OperationPauseStatusSet(uint256,uint8,bool)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -437,7 +437,7 @@ export interface LsdAbiInterface extends utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "ClaimReward"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "LSDPoolConverted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LSTPoolConverted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewPool"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OperationPauseStatusSet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -469,20 +469,20 @@ export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
-export interface LSDPoolConvertedEventObject {
+export interface LSTPoolConvertedEventObject {
   poolId: BigNumber;
   beforeShareType: string;
   afterShareType: string;
   beforeShareTokenAmount: BigNumber;
   afterShareTokenAmount: BigNumber;
 }
-export type LSDPoolConvertedEvent = TypedEvent<
+export type LSTPoolConvertedEvent = TypedEvent<
   [BigNumber, string, string, BigNumber, BigNumber],
-  LSDPoolConvertedEventObject
+  LSTPoolConvertedEventObject
 >;
 
-export type LSDPoolConvertedEventFilter =
-  TypedEventFilter<LSDPoolConvertedEvent>;
+export type LSTPoolConvertedEventFilter =
+  TypedEventFilter<LSTPoolConvertedEvent>;
 
 export interface NewPoolEventObject {
   poolId: BigNumber;
@@ -641,9 +641,9 @@ export interface LsdAbi extends BaseContract {
     convertInfos(
       poolId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[UpgradeableStakingLSD.ConvertInfoStructOutput]>;
+    ): Promise<[UpgradeableStakingLST.ConvertInfoStructOutput]>;
 
-    convertLSDPool(
+    convertLSTPool(
       poolId: PromiseOrValue<BigNumberish>,
       convertType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -831,9 +831,9 @@ export interface LsdAbi extends BaseContract {
   convertInfos(
     poolId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<UpgradeableStakingLSD.ConvertInfoStructOutput>;
+  ): Promise<UpgradeableStakingLST.ConvertInfoStructOutput>;
 
-  convertLSDPool(
+  convertLSTPool(
     poolId: PromiseOrValue<BigNumberish>,
     convertType: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1021,9 +1021,9 @@ export interface LsdAbi extends BaseContract {
     convertInfos(
       poolId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<UpgradeableStakingLSD.ConvertInfoStructOutput>;
+    ): Promise<UpgradeableStakingLST.ConvertInfoStructOutput>;
 
-    convertLSDPool(
+    convertLSTPool(
       poolId: PromiseOrValue<BigNumberish>,
       convertType: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1187,20 +1187,20 @@ export interface LsdAbi extends BaseContract {
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
-    "LSDPoolConverted(uint256,address,address,uint256,uint256)"(
+    "LSTPoolConverted(uint256,address,address,uint256,uint256)"(
       poolId?: null,
       beforeShareType?: null,
       afterShareType?: null,
       beforeShareTokenAmount?: null,
       afterShareTokenAmount?: null
-    ): LSDPoolConvertedEventFilter;
-    LSDPoolConverted(
+    ): LSTPoolConvertedEventFilter;
+    LSTPoolConverted(
       poolId?: null,
       beforeShareType?: null,
       afterShareType?: null,
       beforeShareTokenAmount?: null,
       afterShareTokenAmount?: null
-    ): LSDPoolConvertedEventFilter;
+    ): LSTPoolConvertedEventFilter;
 
     "NewPool(uint256,address)"(
       poolId?: null,
@@ -1315,7 +1315,7 @@ export interface LsdAbi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    convertLSDPool(
+    convertLSTPool(
       poolId: PromiseOrValue<BigNumberish>,
       convertType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1508,7 +1508,7 @@ export interface LsdAbi extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    convertLSDPool(
+    convertLSTPool(
       poolId: PromiseOrValue<BigNumberish>,
       convertType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }

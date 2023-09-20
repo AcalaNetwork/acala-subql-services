@@ -5,9 +5,9 @@ import assert from 'assert';
 
 
 
-export type LSDPoolConvertedRecordProps = Omit<LSDPoolConvertedRecord, NonNullable<FunctionPropertyNames<LSDPoolConvertedRecord>>| '_name'>;
+export type LSTPoolConvertedRecordProps = Omit<LSTPoolConvertedRecord, NonNullable<FunctionPropertyNames<LSTPoolConvertedRecord>>| '_name'>;
 
-export class LSDPoolConvertedRecord implements Entity {
+export class LSTPoolConvertedRecord implements Entity {
 
     constructor(
         
@@ -66,24 +66,24 @@ export class LSDPoolConvertedRecord implements Entity {
 
 
     get _name(): string {
-        return 'LSDPoolConvertedRecord';
+        return 'LSTPoolConvertedRecord';
     }
 
     async save(): Promise<void>{
         let id = this.id;
-        assert(id !== null, "Cannot save LSDPoolConvertedRecord entity without an ID");
-        await store.set('LSDPoolConvertedRecord', id.toString(), this);
+        assert(id !== null, "Cannot save LSTPoolConvertedRecord entity without an ID");
+        await store.set('LSTPoolConvertedRecord', id.toString(), this);
     }
     static async remove(id:string): Promise<void>{
-        assert(id !== null, "Cannot remove LSDPoolConvertedRecord entity without an ID");
-        await store.remove('LSDPoolConvertedRecord', id.toString());
+        assert(id !== null, "Cannot remove LSTPoolConvertedRecord entity without an ID");
+        await store.remove('LSTPoolConvertedRecord', id.toString());
     }
 
-    static async get(id:string): Promise<LSDPoolConvertedRecord | undefined>{
-        assert((id !== null && id !== undefined), "Cannot get LSDPoolConvertedRecord entity without an ID");
-        const record = await store.get('LSDPoolConvertedRecord', id.toString());
+    static async get(id:string): Promise<LSTPoolConvertedRecord | undefined>{
+        assert((id !== null && id !== undefined), "Cannot get LSTPoolConvertedRecord entity without an ID");
+        const record = await store.get('LSTPoolConvertedRecord', id.toString());
         if (record){
-            return this.create(record as LSDPoolConvertedRecordProps);
+            return this.create(record as LSTPoolConvertedRecordProps);
         }else{
             return;
         }
@@ -91,7 +91,7 @@ export class LSDPoolConvertedRecord implements Entity {
 
 
 
-    static create(record: LSDPoolConvertedRecordProps): LSDPoolConvertedRecord {
+    static create(record: LSTPoolConvertedRecordProps): LSTPoolConvertedRecord {
         assert(typeof record.id === 'string', "id must be provided");
         let entity = new this(
         
