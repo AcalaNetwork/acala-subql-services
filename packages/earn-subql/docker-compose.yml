@@ -17,8 +17,8 @@ services:
       timeout: 5s
       retries: 5
 
-  subquery-node:
-    image: onfinality/subql-node:latest
+  earn-subquery-node:
+    image: onfinality/subql-node:v2.12.6
     depends_on:
       "postgres":
         condition: service_healthy
@@ -38,7 +38,7 @@ services:
       - --batch-size=30
       - --unfinalized-blocks=true
 
-  graphql-engine:
+  earn-graphql-engine:
     image: onfinality/subql-query:latest
     ports:
       - 3000:3000
@@ -55,4 +55,4 @@ services:
     command:
       - --name=app
       - --playground
-      - --indexer=http://subquery-node:3000
+      - --indexer=http://earn-subquery-node:3000
