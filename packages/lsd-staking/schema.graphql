@@ -120,7 +120,7 @@ type ClaimRewardRecord @entity {
   amount: BigInt!
 }
 
-type LSDPoolConvertedRecord @entity {
+type LSTPoolConvertedRecord @entity {
   id: ID!
 
   blockTimestamp: Date!
