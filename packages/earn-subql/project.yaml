@@ -28,22 +28,22 @@ dataSources:
           filter:
             module: incentives
             method: ClaimRewards
-        - handle: handleUnbonded
+        - handler: handleUnbonded
           kind: substrate/EventHandler
           filter:
             module: earning
             method: Unbonded
-        - handle: handleBonded
+        - handler: handleBonded
           kind: substrate/EventHandler
           filter:
             module: earning
             method: Bonded
-        - handle: handleWithdrawn
+        - handler: handleWithdrawn
           kind: substrate/EventHandler
           filter:
             module: earning
             method: Withdrawn
-        - handle: handleRebonded
+        - handler: handleRebonded
           kind: substrate/EventHandler
           filter:
             module: earning

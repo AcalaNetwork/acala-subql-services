@@ -1,7 +1,6 @@
 import { SubstrateEvent } from "@subql/types/dist/interfaces";
 import { ClaimRewards, LoyaltyBonusPool, LoyaltyBonusReward, UserPool } from "../types";
 import { forceToCurrencyName } from '@acala-network/sdk-core';
-import { getPoolEntity } from "../utils";
 
 export const handleClaimRewards = async (event: SubstrateEvent) => {
  /**
