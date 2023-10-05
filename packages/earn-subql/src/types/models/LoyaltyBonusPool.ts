@@ -2,10 +2,6 @@
 import {Entity, FunctionPropertyNames} from "@subql/types";
 import assert from 'assert';
 
-import {
-    Reward,
-} from '../interfaces'
-
 
 
 
@@ -17,8 +13,6 @@ export class LoyaltyBonusPool implements Entity {
         
             id: string,
         
-            rewards: Reward[],
-        
             timestamp: Date,
         
             updatedAt: bigint,
@@ -26,8 +20,6 @@ export class LoyaltyBonusPool implements Entity {
     ) {
         
             this.id = id;
-        
-            this.rewards = rewards;
         
             this.timestamp = timestamp;
         
@@ -37,8 +29,6 @@ export class LoyaltyBonusPool implements Entity {
 
 
     public id: string;
-
-    public rewards: Reward[];
 
     public timestamp: Date;
 
@@ -76,8 +66,6 @@ export class LoyaltyBonusPool implements Entity {
         let entity = new this(
         
             record.id,
-        
-            record.rewards,
         
             record.timestamp,
         

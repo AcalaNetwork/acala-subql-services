@@ -3,11 +3,112 @@ type Reward @jsonField {
   amount: BigInt!
 }
 
-type LoyaltyBonusPool @entity {
-  id: ID! # `${poolId}`
+type LoyaltyBonusReward @entity {
+  id: ID! # `${poolid}-${token}`
 
-  rewards: [Reward]!
+  pool: LoyaltyBonusPool!
+  token: String!
+  amount: BigInt!
 
   timestamp: Date!
   updatedAt: BigInt!
+}
+
+type LoyaltyBonusPool @entity {
+  id: ID! # `${poolId}`
+
+  loyaltyBonusReward: [LoyaltyBonusReward]! @derivedFrom(field: "pool")
+
+  timestamp: Date!
+  updatedAt: BigInt!
+}
+
+type Pool @entity {
+  id: ID! # `${pool_id}`
+
+  totalShares: BigInt
+
+  updatedAt: BigInt!
+  timestamp: Date!
+}
+
+type UserPool @entity {
+  id: ID! # `${address}`
+
+  address: String!
+  share: BigInt!
+
+  loyaltyBonusReward: [UserLoyaltyBonusReward]! @derivedFrom(field: "user")
+
+  updatedAt: BigInt!
+  timestamp: Date!
+}
+
+type UserLoyaltyBonusReward @entity {
+  id: ID! # `${address}-${token}`
+
+  user: UserPool!
+  token: String!
+  amount: BigInt!
+  
+  timestamp: Date!
+  updatedAt: BigInt!
+}
+
+type Bonded @entity {
+  id: ID! # `${block}-${index}`
+
+  address: String!
+  amount: BigInt!
+
+  block: BigInt!
+  extrinsic: String!
+  timestamp: Date!
+}
+
+type Unbonded @entity {
+  id: ID! # `${block}-${index}`
+
+  address: String!
+  amount: BigInt!
+
+  block: BigInt!
+  extrinsic: String!
+  timestamp: Date!
+}
+
+type Rebonded @entity {
+  id: ID! # `${block}-${index}`
+
+  address: String!
+  amount: BigInt!
+
+  block: BigInt!
+  extrinsic: String!
+  timestamp: Date!
+}
+
+type Withdrawn @entity {
+  id: ID! # `${block}-${index}`
+
+  address: String!
+  amount: BigInt!
+
+  block: BigInt!
+  extrinsic: String!
+  timestamp: Date!
+}
+
+type ClaimRewards @entity {
+  id: ID! #`${block}-${index}`
+
+  poolId: String!
+  address: String!
+  token: String!
+  actualAmount: BigInt!
+  deductionAmount: BigInt!
+
+  block: BigInt!
+  extrinsic: String!
+  timestamp: Date!
 }

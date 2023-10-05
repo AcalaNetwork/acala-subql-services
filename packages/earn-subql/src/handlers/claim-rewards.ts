@@ -1,6 +1,7 @@
 import { SubstrateEvent } from "@subql/types/dist/interfaces";
-import { LoyaltyBonusPool, Reward } from "../types";
+import { ClaimRewards, LoyaltyBonusPool, LoyaltyBonusReward, UserPool } from "../types";
 import { forceToCurrencyName } from '@acala-network/sdk-core';
+import { getPoolEntity } from "../utils";
 
 export const handleClaimRewards = async (event: SubstrateEvent) => {
  /**
@@ -11,53 +12,60 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
   *  actual_amount: Balance,
   *  deduction_amount: Balance,
   **/
-
+  const index = event.idx.toString();
   const timestamp = event.block.timestamp;
-  const blockNumber = event.block.block.header.number.toNumber();
+  const blockNumber = BigInt(event.block.block.header.number.toNumber());
   const { event: { data: [who, pool, reward_currency_id, actual_amount, deduction_amount] } } = event;
   const poolId = pool.toHex();
-  // get total share
-  const poolInfo = await api.query.rewards.poolInfos(pool);
-  const totalShare = (poolInfo as any).totalShares.toString();
-  // get user share
-  const userInfo = await api.query.rewards.sharesAndWithdrawnRewards(pool, who);
-  const userShare = (userInfo as any)?.[0]?.toString();
-  // modify total_share, actural_amount, deduction_amount, user_share to bigint
-  const totalShareBigInt = BigInt(totalShare);
-  const userShareBigInt = BigInt(userShare);
 
-  let poolEntity = await LoyaltyBonusPool.get(poolId);
+  let loyaltyBonusPool = await LoyaltyBonusPool.get(poolId);
 
-  if (!poolEntity) {
-    poolEntity = new LoyaltyBonusPool(poolId, [] as any, timestamp, BigInt(blockNumber));
+  if (!loyaltyBonusPool) {
+    loyaltyBonusPool = new LoyaltyBonusPool(poolId, timestamp, BigInt(blockNumber));
   }
 
   // get reward token id
-  const rewardTokenId = forceToCurrencyName(reward_currency_id);
+  const rewardToken = forceToCurrencyName(reward_currency_id);
   const deductionAmount = BigInt(deduction_amount.toString() || 0); 
 
-  // get current reward field
-  const currentRewardIndex = poolEntity.rewards.findIndex((reward) => reward.token === rewardTokenId);
-  const prevRewardAmount = currentRewardIndex === -1 ? BigInt(0) : poolEntity.rewards[currentRewardIndex].amount;
-  // when prevRewardAmount is zero, currentRewardAmount is equal to deductionAmount, otherwise, calculate currentRewardAmount
-  const currentRewardAmount = prevRewardAmount === BigInt(0)
-    ? deductionAmount
-    // user will withdraw some rewards and then put new deductionAmount into pool, so we need to deduct the userShare from totalShare
-    : prevRewardAmount - prevRewardAmount * (userShareBigInt / totalShareBigInt) + deductionAmount;
+  // get loyalty bonus reward entity
+  let loyaltyBonusReward = await LoyaltyBonusReward.get(`${poolId}-${rewardToken}`);
 
-  // if currentRewardIndex is -1, push new reward
-  if (currentRewardIndex === -1) {
-    poolEntity.rewards.push({ token: rewardTokenId, amount: currentRewardAmount });
-  } else {
-    // update reward amount
-    poolEntity.rewards[currentRewardIndex].amount = currentRewardAmount;
+  if (!loyaltyBonusReward) {
+    loyaltyBonusReward = new LoyaltyBonusReward(
+      `${poolId}-${rewardToken}`,
+      poolId,
+      rewardToken,
+      BigInt(0),
+      timestamp,
+      blockNumber
+    );
   }
 
+  // update loyalty bonus reward entity
+  loyaltyBonusReward.amount = loyaltyBonusReward.amount + deductionAmount;
 
-  // update timestamp and updatedAt fields
-  poolEntity.timestamp = timestamp;
-  poolEntity.updatedAt = BigInt(blockNumber);
+  // update timestamp and block number
+  loyaltyBonusPool.timestamp = timestamp;
+  loyaltyBonusPool.updatedAt = blockNumber;
+  loyaltyBonusReward.timestamp = timestamp;
+  loyaltyBonusReward.updatedAt = blockNumber;
+
+  // get claim rewards entity
+  const claimRewardsEntity = await ClaimRewards.get(`${blockNumber}-${index}`);
+
+  // save claim rewards event
+  claimRewardsEntity.address = who.toString();
+  claimRewardsEntity.token = rewardToken;
+  claimRewardsEntity.poolId = poolId;
+  claimRewardsEntity.actualAmount = BigInt(actual_amount.toString() || 0);
+  claimRewardsEntity.deductionAmount = deductionAmount;
+  claimRewardsEntity.block = blockNumber;
+  claimRewardsEntity.timestamp = timestamp;
+  claimRewardsEntity.extrinsic = event.extrinsic?.extrinsic.hash.toString() || '';
 
   //save pool entity
-  await poolEntity.save();
+  await loyaltyBonusPool.save();
+  await loyaltyBonusReward.save();
+  await claimRewardsEntity.save();
 }
