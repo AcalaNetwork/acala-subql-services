@@ -11,6 +11,7 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
   *  actual_amount: Balance,
   *  deduction_amount: Balance,
   **/
+  logger.info('start handleClaimRewards');
   const index = event.idx.toString();
   const timestamp = event.block.timestamp;
   const blockNumber = BigInt(event.block.block.header.number.toNumber());
@@ -50,21 +51,23 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
   loyaltyBonusReward.timestamp = timestamp;
   loyaltyBonusReward.updatedAt = blockNumber;
 
-  // get claim rewards entity
-  const claimRewardsEntity = await ClaimRewards.get(`${blockNumber}-${index}`);
-
   // save claim rewards event
-  claimRewardsEntity.address = who.toString();
-  claimRewardsEntity.token = rewardToken;
-  claimRewardsEntity.poolId = poolId;
-  claimRewardsEntity.actualAmount = BigInt(actual_amount.toString() || 0);
-  claimRewardsEntity.deductionAmount = deductionAmount;
-  claimRewardsEntity.block = blockNumber;
-  claimRewardsEntity.timestamp = timestamp;
-  claimRewardsEntity.extrinsic = event.extrinsic?.extrinsic.hash.toString() || '';
+  const claimRewardsEntity = await ClaimRewards.create({
+    id: `${blockNumber}-${index}`,
+    address : who.toString(),
+    token : rewardToken,
+    poolId : poolId,
+    actualAmount : BigInt(actual_amount.toString() || 0),
+    deductionAmount : deductionAmount,
+    block : blockNumber,
+    timestamp : timestamp,
+    extrinsic : event.extrinsic?.extrinsic.hash.toString() || '',
+  });
 
-  //save pool entity
+  //save entities
   await loyaltyBonusPool.save();
   await loyaltyBonusReward.save();
   await claimRewardsEntity.save();
+
+  logger.info('end handleClaimRewards');
 }

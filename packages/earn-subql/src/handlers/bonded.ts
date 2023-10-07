@@ -10,6 +10,7 @@ export const handleBonded = async (event: SubstrateEvent) => {
 			amount: Balance,
 		}
    */
+  logger.info('start handleBonded');
   const index = event.idx.toString();
   const timestamp = event.block.timestamp;
   const blockNumber = BigInt(event.block.block.header.number.toNumber());
@@ -34,16 +35,19 @@ export const handleBonded = async (event: SubstrateEvent) => {
   poolEntity.timestamp = timestamp;
 
   // get bonded entity
-  const bondedEntity = await Bonded.get(`${blockNumber}-${index}`);
+  const bondedEntity = await Bonded.create({
+    id: `${blockNumber}-${index}`,
+    address : address,
+    amount : amountBN,
+    block : blockNumber,
+    timestamp : timestamp,
+    extrinsic : event.extrinsic?.extrinsic.hash.toString() || ''
+  });
 
-  // save bonded event
-  bondedEntity.address = address;
-  bondedEntity.amount = amountBN;
-  bondedEntity.block = blockNumber;
-  bondedEntity.timestamp = timestamp;
-  bondedEntity.extrinsic = event.extrinsic?.extrinsic.hash.toString() || '';
-
+  // save entities
   await userEntity.save();
   await poolEntity.save();
   await bondedEntity.save();
+
+  logger.info('end handleBonded');
 }

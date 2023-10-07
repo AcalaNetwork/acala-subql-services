@@ -2,7 +2,8 @@ import { SubstrateEvent } from "@subql/types";
 import { getPoolEntity, getUserPoolEntity } from "../utils";
 import { Unbonded } from "../types";
 
-export async function handleUnbonded (event: SubstrateEvent) {
+export async function handleUnbonded(event: SubstrateEvent) {
+  logger.info('start handleUnbonded');
   const index = event.idx.toString();
   const timestamp = event.block.timestamp;
   const blockNumber = BigInt(event.block.block.header.number.toNumber());
@@ -30,17 +31,20 @@ export async function handleUnbonded (event: SubstrateEvent) {
   poolEntity.updatedAt = blockNumber;
   poolEntity.timestamp = timestamp;
 
-  // get unbonded entity
-  const unbondedEntity = await Unbonded.get(`${blockNumber}-${index}`);
-
   // save unbonded event
-  unbondedEntity.address = address;
-  unbondedEntity.amount = amountBN;
-  unbondedEntity.block = blockNumber;
-  unbondedEntity.timestamp = timestamp;
-  unbondedEntity.extrinsic = event.extrinsic?.extrinsic.hash.toString() || '';
+  const unbondedEntity = await Unbonded.create({
+    id: `${blockNumber}-${index}`,
+    address: address,
+    amount: amountBN,
+    block: blockNumber,
+    timestamp: timestamp,
+    extrinsic: event.extrinsic?.extrinsic.hash.toString() || '',
+  });
 
+  // save entities
   await userEntity.save();
   await poolEntity.save();
   await unbondedEntity.save();
+
+  logger.info('end handleUnbonded');
 }
