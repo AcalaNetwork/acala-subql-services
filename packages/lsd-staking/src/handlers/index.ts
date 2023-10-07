@@ -26,6 +26,7 @@ export async function handleRewardsDeductionRateSet(
 
   const poolEntity = await Pool.get(poolId.toString());
   poolEntity.rewardsDeductionRate = rate.toBigInt();
+  poolEntity.totalShare = BigInt(0);
   await poolEntity.save();
 
   const rewardsDeductionRateSetRecordEntity = new RewardsDeductionRateSetRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, poolId.toBigInt(), rate.toBigInt());
@@ -48,16 +49,17 @@ export async function handleRewardRuleUpdate(
   }
 
   let rewardSupplyEntity = await RewardSupply.get(id);
-  if (rewardRuleEntity === undefined) {
+  if (rewardSupplyEntity === undefined) {
     rewardSupplyEntity = new RewardSupply(id);
     rewardSupplyEntity.amount = BigInt(0);
   }
 
-  const now = BigInt(event.blockTimestamp.getTime() / 1000);
+  const now = BigInt(Math.floor(event.blockTimestamp.getTime() / 1000));
   const remain = rewardRuleEntity.endTime > now ? (rewardRuleEntity.endTime - now) * rewardRuleEntity.rewardRate : BigInt(0);
 
   rewardRuleEntity.rewardRate = rewardRate.toBigInt();
   rewardRuleEntity.endTime = endTime.toBigInt();
+
 
   const added = rewardRuleEntity.rewardRate * (rewardRuleEntity.endTime - now) - remain;
   if (added > BigInt(0)) {
