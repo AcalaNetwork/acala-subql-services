@@ -37,6 +37,8 @@ services:
       - --workers=4
       - --batch-size=30
       - --unfinalized-blocks=true
+      - --network-dictionary=''
+      - ----dictionary-resolver=''
     healthcheck:
         test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
         interval: 3s
@@ -46,7 +48,7 @@ services:
   graphql-engine:
     image: onfinality/subql-query:latest
     ports:
-      - 3000:3000
+      - 3001:3000
     depends_on:
       "postgres":
         condition: service_healthy

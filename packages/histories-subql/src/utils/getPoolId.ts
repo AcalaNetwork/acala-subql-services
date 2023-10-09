@@ -11,6 +11,8 @@ export const getPoolId = (data: any) => {
     return `loans-${forceToCurrencyName(data.asLoans)}`;
   } else if(data?.isLoansIncentive) {
     return `loans-${forceToCurrencyName(data.asLoansIncentive)}`;
+  } else if (data?.isEarning){
+    return 'acala-staking';
   } else {
     return data.toString();
   }

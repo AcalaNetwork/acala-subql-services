@@ -1,8 +1,7 @@
 specVersion: 1.0.0
-name: acala-earn-subql
-version: 1.0.0
-description: 'Acala Earn Subquery'
+name: karura-staking
 repository: 'https://github.com/AcalaNetwork/acala-subql-services'
+version: 1.0.0
 runner:
   node:
     name: "@subql/node"
@@ -10,16 +9,16 @@ runner:
   query:
     name: "@subql/query"
     version: "2.3.0"
-schema: 
+schema:
     file: ./schema.graphql
 network:
-  chainId: "0x3035b88c212be330a1a724c675d56d53a5016ec32af1790738832db0227ac54c"
-  endpoint: wss://mandala-tc9-rpc.aca-staging.network
+  chainId: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
+  endpoint: wss://crosschain-dev.polkawallet.io:9905
   chaintypes:
     file: './dist/chain-types.js'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 529663
+    startBlock: 5370000
     mapping:
       file: "./dist/index.js"
       handlers:

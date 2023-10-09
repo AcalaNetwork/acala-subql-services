@@ -1,50 +1,49 @@
 specVersion: 1.0.0
-name: karura-liquid-staking
+name: karura-staking
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 version: 1.0.0
-description: 'liquid protocal statistics'
 runner:
   node:
     name: "@subql/node"
-    version: "1.21.1"
+    version: "2.12.6"
   query:
     name: "@subql/query"
-    version: "1.1.1"
-schema: 
+    version: "2.3.0"
+schema:
     file: ./schema.graphql
 network:
   chainId: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
-  dictionary: https://api.subquery.network/sq/subquery/karura-dictionary
-  endpoint: wss://karura.api.onfinality.io/public-ws
+  endpoint: wss://crosschain-dev.polkawallet.io:9905
   chaintypes:
     file: './dist/chain-types.js'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 3800000
+    startBlock: 5370000
     mapping:
       file: "./dist/index.js"
       handlers:
-        - handler: sync
+        - handler: handleClaimRewards
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: Minted
-        - handler: sync
+            module: incentives
+            method: ClaimRewards
+        - handler: handleUnbonded
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: RedeemedByFastMatch
-        - handler: sync
+            module: earning
+            method: Unbonded
+        - handler: handleBonded
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: RedeemedByUnbond
-        - handler: sync
+            module: earning
+            method: Bonded
+        - handler: handleWithdrawn
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: CurrentEraBumped
-        - handler: sync
+            module: earning
+            method: Withdrawn
+        - handler: handleRebonded
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: LedgerBondedReset
+            module: earning
+            method: Rebonded
