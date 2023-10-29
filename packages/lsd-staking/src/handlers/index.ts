@@ -1,6 +1,6 @@
 import { AcalaEvmEvent } from '@subql/acala-evm-processor';
 import { NewPoolEvent, RewardsDeductionRateSetEvent, RewardRuleUpdateEvent, StakeEvent, UnstakeEvent, ClaimRewardEvent, LSTPoolConvertedEvent } from '../types/contracts/LsdAbi';
-import { Pool, RewardRule, ClaimedReward, RewardSupply, NewPoolRecord, RewardsDeductionRateSetRecord, RewardRuleUpdateRecord, StakeRecord, UnstakeRecord, ClaimRewardRecord, LSTPoolConvertedRecord } from '../types';
+import { Pool, Shares, RewardRule, ClaimedReward, RewardSupply, NewPoolRecord, RewardsDeductionRateSetRecord, RewardRuleUpdateRecord, StakeRecord, UnstakeRecord, ClaimRewardRecord, LSTPoolConvertedRecord } from '../types';
 
 export async function handleNewPool(
   event: AcalaEvmEvent<NewPoolEvent['args']>
@@ -84,6 +84,15 @@ export async function handleStake(
   poolEntity.totalShare = poolEntity.totalShare + amount.toBigInt();
   await poolEntity.save();
 
+  const shareId = `${poolId}-${sender}`;
+  let sharesEntity = await Shares.get(shareId);
+  if (sharesEntity === undefined) {
+    sharesEntity = new Shares(shareId, poolId.toBigInt(), sender.toString());
+    sharesEntity.stakedAmount = BigInt(0);
+  }
+  sharesEntity.stakedAmount = sharesEntity.stakedAmount + amount.toBigInt();
+  await sharesEntity.save();
+
   const stakeRecordEntity = new StakeRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, sender.toString(), poolId.toBigInt(), amount.toBigInt());
   await stakeRecordEntity.save();
 }
@@ -98,6 +107,15 @@ export async function handleUnstake(
   const poolEntity = await Pool.get(poolId.toString());
   poolEntity.totalShare = poolEntity.totalShare - amount.toBigInt();
   await poolEntity.save();
+
+  const shareId = `${poolId}-${sender}`;
+  let sharesEntity = await Shares.get(shareId);
+  if (sharesEntity === undefined) {
+    sharesEntity = new Shares(shareId, poolId.toBigInt(), sender.toString());
+    sharesEntity.stakedAmount = BigInt(0);
+  }
+  sharesEntity.stakedAmount = sharesEntity.stakedAmount - amount.toBigInt();
+  await sharesEntity.save();
 
   const unstakeRecordEntity = new UnstakeRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, sender.toString(), poolId.toBigInt(), amount.toBigInt());
   await unstakeRecordEntity.save();

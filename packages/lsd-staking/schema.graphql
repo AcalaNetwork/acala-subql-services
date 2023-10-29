@@ -12,6 +12,16 @@ type Pool @entity {
   convertedExchangeRate: BigInt
 }
 
+type Shares @entity {
+  id: ID!
+
+  poolId: BigInt!
+
+  who: String!
+
+  stakedAmount: BigInt
+}
+
 type RewardRule @entity {
   id: ID!
 
