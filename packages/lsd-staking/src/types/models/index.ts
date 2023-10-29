@@ -4,6 +4,8 @@
 
 export {Pool} from "./Pool"
 
+export {Shares} from "./Shares"
+
 export {RewardRule} from "./RewardRule"
 
 export {ClaimedReward} from "./ClaimedReward"
