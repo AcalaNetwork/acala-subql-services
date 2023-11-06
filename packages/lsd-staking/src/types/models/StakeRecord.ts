@@ -23,6 +23,7 @@ export class StakeRecord implements Entity {
         
             amount: bigint,
         
+        
     ) {
         
             this.id = id;
@@ -51,6 +52,8 @@ export class StakeRecord implements Entity {
     public poolId: bigint;
 
     public amount: bigint;
+
+    public originShareTokenAmount?: bigint;
 
 
     get _name(): string {

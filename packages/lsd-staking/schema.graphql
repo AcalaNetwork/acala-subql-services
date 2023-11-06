@@ -98,6 +98,8 @@ type StakeRecord @entity {
   poolId: BigInt!
   
   amount: BigInt!
+
+  originShareTokenAmount: BigInt
 }
 
 type UnstakeRecord @entity {

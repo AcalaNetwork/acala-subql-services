@@ -1,4 +1,4 @@
-import { AcalaEvmEvent } from '@subql/acala-evm-processor';
+import { AcalaEvmEvent, AcalaEvmCall } from '@subql/acala-evm-processor';
 import { NewPoolEvent, RewardsDeductionRateSetEvent, RewardRuleUpdateEvent, StakeEvent, UnstakeEvent, ClaimRewardEvent, LSTPoolConvertedEvent } from '../types/contracts/LsdAbi';
 import { Pool, Shares, RewardRule, ClaimedReward, RewardSupply, NewPoolRecord, RewardsDeductionRateSetRecord, RewardRuleUpdateRecord, StakeRecord, UnstakeRecord, ClaimRewardRecord, LSTPoolConvertedRecord } from '../types';
 
@@ -11,6 +11,7 @@ export async function handleNewPool(
 
   const poolEntity = new Pool(poolId.toString());
   poolEntity.shareType = shareType.toString();
+  poolEntity.totalShare = BigInt(0);
   await poolEntity.save();
 
   const newPoolRecordEntity = new NewPoolRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, poolId.toBigInt(), shareType.toString());
@@ -26,7 +27,6 @@ export async function handleRewardsDeductionRateSet(
 
   const poolEntity = await Pool.get(poolId.toString());
   poolEntity.rewardsDeductionRate = rate.toBigInt();
-  poolEntity.totalShare = BigInt(0);
   await poolEntity.save();
 
   const rewardsDeductionRateSetRecordEntity = new RewardsDeductionRateSetRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, poolId.toBigInt(), rate.toBigInt());
@@ -90,11 +90,22 @@ export async function handleStake(
     sharesEntity = new Shares(shareId, poolId.toBigInt(), sender.toString());
     sharesEntity.stakedAmount = BigInt(0);
   }
+
   sharesEntity.stakedAmount = sharesEntity.stakedAmount + amount.toBigInt();
   await sharesEntity.save();
 
+
   const stakeRecordEntity = new StakeRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, sender.toString(), poolId.toBigInt(), amount.toBigInt());
   await stakeRecordEntity.save();
+
+  logger.info('Stake: success');
+}
+
+export async function handleStakeCall (
+  event: AcalaEvmCall<any>
+) {
+  logger.info(`StakeCall: ${event.success}`)
+  logger.info(JSON.stringify(event.args.events))
 }
 
 export async function handleUnstake(
@@ -145,7 +156,7 @@ export async function handleLSTPoolConverted(
 
   const poolIdEntity = await Pool.get(poolId.toString());
   poolIdEntity.convertedType = afterShareType.toString();
-  poolIdEntity.convertedExchangeRate = afterShareTokenAmount.toBigInt() * BigInt(10 ^ 18) / beforeShareTokenAmount.toBigInt();
+  poolIdEntity.convertedExchangeRate = afterShareTokenAmount.toBigInt() * BigInt(10 ** 18) / beforeShareTokenAmount.toBigInt();
   await poolIdEntity.save();
 
   const lsdPoolConvertedRecordEntity = new LSTPoolConvertedRecord(`${event.transactionHash}-${event.logIndex}`, event.blockTimestamp, event.from, poolId.toBigInt(), beforeShareType.toString(), afterShareType.toString(), beforeShareTokenAmount.toBigInt(), afterShareTokenAmount.toBigInt());
