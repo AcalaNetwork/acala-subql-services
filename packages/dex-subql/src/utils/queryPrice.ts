@@ -14,7 +14,7 @@ const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, 
 	const amountB = FN.fromInner(_amountB.toString(), 18);
 	const StakingPrice = stakingCurrency === 'DOT' ? await getDotMarketPrice(api, block) : await getKsmMarketPrice(api, block);
 	const StablePrice =  stakingCurrency === 'DOT' ? await getAusdMarketPrice(api, block) : await getKusdMarketPrice(api, block);
-	
+
 	const partA = rateA.mul(StakingPrice).times(amountA).div(amountA.add(amountB));
 	const partB = rateB.mul(StablePrice).times(amountB).div(amountA.add(amountB));
 
@@ -32,9 +32,9 @@ const getPriceFromDexPool = async (tokenA: string, tokenB: string) => {
 			rate: FN.ZERO,
 			amount: BigInt(1)
 		};
-	} 
+	}
 
-	
+
 	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
 	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
 
@@ -51,7 +51,7 @@ const getPriceFromDexPool = async (tokenA: string, tokenB: string) => {
 
 const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	const stakingCurrencyMarketPrice = await getKsmMarketPrice(api, block)
-	
+
 	const stakingCurrency = api.consts.prices.getStakingCurrencyId;
 
 	const stableCurrency = api.consts.prices.getStableCurrencyId;
@@ -59,7 +59,7 @@ const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	const stableCurrencyName = getTokenName(stableCurrency as any);
 
 	const pool = await getPool(stableCurrencyName, stakingCurrencyName)
-	
+
 	const token0 = await getToken(pool.token0Id);
 	const token1 = await getToken(pool.token1Id);
 
@@ -71,13 +71,13 @@ const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 
 const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	const acaPrice = await queryPriceFromOracle(api, block, 'ACA')
-	
+
 	const pool = await getPool('ACA', 'AUSD')
-	
+
 	const token0 = await getToken(pool.token0Id); // ACA
 	const token1 = await getToken(pool.token1Id); // AUSD
 
-	
+
 	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals); // ACA
 	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals); // AUSD
 
@@ -119,7 +119,7 @@ export const circulatePrice = async (api: AnyApi, block: SubstrateBlock, name: M
 	else if (_name === "AUSD") return getStablePriceBundle(api, block, 'AUSD');
 
 	else if (_name === 'KSM') return getKsmMarketPrice(api, block);
-	
+
 	else if (_name === 'DOT') return getDotMarketPrice(api, block);
 
 	else if (_name === "TAI") return getTaiMarketPrice(api, block);
@@ -164,5 +164,5 @@ export const getStablePriceBundle = async (api: AnyApi, block: SubstrateBlock, t
 		await record.save();
 	}
 
-	return FN.fromInner(record.price?.toString() || "0", 12) 
+	return FN.fromInner(record.price?.toString() || "0", 12)
 }
