@@ -1,0 +1,39 @@
+{
+  "name": "acala-evm-transfer",
+  "version": "0.0.1",
+  "description": "record evm tranfser",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "subql codegen && subql build",
+    "codegen": "subql codegen",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
+    "prepack": "rm -rf dist && npm run build",
+    "test": "subql build && subql-node-ethereum test",
+    "build:typechain": "typechain --target=ethers-v5 --out-dir=contracts abis/*.json",
+    "build:develop": "NODE_ENV=develop subql codegen && NODE_ENV=develop subql build"
+  },
+  "homepage": "https://github.com/subquery/ethereum-subql-starter",
+  "repository": "github:subquery/ethereum-subql-starter",
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "acala team",
+  "license": "MIT",
+  "dependencies": {
+    "@subql/types-ethereum": "latest",
+    "assert": "^2.0.0"
+  },
+  "devDependencies": {
+    "@subql/cli": "latest",
+    "@subql/node-ethereum": "latest",
+    "@subql/testing": "latest",
+    "@typechain/ethers-v5": "^11.1.2",
+    "dotenv": "latest",
+    "ethers": "^5.7.2",
+    "typechain": "^8.3.2",
+    "typescript": "latest"
+  }
+}

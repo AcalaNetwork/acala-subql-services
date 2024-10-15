@@ -1,0 +1,40 @@
+specVersion: 1.0.0
+name: karura-staking
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
+version: 1.0.0
+runner:
+  node:
+    name: "@subql/node"
+    version: "2.12.6"
+  query:
+    name: "@subql/query"
+    version: "2.3.0"
+schema:
+    file: ./schema.graphql
+network:
+  chainId: "0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c"
+  dictionary: https://api.subquery.network/sq/subquery/acala-dictionary
+  endpoint: wss://acala.polkawallet.io
+  chaintypes:
+    file: './dist/chain-types.js'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 5502000
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleXCMOut
+          kind: substrate/EventHandler
+          filter:
+            module: xTokens
+            method: TransferredAssets
+        - handler: handleXCMOut
+          kind: substrate/EventHandler
+          filter:
+            module: xTokens
+            method: TransferredMultiAssets
+        - handler: handleXCMIn
+          kind: substrate/EventHandler
+          filter:
+            module: messageQueue
+            method: Processed

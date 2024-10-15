@@ -1,0 +1,28 @@
+type XCMOut @entity {
+  id: ID!
+
+  block: BigInt!
+  tx: String!
+
+  fromAddress: String!
+  toAddress: String!
+  token: String!
+  amountFromTokensEvent: BigInt!
+  amountFromXTokensEvent: BigInt!
+
+  timestamp: Date!
+}
+
+type XCMIn @entity {
+  id: ID!
+
+  block: BigInt!
+  token: String!
+  fromAddress: String!
+  toAddress: String!
+  amount: BigInt!
+  toAddressReceive: BigInt!
+  treasuryReceive: BigInt!
+  
+  timestamp: Date!
+}

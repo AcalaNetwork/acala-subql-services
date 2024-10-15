@@ -1,0 +1,49 @@
+specVersion: 1.0.0
+name: karura-staking
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
+version: 1.0.0
+runner:
+  node:
+    name: "@subql/node"
+    version: "2.12.6"
+  query:
+    name: "@subql/query"
+    version: "2.3.0"
+schema:
+    file: ./schema.graphql
+network:
+  chainId: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
+  endpoint: wss://crosschain-dev.polkawallet.io:9905
+  chaintypes:
+    file: './dist/chain-types.js'
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 5370000
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleClaimRewards
+          kind: substrate/EventHandler
+          filter:
+            module: incentives
+            method: ClaimRewards
+        - handler: handleUnbonded
+          kind: substrate/EventHandler
+          filter:
+            module: earning
+            method: Unbonded
+        - handler: handleBonded
+          kind: substrate/EventHandler
+          filter:
+            module: earning
+            method: Bonded
+        - handler: handleWithdrawn
+          kind: substrate/EventHandler
+          filter:
+            module: earning
+            method: Withdrawn
+        - handler: handleRebonded
+          kind: substrate/EventHandler
+          filter:
+            module: earning
+            method: Rebonded

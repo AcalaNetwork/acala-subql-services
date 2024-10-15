@@ -1,0 +1,47 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+type Token @entity {
+  id: ID! # Token address
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+}
+
+# save approve history
+type Approve @entity {
+  id: ID! # Transaction hash
+  blockHeight: BigInt!
+  owner: String!
+  spender: String!
+  value: BigInt!
+  token: Token!
+  timestamp: Date!
+  success: Boolean!
+}
+
+# save direct transfer history
+type Transfer @entity {
+  id: ID! # Transaction hash
+  blockHeight: BigInt!
+  token: Token!
+  from: String!
+  to: String!
+  value: BigInt!
+  timestamp: Date!
+  success: Boolean!
+}
+
+# save all transfer events, not only direct transfer
+type TransferEvent @entity {
+  id: ID! # Transaction hash
+  blockHeight: BigInt!
+  token: Token!
+  from: String!
+  to: String!
+  value: BigInt!
+
+  transaction: String!
+  timestamp: Date!
+}
