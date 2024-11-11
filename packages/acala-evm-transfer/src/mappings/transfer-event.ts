@@ -5,7 +5,8 @@ import { TransferEvent } from "../types";
 
 export async function handleTransferEvent(event: TransferLog) {
   assert(event.address, "event.address is null");
-  assert(event.args, "event.args is null");
+  // assert(event.args, "event.args is null");
+  if (!event.args) return;
 
   const address = event.address;
   const token = await getToken(address);

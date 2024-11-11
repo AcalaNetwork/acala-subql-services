@@ -21,7 +21,7 @@ subqlTest(
 // test transfer event
 subqlTest(
   "testTransferEvent", // test name
-  6724840, // block height to process
+  6855773, // block height to process
   [], // dependent entities
   [], // expected entities
   "handleTransferEvent" //handler name

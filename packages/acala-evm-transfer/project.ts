@@ -17,9 +17,8 @@ dotenv.config({ path: dotenvPath });
 const project: EthereumProject = {
   specVersion: "1.0.0",
   version: "0.0.1",
-  name: "ethereum-starter",
-  description:
-    "This project can be use as a starting point for developing your new Ethereum SubQuery project",
+  name: "acala-evm-transfer",
+  description: "Acala EVM Transfer",
   runner: {
     node: {
       name: "@subql/node-ethereum",

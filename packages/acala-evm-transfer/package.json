@@ -24,7 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "@subql/types-ethereum": "latest",
-    "assert": "^2.0.0"
+    "assert": "^2.0.0",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@subql/cli": "latest",
