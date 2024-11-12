@@ -1,0 +1,48 @@
+{
+  "name": "dex-stats",
+  "version": "0.0.4",
+  "description": "This project can be used as a starting point for developing your SubQuery project. It indexes all transfers on Acala network",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "subql codegen && subql build",
+    "codegen": "subql codegen",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
+    "prepack": "rm -rf dist && npm run build",
+    "test": "subql build && subql-node test",
+    "build:develop": "NODE_ENV=develop subql codegen && NODE_ENV=develop subql build"
+  },
+  "homepage": "https://github.com/subquery/acala-subql-starter",
+  "repository": "github:subquery/acala-subql-starter",
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "SubQuery Team",
+  "license": "MIT",
+  "dependencies": {
+    "@acala-network/sdk-core": "^4.1.6-30",
+    "@acala-network/sdk-wallet": "^4.1.6-30",
+    "@acala-network/subql-utils": "^0.1.23",
+    "@acala-network/type-definitions": "latest",
+    "@open-web3/util": "^1.1.4",
+    "dayjs": "^1.10.7"
+  },
+  "devDependencies": {
+    "@polkadot/api": "^12",
+    "@subql/types": "latest",
+    "typescript": "^5.2.2",
+    "@subql/cli": "latest",
+    "@acala-network/type-definitions": "latest",
+    "@subql/testing": "latest",
+    "@subql/node": "latest",
+    "dotenv": "latest"
+  },
+  "resolutions": {
+    "@nestjs/schedule": "4.1.1"
+  },
+  "exports": {
+    "chaintypes": "src/chaintypes.ts"
+  }
+}
