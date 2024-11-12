@@ -1,0 +1,40 @@
+{
+  "name": "user-histories",
+  "version": "0.0.4",
+  "description": "for user action history records",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "subql codegen && subql build",
+    "codegen": "subql codegen",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
+    "prepack": "rm -rf dist && npm run build",
+    "test": "subql build && subql-node test",
+    "build:develop": "NODE_ENV=develop subql codegen && NODE_ENV=develop subql build"
+  },
+  "homepage": "https://github.com/subquery/acala-subql-starter",
+  "repository": "github:subquery/acala-subql-starter",
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "qwer951123",
+  "license": "MIT",
+  "devDependencies": {
+    "@polkadot/api": "^12",
+    "@subql/types": "latest",
+    "typescript": "^5.2.2",
+    "@subql/cli": "latest",
+    "@acala-network/type-definitions": "latest",
+    "@subql/testing": "latest",
+    "@subql/node": "latest",
+    "dotenv": "latest"
+  },
+  "resolutions": {
+    "@nestjs/schedule": "4.1.1"
+  },
+  "exports": {
+    "chaintypes": "src/chaintypes.ts"
+  }
+}

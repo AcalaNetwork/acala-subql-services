@@ -1,0 +1,125 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+
+# -------- Account -------- #
+type Account @entity {
+  id: ID!
+  publicKey: String!
+  isSystem: Boolean!
+  firstActiveBlock: Int!
+  lastActiveBlock: Int!
+
+  # for merging records from different actions
+  records: [Record] @derivedFrom(field: "account")
+  # for homa lite
+  homaLiteMint: [HomaLiteMint] @derivedFrom(field: "account")
+  homaLiteRedeemRequested: [HomaLiteRedeemRequested] @derivedFrom(field: "account")
+  homaLiteRedeemed: [HomaLiteRedeemed] @derivedFrom(field: "account")
+  homaLiteRedeemRequestCancelled: [HomaLiteRedeemRequestCancelled] @derivedFrom(field: "account")
+}
+
+# -------- Token -------- #
+type Token @entity {
+  id: ID!
+  decimals: Int!
+}
+
+# -------- Block -------- #
+type Block @entity {
+  id: ID!
+  number: Int!
+  hash: String!
+  timestamp: Date!
+}
+
+type Record @entity {
+  id: ID!
+  account: Account!
+  timestamp: Date!
+  type: String!
+}
+
+# -------- Homa Lite -------- #
+# -------- Mint -------- #
+type HomaLiteMint @entity {
+  id: ID! # blockNumber-eventIndex
+
+  account: Account!
+  staked: BigInt!
+  minted: BigInt!
+
+  record: Record!
+  block: Block!
+  timestamp: Date!
+
+  extrinsic: String
+}
+
+# -------- Redeem Request -------- #
+type HomaLiteRedeemRequested @entity {
+  id: ID! # blockNumber-eventIndex
+
+  account: Account!
+  # liquid amount
+  amount: BigInt!
+  # extra fee (in liquid)
+  extraFee: BigInt!
+
+  record: Record!
+  block: Block!
+  timestamp: Date!
+
+  extrinsic: String
+}
+
+# -------- Redeemed -------- #
+type HomaLiteRedeemed @entity {
+  id: ID! # blockNumber-eventIndex
+
+  account: Account!
+  redeemed: BigInt!
+  deducted: BigInt!
+
+  record: Record!
+  block: Block!
+  timestamp: Date!
+
+  extrinsic: String
+}
+
+# -------- Redeem Cancelled -------- #
+type HomaLiteRedeemRequestCancelled @entity {
+  id: ID! # blockNumber-eventIndex
+
+  account: Account!
+  amount: BigInt!
+
+  record: Record!
+  block: Block!
+  timestamp: Date!
+
+  extrinsic: String
+}
+
+#type Account @entity {
+  #"""
+  #id field is always required and must look like this
+  #"""
+  #id: ID!
+  #"""
+  #The public key of this account (same across all Polkadot parachains)
+  #"""
+  #publicKey: String!
+  #"""
+  #The first block on which we see a transfer involving this account
+  #"""
+  #firstTransferBlock: Int
+  #"""
+  #The most recent block on which we see a transfer involving this account
+  #"""
+  #lastTransferBlock: Int
+  #sentTransfers: [Transfer] @derivedFrom(field: "from") # These are virtual properties to help us navigate to the correct foreign key of Transfer
+  #recievedTransfers: [Transfer] @derivedFrom(field: "to") # These are virtual properties to help us navigate to the correct foreign key of Transfer
+#}
