@@ -44,3 +44,7 @@ export {RemoveLiquidity} from "./RemoveLiquidity"
 
 export {Swap} from "./Swap"
 
+export {StableAssetSwap} from "./StableAssetSwap"
+
+export {StableAssetPoolHourlyData} from "./StableAssetPoolHourlyData"
+
