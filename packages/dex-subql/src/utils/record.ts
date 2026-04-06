@@ -289,7 +289,7 @@ export const getPriceBundle = async (id: string) => {
 	if (!record) {
 		const newRecord = new PriceBundle(id);
 
-		newRecord.tokenId = "";
+		(newRecord as any).tokenId = "";
 		newRecord.blockId = "";
 		newRecord.price = BigInt(0);
 
@@ -458,7 +458,7 @@ export const getTokenDailyData = async (id: string) => {
 	if (!record) {
 		const newRecord = new TokenDailyData(id);
 
-		newRecord.tokenId = "";
+		(newRecord as any).tokenId = "";
 		newRecord.amount = BigInt(0);
 		newRecord.tvl = BigInt(0);
 		newRecord.dailyTradeVolume = BigInt(0);

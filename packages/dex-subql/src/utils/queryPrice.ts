@@ -157,7 +157,7 @@ export const getStablePriceBundle = async (api: AnyApi, block: SubstrateBlock, t
 
 		record = new PriceBundle(id);
 
-		record.tokenId = token
+		(record as any).tokenId = token
 		record.blockId = block.block.header.number.toString();
 		record.price = BigInt((price || FN.ZERO).toChainData())
 
