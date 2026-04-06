@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/earn-subql/package.json packages/earn-subql/yarn.lock ./
 RUN yarn install
 COPY packages/earn-subql/ ./
-RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
+RUN yarn build
 
 # =============
 

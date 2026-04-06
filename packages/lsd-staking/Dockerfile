@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/lsd-staking/package.json packages/lsd-staking/yarn.lock ./
 RUN yarn install
 COPY packages/lsd-staking/ ./
-RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
+RUN yarn build
 
 # =============
 

@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/chain-stats-subql/package.json packages/chain-stats-subql/yarn.lock ./
 RUN yarn install
 COPY packages/chain-stats-subql/ ./
-RUN yarn build || (echo "Build failed, copying source files..." && mkdir -p dist && cp -r src/* dist/)
+RUN yarn build
 
 # =============
 

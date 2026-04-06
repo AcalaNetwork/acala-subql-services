@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=100 --port=3123",
-    "build": "tsc -b",
+    "build": "subql codegen && subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen"
@@ -25,7 +25,8 @@
     "@polkadot/types": "^10.7.2",
     "@subql/cli": "^3.3.1",
     "@subql/node": "^2.9.2",
-    "@subql/types": "^2.1.2"
+    "@subql/types": "^2.1.2",
+    "typescript": "^6.0.2"
   },
   "dependencies": {
     "@acala-network/api": "5.1.1",

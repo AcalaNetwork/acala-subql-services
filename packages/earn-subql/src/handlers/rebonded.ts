@@ -27,7 +27,7 @@ export async function handleRebonded(event: SubstrateEvent) {
   // get pool entity
   const poolEntity = await getPoolEntity('aca-earning');
 
-  poolEntity.totalShares = poolEntity.totalShares + amountBN;
+  poolEntity.totalShares = (poolEntity.totalShares || BigInt(0)) + amountBN;
   poolEntity.updatedAt = blockNumber;
   poolEntity.timestamp = timestamp;
 

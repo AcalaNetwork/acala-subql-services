@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/dex-subql-fixed/package.json ./
 RUN yarn install
 COPY packages/dex-subql-fixed/ ./
-RUN yarn build || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
+RUN yarn build
 
 # =============
 

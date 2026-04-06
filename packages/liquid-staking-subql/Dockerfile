@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/liquid-staking-subql/package.json packages/liquid-staking-subql/yarn.lock ./
 RUN yarn install
 COPY packages/liquid-staking-subql/ ./
-RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
+RUN yarn build
 
 # =============
 

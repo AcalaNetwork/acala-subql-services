@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/dex-subql/package.json packages/dex-subql/yarn.lock ./
 RUN yarn install
 COPY packages/dex-subql/ ./
-RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
+RUN yarn build
 
 # =============
 
