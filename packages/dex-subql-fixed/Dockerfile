@@ -11,9 +11,10 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
-COPY . .
+COPY packages/dex-subql-fixed/package.json packages/dex-subql-fixed/yarn.lock ./
 RUN yarn install --immutable
-RUN yarn workspace dex-stats build
+COPY packages/dex-subql-fixed/ ./
+RUN yarn build
 
 # =============
 

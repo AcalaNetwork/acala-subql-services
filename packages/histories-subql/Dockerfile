@@ -11,9 +11,10 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
-COPY . .
+COPY packages/histories-subql/package.json packages/histories-subql/yarn.lock ./
 RUN yarn install --immutable
-RUN yarn workspace @acala-subql-services/histories-subql build
+COPY packages/histories-subql/ ./
+RUN yarn build
 
 # =============
 

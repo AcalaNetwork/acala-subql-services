@@ -11,9 +11,10 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
-COPY . .
+COPY packages/liquid-staking-subql/package.json packages/liquid-staking-subql/yarn.lock ./
 RUN yarn install --immutable
-RUN yarn workspace @acala-subql-services/liquid-staking-subql build
+COPY packages/liquid-staking-subql/ ./
+RUN yarn build
 
 # =============
 

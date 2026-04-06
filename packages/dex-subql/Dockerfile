@@ -11,9 +11,10 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
-COPY . .
+COPY packages/dex-subql/package.json packages/dex-subql/yarn.lock ./
 RUN yarn install --immutable
-RUN yarn workspace @acala-subql-services/dex-subql build
+COPY packages/dex-subql/ ./
+RUN yarn build
 
 # =============
 
