@@ -12,9 +12,9 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-COPY package.json yarn.lock ./
+COPY packages/dex-subql/package.json packages/dex-subql/yarn.lock ./
 RUN yarn install
-COPY . ./
+COPY packages/dex-subql/ ./
 RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
 
 # =============
@@ -27,12 +27,12 @@ USER root
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json /app/
-COPY --from=builder /app/schema.graphql /app/
-COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/project.yaml /app/
-COPY --from=builder /app/acala-project.yaml /app/
-COPY --from=builder /app/karura-project.yaml /app/
+COPY --from=builder /app/packages/dex-subql/package.json /app/
+COPY --from=builder /app/packages/dex-subql/schema.graphql /app/
+COPY --from=builder /app/packages/dex-subql/dist /app/dist
+COPY --from=builder /app/packages/dex-subql/project.yaml /app/
+COPY --from=builder /app/packages/dex-subql/acala-project.yaml /app/
+COPY --from=builder /app/packages/dex-subql/karura-project.yaml /app/
 
 RUN chown -R 1000:1000 /app
 

@@ -12,9 +12,9 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-COPY package.json yarn.lock ./
+COPY packages/loan-subql/package.json packages/loan-subql/yarn.lock ./
 RUN yarn install
-COPY . ./
+COPY packages/loan-subql/ ./
 RUN yarn build --ignore-scripts || true
 
 # =============
@@ -27,10 +27,10 @@ USER root
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json /app/
-COPY --from=builder /app/schema.graphql /app/
-COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/project.yaml /app/
+COPY --from=builder /app/packages/loan-subql/package.json /app/
+COPY --from=builder /app/packages/loan-subql/schema.graphql /app/
+COPY --from=builder /app/packages/loan-subql/dist /app/dist
+COPY --from=builder /app/packages/loan-subql/project.yaml /app/
 
 RUN chown -R 1000:1000 /app
 
