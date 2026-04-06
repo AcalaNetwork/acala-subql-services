@@ -11,6 +11,13 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
+# Build utils package first
+COPY packages/utils/package.json packages/utils/yarn.lock ./utils/
+RUN cd utils && yarn install
+COPY packages/utils/ ./utils/
+RUN cd utils && yarn build
+
+# Build target package
 COPY packages/loan-subql/package.json packages/loan-subql/yarn.lock ./
 RUN yarn install
 COPY packages/loan-subql/ ./
