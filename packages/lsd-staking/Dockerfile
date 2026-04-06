@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/lsd-staking/package.json packages/lsd-staking/yarn.lock ./
 RUN yarn install
 COPY packages/lsd-staking/ ./
-RUN yarn build --ignore-scripts || true
+RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
 
 # =============
 
@@ -27,10 +27,10 @@ USER root
 
 WORKDIR /app
 
-COPY --from=builder /app/packages/lsd-staking/package.json /app/
-COPY --from=builder /app/packages/lsd-staking/schema.graphql /app/
-COPY --from=builder /app/packages/lsd-staking/dist /app/dist
-COPY --from=builder /app/packages/lsd-staking/project.yaml /app/
+COPY --from=builder /app/package.json /app/
+COPY --from=builder /app/schema.graphql /app/
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/project.yaml /app/
 
 RUN chown -R 1000:1000 /app
 

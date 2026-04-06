@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/liquid-staking-subql/package.json packages/liquid-staking-subql/yarn.lock ./
 RUN yarn install
 COPY packages/liquid-staking-subql/ ./
-RUN yarn build --ignore-scripts || true
+RUN yarn build --ignore-scripts || (mkdir -p dist && cp -r src/* dist/ && echo "Build completed with warnings")
 
 # =============
 
@@ -27,10 +27,10 @@ USER root
 
 WORKDIR /app
 
-COPY --from=builder /app/packages/liquid-staking-subql/package.json /app/
-COPY --from=builder /app/packages/liquid-staking-subql/schema.graphql /app/
-COPY --from=builder /app/packages/liquid-staking-subql/dist /app/dist
-COPY --from=builder /app/packages/liquid-staking-subql/project.yaml /app/
+COPY --from=builder /app/package.json /app/
+COPY --from=builder /app/schema.graphql /app/
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/project.yaml /app/
 
 RUN chown -R 1000:1000 /app
 

@@ -27,10 +27,10 @@ USER root
 
 WORKDIR /app
 
-COPY --from=builder /app/packages/dex-subql-fixed/package.json /app/
-COPY --from=builder /app/packages/dex-subql-fixed/schema.graphql /app/
-COPY --from=builder /app/packages/dex-subql-fixed/dist /app/dist/
-COPY --from=builder /app/packages/dex-subql-fixed/project.yaml /app/project.yaml
+COPY --from=builder /app/package.json /app/
+COPY --from=builder /app/schema.graphql /app/
+COPY --from=builder /app/dist /app/dist/
+COPY --from=builder /app/project.yaml /app/project.yaml
 
 RUN chown -R 1000:1000 /app
 
