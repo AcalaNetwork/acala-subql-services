@@ -12,7 +12,7 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
 COPY packages/histories-subql/package.json packages/histories-subql/yarn.lock ./
-RUN yarn install --immutable
+RUN yarn install
 COPY packages/histories-subql/ ./
 RUN yarn build
 

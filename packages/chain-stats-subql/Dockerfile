@@ -12,7 +12,7 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
 COPY packages/chain-stats-subql/package.json packages/chain-stats-subql/yarn.lock ./
-RUN yarn install --immutable
+RUN yarn install
 COPY packages/chain-stats-subql/ ./
 RUN yarn build
 

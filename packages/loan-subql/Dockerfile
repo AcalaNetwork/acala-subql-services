@@ -12,7 +12,7 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
 COPY packages/loan-subql/package.json packages/loan-subql/yarn.lock ./
-RUN yarn install --immutable
+RUN yarn install
 COPY packages/loan-subql/ ./
 RUN yarn build
 

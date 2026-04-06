@@ -12,7 +12,7 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 
 COPY packages/lsd-staking/package.json packages/lsd-staking/yarn.lock ./
-RUN yarn install --immutable
+RUN yarn install
 COPY packages/lsd-staking/ ./
 RUN yarn build
 
