@@ -11,7 +11,7 @@ export const getAccount = async (address: string) => {
     const isSystem = isSystemAccount(address);
 
     record.type = isSystem ? AccountType.SYSTEM : AccountType.USER;
-		record.txCount = 0;
+		(record as any).txCount = 0;
 	}
 
   return record;
@@ -29,8 +29,8 @@ export const getToken = async (token: string) => {
 	}
 
 	// TODO: should remove
-	record.transferVolume = BigInt(0);
-	record.updateAt = new Date();
+	(record as any).transferVolume = BigInt(0);
+	(record as any).updateAt = new Date();
 
 	return record;
 };
