@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/dex-subql/package.json packages/dex-subql/bun.lock ./
 RUN bun install
 COPY packages/dex-subql/ ./
-RUN bun run build
+RUN set -e && ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build && ls -la /app/dist && echo "Build completed successfully"
 
 # =============
 

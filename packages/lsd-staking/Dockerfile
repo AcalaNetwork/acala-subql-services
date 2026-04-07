@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/lsd-staking/package.json packages/lsd-staking/bun.lock ./
 RUN bun install
 COPY packages/lsd-staking/ ./
-RUN ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build
+RUN set -e && ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build && ls -la /app/dist && echo "Build completed successfully"
 
 # =============
 
