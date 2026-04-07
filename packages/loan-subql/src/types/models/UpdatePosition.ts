@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type UpdatePositionProps = Omit<UpdatePosition, NonNullable<FunctionPropertyNames<UpdatePosition>>>;
+export type UpdatePositionProps = Omit<UpdatePosition, NonNullable<FunctionPropertyNames<UpdatePosition>>>;
 
 export class UpdatePosition implements Entity {
 
@@ -55,7 +55,7 @@ export class UpdatePosition implements Entity {
         assert((id !== null && id !== undefined), "Cannot get UpdatePosition entity without an ID");
         const record = await store.get('UpdatePosition', id.toString());
         if (record){
-            return UpdatePosition.create(record as UpdatePositionProps);
+            return this.create(record as UpdatePositionProps);
         }else{
             return;
         }
@@ -65,35 +65,35 @@ export class UpdatePosition implements Entity {
     static async getByOwnerId(ownerId: string): Promise<UpdatePosition[] | undefined>{
       
       const records = await store.getByField('UpdatePosition', 'ownerId', ownerId);
-      return records.map(record => UpdatePosition.create(record as UpdatePositionProps));
+      return records.map(record => this.create(record as UpdatePositionProps));
       
     }
 
     static async getByCollateralId(collateralId: string): Promise<UpdatePosition[] | undefined>{
       
       const records = await store.getByField('UpdatePosition', 'collateralId', collateralId);
-      return records.map(record => UpdatePosition.create(record as UpdatePositionProps));
+      return records.map(record => this.create(record as UpdatePositionProps));
       
     }
 
     static async getByBlockId(blockId: string): Promise<UpdatePosition[] | undefined>{
       
       const records = await store.getByField('UpdatePosition', 'blockId', blockId);
-      return records.map(record => UpdatePosition.create(record as UpdatePositionProps));
+      return records.map(record => this.create(record as UpdatePositionProps));
       
     }
 
     static async getByExtrinsicId(extrinsicId: string): Promise<UpdatePosition[] | undefined>{
       
       const records = await store.getByField('UpdatePosition', 'extrinsicId', extrinsicId);
-      return records.map(record => UpdatePosition.create(record as UpdatePositionProps));
+      return records.map(record => this.create(record as UpdatePositionProps));
       
     }
 
 
     static create(record: UpdatePositionProps): UpdatePosition {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new UpdatePosition(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

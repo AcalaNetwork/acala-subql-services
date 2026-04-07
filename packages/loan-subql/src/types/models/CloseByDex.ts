@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type CloseByDexProps = Omit<CloseByDex, NonNullable<FunctionPropertyNames<CloseByDex>>>;
+export type CloseByDexProps = Omit<CloseByDex, NonNullable<FunctionPropertyNames<CloseByDex>>>;
 
 export class CloseByDex implements Entity {
 
@@ -55,7 +55,7 @@ export class CloseByDex implements Entity {
         assert((id !== null && id !== undefined), "Cannot get CloseByDex entity without an ID");
         const record = await store.get('CloseByDex', id.toString());
         if (record){
-            return CloseByDex.create(record as CloseByDexProps);
+            return this.create(record as CloseByDexProps);
         }else{
             return;
         }
@@ -65,35 +65,35 @@ export class CloseByDex implements Entity {
     static async getByOwnerId(ownerId: string): Promise<CloseByDex[] | undefined>{
       
       const records = await store.getByField('CloseByDex', 'ownerId', ownerId);
-      return records.map(record => CloseByDex.create(record as CloseByDexProps));
+      return records.map(record => this.create(record as CloseByDexProps));
       
     }
 
     static async getByCollateralId(collateralId: string): Promise<CloseByDex[] | undefined>{
       
       const records = await store.getByField('CloseByDex', 'collateralId', collateralId);
-      return records.map(record => CloseByDex.create(record as CloseByDexProps));
+      return records.map(record => this.create(record as CloseByDexProps));
       
     }
 
     static async getByBlockId(blockId: string): Promise<CloseByDex[] | undefined>{
       
       const records = await store.getByField('CloseByDex', 'blockId', blockId);
-      return records.map(record => CloseByDex.create(record as CloseByDexProps));
+      return records.map(record => this.create(record as CloseByDexProps));
       
     }
 
     static async getByExtrinsicId(extrinsicId: string): Promise<CloseByDex[] | undefined>{
       
       const records = await store.getByField('CloseByDex', 'extrinsicId', extrinsicId);
-      return records.map(record => CloseByDex.create(record as CloseByDexProps));
+      return records.map(record => this.create(record as CloseByDexProps));
       
     }
 
 
     static create(record: CloseByDexProps): CloseByDex {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new CloseByDex(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

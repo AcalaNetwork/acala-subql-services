@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type RedeemRequestCancelledProps = Omit<RedeemRequestCancelled, NonNullable<FunctionPropertyNames<RedeemRequestCancelled>>>;
+export type RedeemRequestCancelledProps = Omit<RedeemRequestCancelled, NonNullable<FunctionPropertyNames<RedeemRequestCancelled>>>;
 
 export class RedeemRequestCancelled implements Entity {
 
@@ -45,7 +45,7 @@ export class RedeemRequestCancelled implements Entity {
         assert((id !== null && id !== undefined), "Cannot get RedeemRequestCancelled entity without an ID");
         const record = await store.get('RedeemRequestCancelled', id.toString());
         if (record){
-            return RedeemRequestCancelled.create(record as RedeemRequestCancelledProps);
+            return this.create(record as RedeemRequestCancelledProps);
         }else{
             return;
         }
@@ -55,14 +55,14 @@ export class RedeemRequestCancelled implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemRequestCancelled[] | undefined>{
       
       const records = await store.getByField('RedeemRequestCancelled', 'addressId', addressId);
-      return records.map(record => RedeemRequestCancelled.create(record as RedeemRequestCancelledProps));
+      return records.map(record => this.create(record as RedeemRequestCancelledProps));
       
     }
 
 
     static create(record: RedeemRequestCancelledProps): RedeemRequestCancelled {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new RedeemRequestCancelled(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

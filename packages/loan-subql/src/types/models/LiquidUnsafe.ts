@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type LiquidUnsafeProps = Omit<LiquidUnsafe, NonNullable<FunctionPropertyNames<LiquidUnsafe>>>;
+export type LiquidUnsafeProps = Omit<LiquidUnsafe, NonNullable<FunctionPropertyNames<LiquidUnsafe>>>;
 
 export class LiquidUnsafe implements Entity {
 
@@ -55,7 +55,7 @@ export class LiquidUnsafe implements Entity {
         assert((id !== null && id !== undefined), "Cannot get LiquidUnsafe entity without an ID");
         const record = await store.get('LiquidUnsafe', id.toString());
         if (record){
-            return LiquidUnsafe.create(record as LiquidUnsafeProps);
+            return this.create(record as LiquidUnsafeProps);
         }else{
             return;
         }
@@ -65,42 +65,42 @@ export class LiquidUnsafe implements Entity {
     static async getBySenderId(senderId: string): Promise<LiquidUnsafe[] | undefined>{
       
       const records = await store.getByField('LiquidUnsafe', 'senderId', senderId);
-      return records.map(record => LiquidUnsafe.create(record as LiquidUnsafeProps));
+      return records.map(record => this.create(record as LiquidUnsafeProps));
       
     }
 
     static async getByOwnerId(ownerId: string): Promise<LiquidUnsafe[] | undefined>{
       
       const records = await store.getByField('LiquidUnsafe', 'ownerId', ownerId);
-      return records.map(record => LiquidUnsafe.create(record as LiquidUnsafeProps));
+      return records.map(record => this.create(record as LiquidUnsafeProps));
       
     }
 
     static async getByCollateralId(collateralId: string): Promise<LiquidUnsafe[] | undefined>{
       
       const records = await store.getByField('LiquidUnsafe', 'collateralId', collateralId);
-      return records.map(record => LiquidUnsafe.create(record as LiquidUnsafeProps));
+      return records.map(record => this.create(record as LiquidUnsafeProps));
       
     }
 
     static async getByBlockId(blockId: string): Promise<LiquidUnsafe[] | undefined>{
       
       const records = await store.getByField('LiquidUnsafe', 'blockId', blockId);
-      return records.map(record => LiquidUnsafe.create(record as LiquidUnsafeProps));
+      return records.map(record => this.create(record as LiquidUnsafeProps));
       
     }
 
     static async getByExtrinsicId(extrinsicId: string): Promise<LiquidUnsafe[] | undefined>{
       
       const records = await store.getByField('LiquidUnsafe', 'extrinsicId', extrinsicId);
-      return records.map(record => LiquidUnsafe.create(record as LiquidUnsafeProps));
+      return records.map(record => this.create(record as LiquidUnsafeProps));
       
     }
 
 
     static create(record: LiquidUnsafeProps): LiquidUnsafe {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new LiquidUnsafe(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

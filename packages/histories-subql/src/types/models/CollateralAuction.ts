@@ -9,7 +9,7 @@ import {
 } from '../enums'
 
 
-type CollateralAuctionProps = Omit<CollateralAuction, NonNullable<FunctionPropertyNames<CollateralAuction>>>;
+export type CollateralAuctionProps = Omit<CollateralAuction, NonNullable<FunctionPropertyNames<CollateralAuction>>>;
 
 export class CollateralAuction implements Entity {
 
@@ -67,7 +67,7 @@ export class CollateralAuction implements Entity {
         assert((id !== null && id !== undefined), "Cannot get CollateralAuction entity without an ID");
         const record = await store.get('CollateralAuction', id.toString());
         if (record){
-            return CollateralAuction.create(record as CollateralAuctionProps);
+            return this.create(record as CollateralAuctionProps);
         }else{
             return;
         }
@@ -77,7 +77,7 @@ export class CollateralAuction implements Entity {
 
     static create(record: CollateralAuctionProps): CollateralAuction {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new CollateralAuction(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

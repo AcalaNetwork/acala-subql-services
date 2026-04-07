@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type DailyPositionProps = Omit<DailyPosition, NonNullable<FunctionPropertyNames<DailyPosition>>>;
+export type DailyPositionProps = Omit<DailyPosition, NonNullable<FunctionPropertyNames<DailyPosition>>>;
 
 export class DailyPosition implements Entity {
 
@@ -57,7 +57,7 @@ export class DailyPosition implements Entity {
         assert((id !== null && id !== undefined), "Cannot get DailyPosition entity without an ID");
         const record = await store.get('DailyPosition', id.toString());
         if (record){
-            return DailyPosition.create(record as DailyPositionProps);
+            return this.create(record as DailyPositionProps);
         }else{
             return;
         }
@@ -67,21 +67,21 @@ export class DailyPosition implements Entity {
     static async getByOwnerId(ownerId: string): Promise<DailyPosition[] | undefined>{
       
       const records = await store.getByField('DailyPosition', 'ownerId', ownerId);
-      return records.map(record => DailyPosition.create(record as DailyPositionProps));
+      return records.map(record => this.create(record as DailyPositionProps));
       
     }
 
     static async getByCollateralId(collateralId: string): Promise<DailyPosition[] | undefined>{
       
       const records = await store.getByField('DailyPosition', 'collateralId', collateralId);
-      return records.map(record => DailyPosition.create(record as DailyPositionProps));
+      return records.map(record => this.create(record as DailyPositionProps));
       
     }
 
 
     static create(record: DailyPositionProps): DailyPosition {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new DailyPosition(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

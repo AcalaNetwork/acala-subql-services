@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type DEXTakeCollateralAuctionProps = Omit<DEXTakeCollateralAuction, NonNullable<FunctionPropertyNames<DEXTakeCollateralAuction>>>;
+export type DEXTakeCollateralAuctionProps = Omit<DEXTakeCollateralAuction, NonNullable<FunctionPropertyNames<DEXTakeCollateralAuction>>>;
 
 export class DEXTakeCollateralAuction implements Entity {
 
@@ -51,7 +51,7 @@ export class DEXTakeCollateralAuction implements Entity {
         assert((id !== null && id !== undefined), "Cannot get DEXTakeCollateralAuction entity without an ID");
         const record = await store.get('DEXTakeCollateralAuction', id.toString());
         if (record){
-            return DEXTakeCollateralAuction.create(record as DEXTakeCollateralAuctionProps);
+            return this.create(record as DEXTakeCollateralAuctionProps);
         }else{
             return;
         }
@@ -61,14 +61,14 @@ export class DEXTakeCollateralAuction implements Entity {
     static async getByAuctionId(auctionId: string): Promise<DEXTakeCollateralAuction[] | undefined>{
       
       const records = await store.getByField('DEXTakeCollateralAuction', 'auctionId', auctionId);
-      return records.map(record => DEXTakeCollateralAuction.create(record as DEXTakeCollateralAuctionProps));
+      return records.map(record => this.create(record as DEXTakeCollateralAuctionProps));
       
     }
 
 
     static create(record: DEXTakeCollateralAuctionProps): DEXTakeCollateralAuction {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new DEXTakeCollateralAuction(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

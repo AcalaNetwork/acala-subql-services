@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type RedeemedByFastMatchProps = Omit<RedeemedByFastMatch, NonNullable<FunctionPropertyNames<RedeemedByFastMatch>>>;
+export type RedeemedByFastMatchProps = Omit<RedeemedByFastMatch, NonNullable<FunctionPropertyNames<RedeemedByFastMatch>>>;
 
 export class RedeemedByFastMatch implements Entity {
 
@@ -49,7 +49,7 @@ export class RedeemedByFastMatch implements Entity {
         assert((id !== null && id !== undefined), "Cannot get RedeemedByFastMatch entity without an ID");
         const record = await store.get('RedeemedByFastMatch', id.toString());
         if (record){
-            return RedeemedByFastMatch.create(record as RedeemedByFastMatchProps);
+            return this.create(record as RedeemedByFastMatchProps);
         }else{
             return;
         }
@@ -59,14 +59,14 @@ export class RedeemedByFastMatch implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemedByFastMatch[] | undefined>{
       
       const records = await store.getByField('RedeemedByFastMatch', 'addressId', addressId);
-      return records.map(record => RedeemedByFastMatch.create(record as RedeemedByFastMatchProps));
+      return records.map(record => this.create(record as RedeemedByFastMatchProps));
       
     }
 
 
     static create(record: RedeemedByFastMatchProps): RedeemedByFastMatch {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new RedeemedByFastMatch(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

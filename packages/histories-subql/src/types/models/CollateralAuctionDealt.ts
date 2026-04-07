@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type CollateralAuctionDealtProps = Omit<CollateralAuctionDealt, NonNullable<FunctionPropertyNames<CollateralAuctionDealt>>>;
+export type CollateralAuctionDealtProps = Omit<CollateralAuctionDealt, NonNullable<FunctionPropertyNames<CollateralAuctionDealt>>>;
 
 export class CollateralAuctionDealt implements Entity {
 
@@ -51,7 +51,7 @@ export class CollateralAuctionDealt implements Entity {
         assert((id !== null && id !== undefined), "Cannot get CollateralAuctionDealt entity without an ID");
         const record = await store.get('CollateralAuctionDealt', id.toString());
         if (record){
-            return CollateralAuctionDealt.create(record as CollateralAuctionDealtProps);
+            return this.create(record as CollateralAuctionDealtProps);
         }else{
             return;
         }
@@ -61,14 +61,14 @@ export class CollateralAuctionDealt implements Entity {
     static async getByAuctionId(auctionId: string): Promise<CollateralAuctionDealt[] | undefined>{
       
       const records = await store.getByField('CollateralAuctionDealt', 'auctionId', auctionId);
-      return records.map(record => CollateralAuctionDealt.create(record as CollateralAuctionDealtProps));
+      return records.map(record => this.create(record as CollateralAuctionDealtProps));
       
     }
 
 
     static create(record: CollateralAuctionDealtProps): CollateralAuctionDealt {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new CollateralAuctionDealt(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

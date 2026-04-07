@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type WithdrawDexShareProps = Omit<WithdrawDexShare, NonNullable<FunctionPropertyNames<WithdrawDexShare>>>;
+export type WithdrawDexShareProps = Omit<WithdrawDexShare, NonNullable<FunctionPropertyNames<WithdrawDexShare>>>;
 
 export class WithdrawDexShare implements Entity {
 
@@ -47,7 +47,7 @@ export class WithdrawDexShare implements Entity {
         assert((id !== null && id !== undefined), "Cannot get WithdrawDexShare entity without an ID");
         const record = await store.get('WithdrawDexShare', id.toString());
         if (record){
-            return WithdrawDexShare.create(record as WithdrawDexShareProps);
+            return this.create(record as WithdrawDexShareProps);
         }else{
             return;
         }
@@ -57,21 +57,21 @@ export class WithdrawDexShare implements Entity {
     static async getByAddressId(addressId: string): Promise<WithdrawDexShare[] | undefined>{
       
       const records = await store.getByField('WithdrawDexShare', 'addressId', addressId);
-      return records.map(record => WithdrawDexShare.create(record as WithdrawDexShareProps));
+      return records.map(record => this.create(record as WithdrawDexShareProps));
       
     }
 
     static async getByTokenId(tokenId: string): Promise<WithdrawDexShare[] | undefined>{
       
       const records = await store.getByField('WithdrawDexShare', 'tokenId', tokenId);
-      return records.map(record => WithdrawDexShare.create(record as WithdrawDexShareProps));
+      return records.map(record => this.create(record as WithdrawDexShareProps));
       
     }
 
 
     static create(record: WithdrawDexShareProps): WithdrawDexShare {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new WithdrawDexShare(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

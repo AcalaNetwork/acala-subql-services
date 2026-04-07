@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type HourlyCollateralProps = Omit<HourlyCollateral, NonNullable<FunctionPropertyNames<HourlyCollateral>>>;
+export type HourlyCollateralProps = Omit<HourlyCollateral, NonNullable<FunctionPropertyNames<HourlyCollateral>>>;
 
 export class HourlyCollateral implements Entity {
 
@@ -55,7 +55,7 @@ export class HourlyCollateral implements Entity {
         assert((id !== null && id !== undefined), "Cannot get HourlyCollateral entity without an ID");
         const record = await store.get('HourlyCollateral', id.toString());
         if (record){
-            return HourlyCollateral.create(record as HourlyCollateralProps);
+            return this.create(record as HourlyCollateralProps);
         }else{
             return;
         }
@@ -65,14 +65,14 @@ export class HourlyCollateral implements Entity {
     static async getByCollateralId(collateralId: string): Promise<HourlyCollateral[] | undefined>{
       
       const records = await store.getByField('HourlyCollateral', 'collateralId', collateralId);
-      return records.map(record => HourlyCollateral.create(record as HourlyCollateralProps));
+      return records.map(record => this.create(record as HourlyCollateralProps));
       
     }
 
 
     static create(record: HourlyCollateralProps): HourlyCollateral {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new HourlyCollateral(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

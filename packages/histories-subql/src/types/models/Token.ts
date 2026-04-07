@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type TokenProps = Omit<Token, NonNullable<FunctionPropertyNames<Token>>>;
+export type TokenProps = Omit<Token, NonNullable<FunctionPropertyNames<Token>>>;
 
 export class Token implements Entity {
 
@@ -19,12 +19,6 @@ export class Token implements Entity {
     public name: string;
 
     public decimals: number;
-
-    public transferVolume: bigint;
-
-    public updateAt: Date;
-
-    public updateAtBlock?: bigint;
 
 
     async save(): Promise<void>{
@@ -41,7 +35,7 @@ export class Token implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Token entity without an ID");
         const record = await store.get('Token', id.toString());
         if (record){
-            return Token.create(record as TokenProps);
+            return this.create(record as TokenProps);
         }else{
             return;
         }
@@ -51,7 +45,7 @@ export class Token implements Entity {
 
     static create(record: TokenProps): Token {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Token(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

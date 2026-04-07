@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type ClaimRewardsProps = Omit<ClaimRewards, NonNullable<FunctionPropertyNames<ClaimRewards>>>;
+export type ClaimRewardsProps = Omit<ClaimRewards, NonNullable<FunctionPropertyNames<ClaimRewards>>>;
 
 export class ClaimRewards implements Entity {
 
@@ -51,7 +51,7 @@ export class ClaimRewards implements Entity {
         assert((id !== null && id !== undefined), "Cannot get ClaimRewards entity without an ID");
         const record = await store.get('ClaimRewards', id.toString());
         if (record){
-            return ClaimRewards.create(record as ClaimRewardsProps);
+            return this.create(record as ClaimRewardsProps);
         }else{
             return;
         }
@@ -61,21 +61,21 @@ export class ClaimRewards implements Entity {
     static async getByAddressId(addressId: string): Promise<ClaimRewards[] | undefined>{
       
       const records = await store.getByField('ClaimRewards', 'addressId', addressId);
-      return records.map(record => ClaimRewards.create(record as ClaimRewardsProps));
+      return records.map(record => this.create(record as ClaimRewardsProps));
       
     }
 
     static async getByTokenId(tokenId: string): Promise<ClaimRewards[] | undefined>{
       
       const records = await store.getByField('ClaimRewards', 'tokenId', tokenId);
-      return records.map(record => ClaimRewards.create(record as ClaimRewardsProps));
+      return records.map(record => this.create(record as ClaimRewardsProps));
       
     }
 
 
     static create(record: ClaimRewardsProps): ClaimRewards {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new ClaimRewards(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

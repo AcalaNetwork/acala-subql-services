@@ -9,7 +9,7 @@ import {
 } from '../enums'
 
 
-type AccountProps = Omit<Account, NonNullable<FunctionPropertyNames<Account>>>;
+export type AccountProps = Omit<Account, NonNullable<FunctionPropertyNames<Account>>>;
 
 export class Account implements Entity {
 
@@ -26,12 +26,6 @@ export class Account implements Entity {
 
     public name?: string;
 
-    public txCount?: number;
-
-    public updateAt?: Date;
-
-    public updateAtBlock?: bigint;
-
 
     async save(): Promise<void>{
         let id = this.id;
@@ -47,7 +41,7 @@ export class Account implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Account entity without an ID");
         const record = await store.get('Account', id.toString());
         if (record){
-            return Account.create(record as AccountProps);
+            return this.create(record as AccountProps);
         }else{
             return;
         }
@@ -57,7 +51,7 @@ export class Account implements Entity {
 
     static create(record: AccountProps): Account {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Account(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

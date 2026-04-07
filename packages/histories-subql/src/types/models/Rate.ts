@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type RateProps = Omit<Rate, NonNullable<FunctionPropertyNames<Rate>>>;
+export type RateProps = Omit<Rate, NonNullable<FunctionPropertyNames<Rate>>>;
 
 export class Rate implements Entity {
 
@@ -49,7 +49,7 @@ export class Rate implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Rate entity without an ID");
         const record = await store.get('Rate', id.toString());
         if (record){
-            return Rate.create(record as RateProps);
+            return this.create(record as RateProps);
         }else{
             return;
         }
@@ -59,7 +59,7 @@ export class Rate implements Entity {
 
     static create(record: RateProps): Rate {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Rate(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type MintProps = Omit<Mint, NonNullable<FunctionPropertyNames<Mint>>>;
+export type MintProps = Omit<Mint, NonNullable<FunctionPropertyNames<Mint>>>;
 
 export class Mint implements Entity {
 
@@ -55,7 +55,7 @@ export class Mint implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Mint entity without an ID");
         const record = await store.get('Mint', id.toString());
         if (record){
-            return Mint.create(record as MintProps);
+            return this.create(record as MintProps);
         }else{
             return;
         }
@@ -65,14 +65,14 @@ export class Mint implements Entity {
     static async getByAddressId(addressId: string): Promise<Mint[] | undefined>{
       
       const records = await store.getByField('Mint', 'addressId', addressId);
-      return records.map(record => Mint.create(record as MintProps));
+      return records.map(record => this.create(record as MintProps));
       
     }
 
 
     static create(record: MintProps): Mint {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Mint(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

@@ -9,7 +9,7 @@ import {
 } from '../enums'
 
 
-type BidProps = Omit<Bid, NonNullable<FunctionPropertyNames<Bid>>>;
+export type BidProps = Omit<Bid, NonNullable<FunctionPropertyNames<Bid>>>;
 
 export class Bid implements Entity {
 
@@ -55,7 +55,7 @@ export class Bid implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Bid entity without an ID");
         const record = await store.get('Bid', id.toString());
         if (record){
-            return Bid.create(record as BidProps);
+            return this.create(record as BidProps);
         }else{
             return;
         }
@@ -65,14 +65,14 @@ export class Bid implements Entity {
     static async getByAuctionId(auctionId: string): Promise<Bid[] | undefined>{
       
       const records = await store.getByField('Bid', 'auctionId', auctionId);
-      return records.map(record => Bid.create(record as BidProps));
+      return records.map(record => this.create(record as BidProps));
       
     }
 
 
     static create(record: BidProps): Bid {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Bid(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

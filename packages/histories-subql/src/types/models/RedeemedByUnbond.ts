@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type RedeemedByUnbondProps = Omit<RedeemedByUnbond, NonNullable<FunctionPropertyNames<RedeemedByUnbond>>>;
+export type RedeemedByUnbondProps = Omit<RedeemedByUnbond, NonNullable<FunctionPropertyNames<RedeemedByUnbond>>>;
 
 export class RedeemedByUnbond implements Entity {
 
@@ -49,7 +49,7 @@ export class RedeemedByUnbond implements Entity {
         assert((id !== null && id !== undefined), "Cannot get RedeemedByUnbond entity without an ID");
         const record = await store.get('RedeemedByUnbond', id.toString());
         if (record){
-            return RedeemedByUnbond.create(record as RedeemedByUnbondProps);
+            return this.create(record as RedeemedByUnbondProps);
         }else{
             return;
         }
@@ -59,14 +59,14 @@ export class RedeemedByUnbond implements Entity {
     static async getByAddressId(addressId: string): Promise<RedeemedByUnbond[] | undefined>{
       
       const records = await store.getByField('RedeemedByUnbond', 'addressId', addressId);
-      return records.map(record => RedeemedByUnbond.create(record as RedeemedByUnbondProps));
+      return records.map(record => this.create(record as RedeemedByUnbondProps));
       
     }
 
 
     static create(record: RedeemedByUnbondProps): RedeemedByUnbond {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new RedeemedByUnbond(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

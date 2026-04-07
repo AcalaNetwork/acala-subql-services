@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type HourlyPositionProps = Omit<HourlyPosition, NonNullable<FunctionPropertyNames<HourlyPosition>>>;
+export type HourlyPositionProps = Omit<HourlyPosition, NonNullable<FunctionPropertyNames<HourlyPosition>>>;
 
 export class HourlyPosition implements Entity {
 
@@ -57,7 +57,7 @@ export class HourlyPosition implements Entity {
         assert((id !== null && id !== undefined), "Cannot get HourlyPosition entity without an ID");
         const record = await store.get('HourlyPosition', id.toString());
         if (record){
-            return HourlyPosition.create(record as HourlyPositionProps);
+            return this.create(record as HourlyPositionProps);
         }else{
             return;
         }
@@ -67,21 +67,21 @@ export class HourlyPosition implements Entity {
     static async getByOwnerId(ownerId: string): Promise<HourlyPosition[] | undefined>{
       
       const records = await store.getByField('HourlyPosition', 'ownerId', ownerId);
-      return records.map(record => HourlyPosition.create(record as HourlyPositionProps));
+      return records.map(record => this.create(record as HourlyPositionProps));
       
     }
 
     static async getByCollateralId(collateralId: string): Promise<HourlyPosition[] | undefined>{
       
       const records = await store.getByField('HourlyPosition', 'collateralId', collateralId);
-      return records.map(record => HourlyPosition.create(record as HourlyPositionProps));
+      return records.map(record => this.create(record as HourlyPositionProps));
       
     }
 
 
     static create(record: HourlyPositionProps): HourlyPosition {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new HourlyPosition(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

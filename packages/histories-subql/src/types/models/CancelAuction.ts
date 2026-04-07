@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type CancelAuctionProps = Omit<CancelAuction, NonNullable<FunctionPropertyNames<CancelAuction>>>;
+export type CancelAuctionProps = Omit<CancelAuction, NonNullable<FunctionPropertyNames<CancelAuction>>>;
 
 export class CancelAuction implements Entity {
 
@@ -43,7 +43,7 @@ export class CancelAuction implements Entity {
         assert((id !== null && id !== undefined), "Cannot get CancelAuction entity without an ID");
         const record = await store.get('CancelAuction', id.toString());
         if (record){
-            return CancelAuction.create(record as CancelAuctionProps);
+            return this.create(record as CancelAuctionProps);
         }else{
             return;
         }
@@ -53,14 +53,14 @@ export class CancelAuction implements Entity {
     static async getByAuctionId(auctionId: string): Promise<CancelAuction[] | undefined>{
       
       const records = await store.getByField('CancelAuction', 'auctionId', auctionId);
-      return records.map(record => CancelAuction.create(record as CancelAuctionProps));
+      return records.map(record => this.create(record as CancelAuctionProps));
       
     }
 
 
     static create(record: CancelAuctionProps): CancelAuction {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new CancelAuction(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type RedeemedProps = Omit<Redeemed, NonNullable<FunctionPropertyNames<Redeemed>>>;
+export type RedeemedProps = Omit<Redeemed, NonNullable<FunctionPropertyNames<Redeemed>>>;
 
 export class Redeemed implements Entity {
 
@@ -47,7 +47,7 @@ export class Redeemed implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Redeemed entity without an ID");
         const record = await store.get('Redeemed', id.toString());
         if (record){
-            return Redeemed.create(record as RedeemedProps);
+            return this.create(record as RedeemedProps);
         }else{
             return;
         }
@@ -57,14 +57,14 @@ export class Redeemed implements Entity {
     static async getByAddressId(addressId: string): Promise<Redeemed[] | undefined>{
       
       const records = await store.getByField('Redeemed', 'addressId', addressId);
-      return records.map(record => Redeemed.create(record as RedeemedProps));
+      return records.map(record => this.create(record as RedeemedProps));
       
     }
 
 
     static create(record: RedeemedProps): Redeemed {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Redeemed(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

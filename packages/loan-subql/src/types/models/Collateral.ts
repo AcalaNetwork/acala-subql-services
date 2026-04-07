@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type CollateralProps = Omit<Collateral, NonNullable<FunctionPropertyNames<Collateral>>>;
+export type CollateralProps = Omit<Collateral, NonNullable<FunctionPropertyNames<Collateral>>>;
 
 export class Collateral implements Entity {
 
@@ -41,7 +41,7 @@ export class Collateral implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Collateral entity without an ID");
         const record = await store.get('Collateral', id.toString());
         if (record){
-            return Collateral.create(record as CollateralProps);
+            return this.create(record as CollateralProps);
         }else{
             return;
         }
@@ -51,7 +51,7 @@ export class Collateral implements Entity {
 
     static create(record: CollateralProps): Collateral {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Collateral(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type ConfiscatePositionProps = Omit<ConfiscatePosition, NonNullable<FunctionPropertyNames<ConfiscatePosition>>>;
+export type ConfiscatePositionProps = Omit<ConfiscatePosition, NonNullable<FunctionPropertyNames<ConfiscatePosition>>>;
 
 export class ConfiscatePosition implements Entity {
 
@@ -53,7 +53,7 @@ export class ConfiscatePosition implements Entity {
         assert((id !== null && id !== undefined), "Cannot get ConfiscatePosition entity without an ID");
         const record = await store.get('ConfiscatePosition', id.toString());
         if (record){
-            return ConfiscatePosition.create(record as ConfiscatePositionProps);
+            return this.create(record as ConfiscatePositionProps);
         }else{
             return;
         }
@@ -63,42 +63,42 @@ export class ConfiscatePosition implements Entity {
     static async getBySenderId(senderId: string): Promise<ConfiscatePosition[] | undefined>{
       
       const records = await store.getByField('ConfiscatePosition', 'senderId', senderId);
-      return records.map(record => ConfiscatePosition.create(record as ConfiscatePositionProps));
+      return records.map(record => this.create(record as ConfiscatePositionProps));
       
     }
 
     static async getByOwnerId(ownerId: string): Promise<ConfiscatePosition[] | undefined>{
       
       const records = await store.getByField('ConfiscatePosition', 'ownerId', ownerId);
-      return records.map(record => ConfiscatePosition.create(record as ConfiscatePositionProps));
+      return records.map(record => this.create(record as ConfiscatePositionProps));
       
     }
 
     static async getByCollateralId(collateralId: string): Promise<ConfiscatePosition[] | undefined>{
       
       const records = await store.getByField('ConfiscatePosition', 'collateralId', collateralId);
-      return records.map(record => ConfiscatePosition.create(record as ConfiscatePositionProps));
+      return records.map(record => this.create(record as ConfiscatePositionProps));
       
     }
 
     static async getByBlockId(blockId: string): Promise<ConfiscatePosition[] | undefined>{
       
       const records = await store.getByField('ConfiscatePosition', 'blockId', blockId);
-      return records.map(record => ConfiscatePosition.create(record as ConfiscatePositionProps));
+      return records.map(record => this.create(record as ConfiscatePositionProps));
       
     }
 
     static async getByExtrinsicId(extrinsicId: string): Promise<ConfiscatePosition[] | undefined>{
       
       const records = await store.getByField('ConfiscatePosition', 'extrinsicId', extrinsicId);
-      return records.map(record => ConfiscatePosition.create(record as ConfiscatePositionProps));
+      return records.map(record => this.create(record as ConfiscatePositionProps));
       
     }
 
 
     static create(record: ConfiscatePositionProps): ConfiscatePosition {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new ConfiscatePosition(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }

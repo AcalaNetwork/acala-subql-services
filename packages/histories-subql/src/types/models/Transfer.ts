@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-type TransferProps = Omit<Transfer, NonNullable<FunctionPropertyNames<Transfer>>>;
+export type TransferProps = Omit<Transfer, NonNullable<FunctionPropertyNames<Transfer>>>;
 
 export class Transfer implements Entity {
 
@@ -51,7 +51,7 @@ export class Transfer implements Entity {
         assert((id !== null && id !== undefined), "Cannot get Transfer entity without an ID");
         const record = await store.get('Transfer', id.toString());
         if (record){
-            return Transfer.create(record as TransferProps);
+            return this.create(record as TransferProps);
         }else{
             return;
         }
@@ -61,28 +61,28 @@ export class Transfer implements Entity {
     static async getByFromId(fromId: string): Promise<Transfer[] | undefined>{
       
       const records = await store.getByField('Transfer', 'fromId', fromId);
-      return records.map(record => Transfer.create(record as TransferProps));
+      return records.map(record => this.create(record as TransferProps));
       
     }
 
     static async getByToId(toId: string): Promise<Transfer[] | undefined>{
       
       const records = await store.getByField('Transfer', 'toId', toId);
-      return records.map(record => Transfer.create(record as TransferProps));
+      return records.map(record => this.create(record as TransferProps));
       
     }
 
     static async getByTokenId(tokenId: string): Promise<Transfer[] | undefined>{
       
       const records = await store.getByField('Transfer', 'tokenId', tokenId);
-      return records.map(record => Transfer.create(record as TransferProps));
+      return records.map(record => this.create(record as TransferProps));
       
     }
 
 
     static create(record: TransferProps): Transfer {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new Transfer(record.id);
+        let entity = new this(record.id);
         Object.assign(entity,record);
         return entity;
     }
