@@ -15,18 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/dex-subql-fixed/package.json packages/dex-subql-fixed/bun.lock ./
 RUN bun install
 COPY packages/dex-subql-fixed/ ./
-RUN echo "=== BEFORE BUILD ===" && \
-    ls -la /app/ && \
-    bun run build && \
-    echo "=== AFTER BUILD ===" && \
-    ls -la /app/ && \
-    if [ -d /app/dist ]; then \
-        echo "=== DIST EXISTS ===" && \
-        ls -lh /app/dist/; \
-    else \
-        echo "=== DIST NOT FOUND ===" && \
-        find /app -name "*.js" -type f | head -20; \
-    fi
+RUN bun run build
 
 # =============
 
