@@ -15,7 +15,19 @@ RUN unlink /usr/bin/python && \
 COPY packages/loan-subql/package.json packages/loan-subql/bun.lock ./
 RUN bun install
 COPY packages/loan-subql/ ./
-RUN set -e && ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build && ls -la /app/dist && echo "Build completed successfully"
+RUN set -e \
+    && ./node_modules/.bin/subql codegen \
+    && ./node_modules/.bin/subql build --output dist \
+    && sync \
+    && for i in 1 2 3 4 5; do [ -d /app/dist ] && break; sleep 1; done \
+    && if [ ! -d /app/dist ]; then \
+        echo "SubQL build did not create /app/dist"; \
+        find /app -maxdepth 2 -type d -name dist -print; \
+        find /app -maxdepth 2 -type f \( -name 'index.js' -o -name 'index.js.LICENSE.txt' \) -print; \
+        exit 1; \
+    fi \
+    && ls -la /app/dist \
+    && echo "Build completed successfully"
 
 # =============
 
