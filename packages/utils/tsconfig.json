@@ -9,6 +9,7 @@
         "skipLibCheck": true,
         "module": "commonjs",
         "outDir": "build",
+        "rootDir": "./src",
         "target": "es2017"
     },
     "include": ["src/**/*", "node_modules/@subql/types/dist/global.d.ts"]
