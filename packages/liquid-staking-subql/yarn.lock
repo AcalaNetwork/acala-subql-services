@@ -29,6 +29,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@acala-network/sdk-core@npm:4.1.6-30":
+  version: 4.1.6-30
+  resolution: "@acala-network/sdk-core@npm:4.1.6-30"
+  dependencies:
+    "@polkadot/api": ^8.5.1
+    "@polkadot/types": ^8.5.1
+    "@types/events": ^3.0.0
+    bignumber.js: ^9.0.0
+    events: ^3.2.0
+    lodash: ^4.17.20
+  checksum: f03a528c1511bc4a80f7063fe51c28643057920659d0e02d7d85f5c45958541b21014f1adf8552cc0c0cf13a468f53ee22b87e9cf8fdea841ade5e4c12c5bb75
+  languageName: node
+  linkType: hard
+
 "@acala-network/type-definitions@npm:5.1.1":
   version: 5.1.1
   resolution: "@acala-network/type-definitions@npm:5.1.1"
@@ -50,11 +64,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-subql-services/liquid-staking-subql@workspace:.":
+"@acala-subql-services/subql-subql@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@acala-subql-services/liquid-staking-subql@workspace:."
+  resolution: "@acala-subql-services/subql-subql@workspace:."
   dependencies:
     "@acala-network/api": 5.1.1
+    "@acala-network/sdk-core": 4.1.6-30
     "@acala-network/type-definitions": 5.1.1
     "@polkadot/api": ^10.7.2
     "@polkadot/types": ^10.7.2
@@ -2840,6 +2855,13 @@ __metadata:
   version: 1.0.1
   resolution: "@types/estree@npm:1.0.1"
   checksum: e9aa175eacb797216fafce4d41e8202c7a75555bc55232dee0f9903d7171f8f19f0ae7d5191bb1a88cb90e65468be508c0df850a9fb81b4433b293a5a749899d
+  languageName: node
+  linkType: hard
+
+"@types/events@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@types/events@npm:3.0.0"
+  checksum: 9a424c2da210957d5636e0763e8c9fc3aaeee35bf411284ddec62a56a6abe31de9c7c2e713dabdd8a76ff98b47db2bd52f61310be6609641d6234cc842ecbbe3
   languageName: node
   linkType: hard
 
@@ -7457,7 +7479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.15, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
