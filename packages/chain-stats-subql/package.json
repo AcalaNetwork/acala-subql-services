@@ -22,6 +22,8 @@
     "@subql/cli": "1.0.2-0",
     "@subql/node": "1.1.2",
     "@subql/types": "^1.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {

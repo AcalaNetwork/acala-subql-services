@@ -37,7 +37,9 @@
     "@acala-network/type-definitions": "latest",
     "@subql/testing": "latest",
     "@subql/node": "latest",
-    "dotenv": "latest"
+    "dotenv": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "resolutions": {
     "@nestjs/schedule": "4.1.1"

@@ -22,7 +22,9 @@
     "@subql/cli": "1.0.2-0",
     "@subql/node": "1.1.2",
     "@subql/types": "^1.1.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "dependencies": {
     "@acala-network/sdk-core": "^4.1.6-30",
