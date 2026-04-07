@@ -1,15 +1,26 @@
-import { AnyApi, FixedPointNumber, forceToCurrencyId, forceToCurrencyName, isLiquidCrowdloanName, MaybeCurrency } from '@acala-network/sdk-core'
+import { AnyApi, createLiquidCrowdloanName, FixedPointNumber, forceToCurrencyId, forceToCurrencyName, isLiquidCrowdloanName, MaybeCurrency } from '@acala-network/sdk-core'
 import { SubstrateBlock } from '@subql/types/dist/interfaces'
-import { getAllLiquidCrowdloanTokenPrice } from '@acala-network/sdk/wallet/utils/get-liquid-crowdloan-token-price'
 import { getLiquidCurrency, getStakingCurrency, getTokenDecimals } from './tokens'
 import { CacheDate } from './cache-date'
 
 const cache = new CacheDate<FixedPointNumber>()
+const CROWDLOAN_TOKEN_LEASE = [13]
+const LEASE_BLOCK_NUMBERS: Record<number, number> = {
+    13: 17856000
+}
+
+const getLiquidCrowdloanPrice = (api: AnyApi, lease: number, currentRelayBlockNumber: number, stakingCurrencyPrice: FixedPointNumber) => {
+    const rewardRatePerRelaychainBlock = (api.consts?.prices?.rewardRatePerRelaychainBlock as any)?.toNumber?.() || 0
+    const leaseBlockNumber = LEASE_BLOCK_NUMBERS[lease]
+    const discount = FixedPointNumber.ONE.div(new FixedPointNumber((1 + rewardRatePerRelaychainBlock / 10 ** 18) ** Math.max(leaseBlockNumber - currentRelayBlockNumber, 0)))
+
+    return stakingCurrencyPrice.mul(discount)
+}
 
 // query price via oracle feed
 const queryFeedPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
     if(api?.query?.acalaOracle?.values) {
-        const result = await api.query.acalaOracle.values(forceToCurrencyId(api as any, token));
+        const result = await (api.query.acalaOracle.values(forceToCurrencyId(api as any, token)) as any)
 
         return FixedPointNumber.fromInner(result?.value?.value?.toString() || result?.value?.toString() || 0, 18)
     } else {
@@ -69,8 +80,21 @@ const queryLiquidTokenPriceFromHoma = async (api: AnyApi, stakingPrice: FixedPoi
     return price
 }
 
-const queryLiquidCrowdloanTokenPrice = (api: AnyApi, block: SubstrateBlock, stakingPrice: FixedPointNumber) => {
-    return getAllLiquidCrowdloanTokenPrice(api, block, stakingPrice)
+const queryLiquidCrowdloanTokenPrice = (api: AnyApi, block: SubstrateBlock, stakingPrice: FixedPointNumber): Record<string, FixedPointNumber> => {
+    // `setValidationData` carries the relay chain block height used for the discount schedule.
+    const extrinsic = (block.block.extrinsics as any[]).find((item) => {
+        return item.method.section === 'parachainSystem' && item.method.method === 'setValidationData'
+    })
+
+    const relayChainBlockNumber = extrinsic?.method?.args?.[0]?.validationData?.relayParentNumber?.toNumber?.()
+
+    if (!relayChainBlockNumber) {
+        return {}
+    }
+
+    return Object.fromEntries(CROWDLOAN_TOKEN_LEASE.map((lease) => {
+        return [createLiquidCrowdloanName(lease), getLiquidCrowdloanPrice(api, lease, relayChainBlockNumber, stakingPrice)]
+    }))
 }
 
 export const queryPriceFromOracle = async (api: AnyApi, block: SubstrateBlock, token: MaybeCurrency): Promise<FixedPointNumber> => {
