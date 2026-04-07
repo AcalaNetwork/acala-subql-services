@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM oven/bun:1-alpine AS builder
 LABEL maintainer="hello@acala.network"
 
 WORKDIR /app
@@ -12,10 +12,10 @@ RUN unlink /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-COPY packages/xcm-subql/package.json packages/xcm-subql/yarn.lock ./
-RUN yarn install
+COPY packages/xcm-subql/package.json packages/xcm-subql/bun.lock ./
+RUN bun install
 COPY packages/xcm-subql/ ./
-RUN yarn build
+RUN bun run build
 
 # =============
 

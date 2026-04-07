@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "start": "yarn build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=100 --port=3123",
+    "start": "bun run build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=100 --port=3123",
     "build": "subql codegen && subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
