@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/loan-subql/package.json packages/loan-subql/bun.lock ./
 RUN bun install
 COPY packages/loan-subql/ ./
-RUN bun run build
+RUN ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build
 
 # =============
 

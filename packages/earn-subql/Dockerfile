@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/earn-subql/package.json packages/earn-subql/bun.lock ./
 RUN bun install
 COPY packages/earn-subql/ ./
-RUN bun run build
+RUN ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build
 
 # =============
 

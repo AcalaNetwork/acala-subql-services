@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/histories-subql/package.json packages/histories-subql/bun.lock ./
 RUN bun install
 COPY packages/histories-subql/ ./
-RUN bun run build
+RUN ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build
 
 # =============
 

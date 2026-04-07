@@ -15,7 +15,7 @@ RUN unlink /usr/bin/python && \
 COPY packages/chain-stats-subql/package.json packages/chain-stats-subql/bun.lock ./
 RUN bun install
 COPY packages/chain-stats-subql/ ./
-RUN bun run build
+RUN ./node_modules/.bin/subql codegen && ./node_modules/.bin/subql build
 
 # =============
 
