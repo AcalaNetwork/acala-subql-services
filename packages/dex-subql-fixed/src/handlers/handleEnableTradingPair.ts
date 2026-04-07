@@ -7,10 +7,11 @@ import { SubstrateEvent } from "@subql/types";
 export async function handleEnableTradingPair(event: SubstrateEvent) {
   const [pair] = event.event.data;
   const rawData = await api.query.dex.liquidityPool(pair) as unknown as [any, any];
-  const pool = await getPool(forceToCurrencyName(pair[0]), forceToCurrencyName(pair[1]));
+  const pairArray = pair as unknown as [any, any];
+  const pool = await getPool(forceToCurrencyName(pairArray[0]), forceToCurrencyName(pairArray[1]));
 
-  pool.token0Amount = rawData[0].toString();
-  pool.token1Amount = rawData[1].toString()
+  pool.token0Amount = rawData[0]?.toString() || '';
+  pool.token1Amount = rawData[1]?.toString() || ''
 
   const price0 = await queryPrice(api, event.block, pool.token0Id!);
   const price1 = await queryPrice(api, event.block, pool.token1Id!);
