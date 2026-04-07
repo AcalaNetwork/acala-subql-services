@@ -6,6 +6,8 @@ node_modules
 dist
 build
 *.tsbuildinfo
+!packages/*/dist
+!packages/*/dist/**
 
 # Git
 .git

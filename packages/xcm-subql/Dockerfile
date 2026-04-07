@@ -16,9 +16,12 @@ COPY packages/xcm-subql/package.json packages/xcm-subql/bun.lock ./
 RUN bun install
 COPY packages/xcm-subql/ ./
 RUN set -e \
-    && ./node_modules/.bin/subql codegen \
-    && ./node_modules/.bin/subql build --output dist \
-    && sync \
+    && if [ -d /app/dist ]; then \
+        echo "Using prebuilt dist from build context"; \
+      else \
+        ./node_modules/.bin/subql codegen; \
+        ./node_modules/.bin/subql build --output dist; \
+      fi \
     && for i in 1 2 3 4 5; do [ -d /app/dist ] && break; sleep 1; done \
     && if [ ! -d /app/dist ]; then \
         echo "SubQL build did not create /app/dist"; \
