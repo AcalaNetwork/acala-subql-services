@@ -45,6 +45,7 @@
     "@nestjs/schedule": "4.1.1"
   },
   "exports": {
-    "chaintypes": "src/chaintypes.ts"
+    "chain-types": "./src/chain-types.ts",
+    "chaintypes": "./src/chaintypes.ts"
   }
 }

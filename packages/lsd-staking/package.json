@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "exports": {
+    "chain-types": "./src/chain-types.ts"
+  },
   "scripts": {
     "build": "subql codegen && subql build",
     "prepack": "rm -rf dist && npm build",
@@ -34,6 +37,7 @@
   "dependencies": {
     "@acala-network/api": "5.1.1",
     "@acala-network/type-definitions": "5.1.1",
+    "@babel/runtime": "^7.28.4",
     "@polkadot/api": "^10.7.2",
     "@polkadot/types": "^10.7.2"
   }

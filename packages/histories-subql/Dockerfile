@@ -29,6 +29,12 @@ RUN set -e \
         find /app -maxdepth 2 -type f \( -name 'index.js' -o -name 'index.js.LICENSE.txt' \) -print; \
         exit 1; \
     fi \
+    && if [ -f /app/src/chain-types.ts ] && [ ! -f /app/dist/chain-types.js ]; then \
+        ./node_modules/.bin/tsc /app/src/chain-types.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
+      fi \
+    && if [ -f /app/src/chaintypes.ts ] && [ ! -f /app/dist/chaintypes.js ]; then \
+        ./node_modules/.bin/tsc /app/src/chaintypes.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
+      fi \
     && ls -la /app/dist \
     && echo "Build completed successfully"
 
@@ -52,3 +58,5 @@ RUN chown -R 1000:1000 /app
 USER 1000
 
 EXPOSE 3000
+
+ENTRYPOINT ["/sbin/tini", "--", "/bin/run", "--historical=height", "-f", "/app"]

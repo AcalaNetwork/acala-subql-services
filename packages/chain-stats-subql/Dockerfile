@@ -29,12 +29,18 @@ RUN set -e \
         find /app -maxdepth 2 -type f \( -name 'index.js' -o -name 'index.js.LICENSE.txt' \) -print; \
         exit 1; \
     fi \
+    && if [ -f /app/src/chain-types.ts ] && [ ! -f /app/dist/chain-types.js ]; then \
+        ./node_modules/.bin/tsc /app/src/chain-types.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
+      fi \
+    && if [ -f /app/src/chaintypes.ts ] && [ ! -f /app/dist/chaintypes.js ]; then \
+        ./node_modules/.bin/tsc /app/src/chaintypes.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
+      fi \
     && ls -la /app/dist \
     && echo "Build completed successfully"
 
 # =============
 
-FROM onfinality/subql-node:v6.0.4
+FROM onfinality/subql-node:v1.21.1
 LABEL maintainer="hello@acala.network"
 
 # subql node changed default user to USER 1000

@@ -29,6 +29,12 @@ RUN set -e \
         find /app -maxdepth 2 -type f \( -name 'index.js' -o -name 'index.js.LICENSE.txt' \) -print; \
         exit 1; \
     fi \
+    && if [ -f /app/src/chain-types.ts ] && [ ! -f /app/dist/chain-types.js ]; then \
+        ./node_modules/.bin/tsc /app/src/chain-types.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
+      fi \
+    && if [ -f /app/src/chaintypes.ts ] && [ ! -f /app/dist/chaintypes.js ]; then \
+        ./node_modules/.bin/tsc /app/src/chaintypes.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
+      fi \
     && ls -la /app/dist \
     && echo "Build completed successfully"
 
@@ -45,6 +51,8 @@ WORKDIR /app
 COPY --from=builder /app/package.json /app/
 COPY --from=builder /app/schema.graphql /app/
 COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/node_modules/@subql/acala-evm-processor /app/node_modules/@subql/acala-evm-processor
+COPY --from=builder /app/lsd.abi.json /app/
 COPY --from=builder /app/project.yaml /app/
 
 RUN chown -R 1000:1000 /app
