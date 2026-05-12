@@ -456,9 +456,16 @@ export const getTokenDailyData = async (id: string) => {
 	const record = await TokenDailyData.get(id);
 
 	if (!record) {
-		const newRecord = new TokenDailyData(id);
+		const newRecord = new TokenDailyData(
+			id,
+			"",
+			BigInt(0),
+			BigInt(0),
+			BigInt(0),
+			BigInt(0),
+			BigInt(0),
+		);
 
-		(newRecord as any).tokenId = "";
 		newRecord.amount = BigInt(0);
 		newRecord.tvl = BigInt(0);
 		newRecord.dailyTradeVolume = BigInt(0);
@@ -477,10 +484,16 @@ export const getStableAssetSwap = async (id: string) => {
 	const record = await StableAssetSwap.get(id);
 
 	if (!record) {
-		const newRecord = new StableAssetSwap(id);
-        newRecord.feeAmount = BigInt(0);
-        newRecord.yieldAmount = BigInt(0);
-		newRecord.exchangeRate = 0
+		const newRecord = new StableAssetSwap(
+			id,
+			0,
+			0,
+			BigInt(0),
+			BigInt(0),
+		);
+	        newRecord.feeAmount = BigInt(0);
+	        newRecord.yieldAmount = BigInt(0);
+			newRecord.exchangeRate = 0
         newRecord.totalStaking = BigInt(0);
         newRecord.totalLiquidity = BigInt(0);
         newRecord.price = BigInt(0);

@@ -1,94 +1,127 @@
 // Auto-generated , DO NOT EDIT
-import {Entity, FunctionPropertyNames} from "@subql/types";
+import {Entity, FunctionPropertyNames, FieldsExpression, GetOptions } from "@subql/types-core";
 import assert from 'assert';
 
 
 
+export type TransferPositionProps = Omit<TransferPosition, NonNullable<FunctionPropertyNames<TransferPosition>> | '_name'>;
 
-export type TransferPositionProps = Omit<TransferPosition, NonNullable<FunctionPropertyNames<TransferPosition>>>;
+/*
+ * Compat types allows for support of alternative `id` types without refactoring the node
+ */
+type CompatTransferPositionProps = Omit<TransferPositionProps, 'id'> & { id: string; };
+type CompatEntity = Omit<Entity, 'id'> & { id: string; };
 
-export class TransferPosition implements Entity {
+export class TransferPosition implements CompatEntity {
 
-    constructor(id: string) {
+    constructor(
+        
+        id: string,
+        collateralId: string,
+        fromId: string,
+        toId: string,
+        blockId: string,
+        timestamp: Date,
+    ) {
         this.id = id;
+        this.collateralId = collateralId;
+        this.fromId = fromId;
+        this.toId = toId;
+        this.blockId = blockId;
+        this.timestamp = timestamp;
+        
     }
-
 
     public id: string;
-
     public collateralId: string;
-
     public fromId: string;
-
     public toId: string;
-
     public blockId: string;
-
     public extrinsicId?: string;
-
     public timestamp: Date;
+    
 
-
-    async save(): Promise<void>{
-        let id = this.id;
-        assert(id !== null, "Cannot save TransferPosition entity without an ID");
-        await store.set('TransferPosition', id.toString(), this);
+    get _name(): string {
+        return 'TransferPosition';
     }
-    static async remove(id:string): Promise<void>{
+
+    async save(): Promise<void> {
+        const id = this.id;
+        assert(id !== null, "Cannot save TransferPosition entity without an ID");
+        await store.set('TransferPosition', id.toString(), this as unknown as CompatTransferPositionProps);
+    }
+
+    static async remove(id: string): Promise<void> {
         assert(id !== null, "Cannot remove TransferPosition entity without an ID");
         await store.remove('TransferPosition', id.toString());
     }
 
-    static async get(id:string): Promise<TransferPosition | undefined>{
+    static async get(id: string): Promise<TransferPosition | undefined> {
         assert((id !== null && id !== undefined), "Cannot get TransferPosition entity without an ID");
         const record = await store.get('TransferPosition', id.toString());
-        if (record){
-            return this.create(record as TransferPositionProps);
-        }else{
+        if (record) {
+            return this.create(record as unknown as TransferPositionProps);
+        } else {
             return;
         }
     }
 
-
-    static async getByCollateralId(collateralId: string): Promise<TransferPosition[] | undefined>{
-      
-      const records = await store.getByField('TransferPosition', 'collateralId', collateralId);
-      return records.map(record => this.create(record as TransferPositionProps));
-      
+    static async getByCollateralId(collateralId: string, options: GetOptions<CompatTransferPositionProps>): Promise<TransferPosition[]> {
+        // Inputs must be cast as the store interface has not been updated to support alternative ID types
+        const records = await store.getByField<CompatTransferPositionProps>('TransferPosition', 'collateralId', collateralId, options);
+        return records.map(record => this.create(record as unknown as TransferPositionProps));
     }
+    
 
-    static async getByFromId(fromId: string): Promise<TransferPosition[] | undefined>{
-      
-      const records = await store.getByField('TransferPosition', 'fromId', fromId);
-      return records.map(record => this.create(record as TransferPositionProps));
-      
+    static async getByFromId(fromId: string, options: GetOptions<CompatTransferPositionProps>): Promise<TransferPosition[]> {
+        // Inputs must be cast as the store interface has not been updated to support alternative ID types
+        const records = await store.getByField<CompatTransferPositionProps>('TransferPosition', 'fromId', fromId, options);
+        return records.map(record => this.create(record as unknown as TransferPositionProps));
     }
+    
 
-    static async getByToId(toId: string): Promise<TransferPosition[] | undefined>{
-      
-      const records = await store.getByField('TransferPosition', 'toId', toId);
-      return records.map(record => this.create(record as TransferPositionProps));
-      
+    static async getByToId(toId: string, options: GetOptions<CompatTransferPositionProps>): Promise<TransferPosition[]> {
+        // Inputs must be cast as the store interface has not been updated to support alternative ID types
+        const records = await store.getByField<CompatTransferPositionProps>('TransferPosition', 'toId', toId, options);
+        return records.map(record => this.create(record as unknown as TransferPositionProps));
     }
+    
 
-    static async getByBlockId(blockId: string): Promise<TransferPosition[] | undefined>{
-      
-      const records = await store.getByField('TransferPosition', 'blockId', blockId);
-      return records.map(record => this.create(record as TransferPositionProps));
-      
+    static async getByBlockId(blockId: string, options: GetOptions<CompatTransferPositionProps>): Promise<TransferPosition[]> {
+        // Inputs must be cast as the store interface has not been updated to support alternative ID types
+        const records = await store.getByField<CompatTransferPositionProps>('TransferPosition', 'blockId', blockId, options);
+        return records.map(record => this.create(record as unknown as TransferPositionProps));
     }
+    
 
-    static async getByExtrinsicId(extrinsicId: string): Promise<TransferPosition[] | undefined>{
-      
-      const records = await store.getByField('TransferPosition', 'extrinsicId', extrinsicId);
-      return records.map(record => this.create(record as TransferPositionProps));
-      
+    static async getByExtrinsicId(extrinsicId: string, options: GetOptions<CompatTransferPositionProps>): Promise<TransferPosition[]> {
+        // Inputs must be cast as the store interface has not been updated to support alternative ID types
+        const records = await store.getByField<CompatTransferPositionProps>('TransferPosition', 'extrinsicId', extrinsicId, options);
+        return records.map(record => this.create(record as unknown as TransferPositionProps));
     }
+    
 
+
+    /**
+     * Gets entities matching the specified filters and options.
+     *
+     * ⚠️ This function will first search cache data followed by DB data. Please consider this when using order and offset options.⚠️
+     * */
+    static async getByFields(filter: FieldsExpression<TransferPositionProps>[], options: GetOptions<TransferPositionProps>): Promise<TransferPosition[]> {
+        const records = await store.getByFields<CompatTransferPositionProps>('TransferPosition', filter  as unknown as FieldsExpression<CompatTransferPositionProps>[], options as unknown as GetOptions<CompatTransferPositionProps>);
+        return records.map(record => this.create(record as unknown as TransferPositionProps));
+    }
 
     static create(record: TransferPositionProps): TransferPosition {
-        assert(typeof record.id === 'string', "id must be provided");
-        let entity = new this(record.id);
+        assert(record.id !== undefined && record.id !== null, "id must be provided");
+        const entity = new this(
+            record.id,
+            record.collateralId,
+            record.fromId,
+            record.toId,
+            record.blockId,
+            record.timestamp,
+        );
         Object.assign(entity,record);
         return entity;
     }

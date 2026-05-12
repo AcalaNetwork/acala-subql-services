@@ -11,7 +11,7 @@ export const getMint = async (id: string) => {
 	let record = await Mint.get(id);
 
 	if (!record) {
-		record = new Mint(id);
+		record = new Mint(id, BigInt(0), '');
 		record.amountMinted = BigInt(0);
 		record.amountStaked = BigInt(0);
 		record.stakingCurrencyAmount = BigInt(0);
@@ -27,7 +27,7 @@ export const getRedeemRequestCancelled = async (id: string) => {
 	let record = await RedeemRequestCancelled.get(id);
 
 	if (!record) {
-		record = new RedeemRequestCancelled(id);
+		record = new RedeemRequestCancelled(id, BigInt(0), '');
     record.addressId = '';
     record.amount = BigInt(0);
 		record.blockNumber = BigInt(0);
@@ -40,7 +40,7 @@ export const getRequestedRedeem = async (id: string) => {
 	let record = await RequestedRedeem.get(id);
 
 	if (!record) {
-		record = new RequestedRedeem(id);
+		record = new RequestedRedeem(id, BigInt(0), '');
 
     record.addressId = '';
     record.amount = BigInt(0);
@@ -55,7 +55,7 @@ export const getRedeemRequested = async (id: string) => {
 	let record = await RedeemRequested.get(id);
 
 	if (!record) {
-		record = new RedeemRequested(id);
+		record = new RedeemRequested(id, BigInt(0), '');
 
     record.addressId = '';
     record.amount = BigInt(0);
@@ -70,7 +70,7 @@ export const getRedeemedByUnbond = async (id: string) => {
 	let record = await RedeemedByUnbond.get(id);
 
 	if (!record) {
-		record = new RedeemedByUnbond(id);
+		record = new RedeemedByUnbond(id, BigInt(0), '');
 
     record.addressId = '';
     record.eraIndexWhenUnbond = BigInt(0);
@@ -86,7 +86,7 @@ export const getRedeemed = async (id: string) => {
 	let record = await Redeemed.get(id);
 
 	if (!record) {
-		record = new Redeemed(id);
+		record = new Redeemed(id, BigInt(0), '');
 
     record.addressId = '';
     record.stakingAmountRedeemed = BigInt(0);
@@ -101,7 +101,7 @@ export const getRedeemedByFastMatch = async (id: string) => {
 	let record = await RedeemedByFastMatch.get(id);
 
 	if (!record) {
-		record = new RedeemedByFastMatch(id);
+		record = new RedeemedByFastMatch(id, BigInt(0), '');
 
     record.addressId = '';
     record.matchedLiquidAmount = BigInt(0);
@@ -117,7 +117,7 @@ export const getRate = async(id: string) => {
 	let record = await Rate.get(id);
 
 	if (!record) {
-		record = new Rate(id);
+		record = new Rate(id, BigInt(0), '');
 
 		record.totalStaking = BigInt(0);
 		record.totalLiquidity = BigInt(0);

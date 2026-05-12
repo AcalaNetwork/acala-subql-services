@@ -31,7 +31,7 @@ export const getBlock = async (block: SubstrateBlock) => {
     // to ensure block 1 is exist
     await getBlockOne();
 
-    record = new Block(id);
+    record = new Block(id, block.hash.toString(), BigInt(id), block.timestamp);
 
     record.hash = block.hash.toString();
     record.number = BigInt(id);
@@ -51,7 +51,7 @@ export const getBlockOne = async () => {
   let record = await Block.get(id);
 
   if (!record) {
-    record = new Block(id);
+    record = new Block(id, '', BigInt(id), new Date('0'));
 
     record.hash = '';
     record.number = BigInt(id);
@@ -70,9 +70,15 @@ export const getExtrinsic = async (extrinsic: SubstrateExtrinsic) => {
   let record = await Extrinsic.get(id);
 
   if (!record) {
-    record = new Extrinsic(id);
-
     const sender = await getAccount(extrinsic.extrinsic.signer.toString());
+    record = new Extrinsic(
+      id,
+      sender.id,
+      id,
+      extrinsic.extrinsic.method.method,
+      extrinsic.extrinsic.method.section,
+      extrinsic.extrinsic.toHex(),
+    );
 
     record.hash = id
     record.blockId = extrinsic.block.block.header.number.toString();
@@ -91,7 +97,7 @@ export const getAccount = async (address: string) => {
   let record = await Account.get(address);
 
   if (!record) {
-    record = new Account(address);
+    record = new Account(address, address, 0);
 
     record.address = address;
     record.txCount = 0;
@@ -106,8 +112,8 @@ export const getCollateral = async (token: string) => {
   let record = await Collateral.get(token);
 
   if (!record) {
-    record = new Collateral(token);
     const decimals = await getTokenDecimals(api as any, token);
+    record = new Collateral(token, token, decimals, BigInt(0), BigInt(0), 0);
 
     record.name = token;
     record.decimals = decimals;
@@ -127,7 +133,21 @@ export const getHourlyCollateral = async (collateral: string, timestamp: Date) =
   let record = await HourlyCollateral.get(id);
 
   if (!record) {
-    record = new HourlyCollateral(id);
+    record = new HourlyCollateral(
+      id,
+      collateral,
+      0,
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      timestamp,
+    );
 
     record.collateralId = collateral;
     record.depositAmount = BigInt(0);
@@ -152,7 +172,21 @@ export const getDailyCollateral = async (collateral: string, timestamp: Date) =>
   let record = await DailyCollateral.get(id);
 
   if (!record) {
-    record = new DailyCollateral(id);
+    record = new DailyCollateral(
+      id,
+      collateral,
+      0,
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      timestamp,
+    );
 
     record.collateralId = collateral;
     record.debitAmount = BigInt(0);
@@ -176,7 +210,7 @@ export const getPosition = async (collateral: string, owner: string) => {
   let record = await Position.get(id);
 
   if (!record) {
-    record = new Position(id);
+    record = new Position(id, owner, collateral, 0, BigInt(0), BigInt(0), new Date(), '');
 
     record.collateralId = collateral;
     record.ownerId = owner;
@@ -196,7 +230,22 @@ export const getHourlyPosition = async (collateral: string, owner: string, times
   let record = await HourlyPosition.get(id);
 
   if (!record) {
-    record = new HourlyPosition(id);
+    record = new HourlyPosition(
+      id,
+      owner,
+      collateral,
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      timestamp,
+      0,
+    );
 
     record.collateralId = collateral;
     record.ownerId = owner;
@@ -221,7 +270,22 @@ export const getDailyPosition = async (collateral: string, owner: string, timest
   let record = await DailyPosition.get(id);
 
   if (!record) {
-    record = new DailyPosition(id);
+    record = new DailyPosition(
+      id,
+      owner,
+      collateral,
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      timestamp,
+      0,
+    );
 
     record.collateralId = collateral;
     record.ownerId = owner;
@@ -249,7 +313,7 @@ export const getExchangeBundle = async (token: string, block: SubstrateBlock) =>
   if (!record) {
     const exchangeRate = await queryExchangeRate(token)
 
-    record = new ExchangeBundle(id);
+    record = new ExchangeBundle(id, block.block.header.number.toString(), token, exchangeRate);
 
     record.collateralId = token;
     record.debitExchangeRate = exchangeRate;
@@ -270,11 +334,12 @@ export const getPriceBundle = async (token: string, block: SubstrateBlock) => {
     const price = await queryPriceFromOracle(api as any, block, token)
       .catch(() => Promise.resolve(FixedPointNumber.ZERO));
 
-    record = new PriceBundle(id);
+    const chainPrice = BigInt((price || FixedPointNumber.ZERO).toChainData());
+    record = new PriceBundle(id, block.block.header.number.toString(), token, chainPrice);
 
     record.collateralId = token
     record.blockId = block.block.header.number.toString();
-    record.price = BigInt((price || FixedPointNumber.ZERO).toChainData())
+    record.price = chainPrice
 
     await record.save();
   }
@@ -286,15 +351,29 @@ export const getCollateralParams = async (id: string) => {
   let record = await CollateralParams.get(id);
 
   if (!record) {
-    record = new CollateralParams(id);
-
     const params = await api.query.cdpEngine.collateralParams(getCurrencyObject(id)) as any;
+    const maximumTotalDebitValue = BigInt(params?.maximumTotalDebitValue?.toString() || params.unwrapOrDefault().maximumTotalDebitValue.toString());
+    const interestRatePerSec = BigInt(params?.interestRatePerSec?.toString() || params.unwrapOrDefault().interestRatePerSec.toString());
+    const liquidationRatio = BigInt(params?.liquidationRatio?.toString() || params.unwrapOrDefault().liquidationRatio.toString());
+    const liquidationPenalty = BigInt(params?.liquidationPenalty?.toString() || params.unwrapOrDefault().liquidationPenalty.toString());
+    const requiredCollateralRatio = BigInt(params?.requiredCollateralRatio?.toString() || params.unwrapOrDefault().requiredCollateralRatio.toString());
+    record = new CollateralParams(
+      id,
+      id,
+      maximumTotalDebitValue,
+      interestRatePerSec,
+      liquidationRatio,
+      liquidationPenalty,
+      requiredCollateralRatio,
+      new Date(0),
+      '1',
+    );
     record.collateralId = id;
-    record.maximumTotalDebitValue = BigInt(params?.maximumTotalDebitValue?.toString() || params.unwrapOrDefault().maximumTotalDebitValue.toString());
-    record.interestRatePerSec = BigInt(params?.interestRatePerSec?.toString() || params.unwrapOrDefault().interestRatePerSec.toString());
-    record.liquidationRatio = BigInt(params?.liquidationRatio?.toString() || params.unwrapOrDefault().liquidationRatio.toString());
-    record.liquidationPenalty = BigInt(params?.liquidationPenalty?.toString() || params.unwrapOrDefault().liquidationPenalty.toString());
-    record.requiredCollateralRatio = BigInt(params?.requiredCollateralRatio?.toString() || params.unwrapOrDefault().requiredCollateralRatio.toString());
+    record.maximumTotalDebitValue = maximumTotalDebitValue;
+    record.interestRatePerSec = interestRatePerSec;
+    record.liquidationRatio = liquidationRatio;
+    record.liquidationPenalty = liquidationPenalty;
+    record.requiredCollateralRatio = requiredCollateralRatio;
     record.updateAtBlockId = '1';
     record.updateAt = new Date(0);
   }
@@ -307,7 +386,19 @@ export const getCollateralParamsHistory = async (collateral: string, block: stri
   let record = await CollateralParamsHistory.get(id);
 
   if (!record) {
-    record = new CollateralParamsHistory(id);
+    record = new CollateralParamsHistory(
+      id,
+      collateral,
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      '',
+      '',
+      new Date(0),
+      new Date(0),
+    );
 
     record.collateralId = collateral;
     record.interestRatePerSec = BigInt(0);
@@ -328,7 +419,20 @@ export const getUpdatePosition = async (id: string) => {
   let record = await UpdatePosition.get(id);
 
   if (!record) {
-    record = new UpdatePosition(id);
+    record = new UpdatePosition(
+      id,
+      '',
+      '',
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      false,
+      '1',
+      new Date(0),
+    );
 
     record.ownerId = '';
     record.collateralId = '';
@@ -339,6 +443,7 @@ export const getUpdatePosition = async (id: string) => {
     record.debitAdjustmentUSD = BigInt(0);
     record.price = BigInt(0);
     record.debitExchangeRate = BigInt(0)
+    record.isDerived = false
     record.timestamp = new Date(0)
   }
 
@@ -349,7 +454,20 @@ export const getCloseByDex = async (id: string) => {
   let record = await CloseByDex.get(id);
 
   if (!record) {
-    record = new CloseByDex(id);
+    record = new CloseByDex(
+      id,
+      '',
+      '',
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      '1',
+      new Date(0),
+    );
 
     record.collateralId = '';
     record.soldAmount = BigInt(0);
@@ -370,12 +488,26 @@ export const getLiquidUnsafe = async (id: string) => {
   let record = await LiquidUnsafe.get(id);
 
   if (!record) {
-    record = new LiquidUnsafe(id);
+    record = new LiquidUnsafe(
+      id,
+      '',
+      '',
+      '',
+      BigInt(0),
+      BigInt(0),
+      BigInt(0),
+      '',
+      BigInt(0),
+      BigInt(0),
+      '1',
+      new Date(0),
+    );
 
     record.collateralId = '';
     record.senderId = '';
     record.ownerId = '';
     record.collateralAmount = BigInt(0);
+    record.collateralVolumeUSD = BigInt(0);
     record.badDebitVolumeUSD = BigInt(0);
     record.liquidationStrategy = '';
     record.blockId = '1';
@@ -391,7 +523,7 @@ export const getTransferPosition = async (id: string) => {
   let record = await TransferPosition.get(id);
 
   if (!record) {
-    record = new TransferPosition(id);
+    record = new TransferPosition(id, '', '', '', '1', new Date());
 
     record.collateralId = '';
     record.fromId = '';

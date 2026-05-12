@@ -14,6 +14,7 @@ export const handleClaimRewards = async (event: SubstrateEvent) => {
   logger.info('start handleClaimRewards');
   const index = event.idx.toString();
   const timestamp = event.block.timestamp;
+  if (!timestamp) throw new Error("Missing block timestamp");
   const blockNumber = BigInt(event.block.block.header.number.toNumber());
   const { event: { data: [who, pool, reward_currency_id, actual_amount, deduction_amount] } } = event;
   const poolId = pool.toHex();

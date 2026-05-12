@@ -1,55 +1,84 @@
 // Auto-generated , DO NOT EDIT
-import {Entity, FunctionPropertyNames} from "@subql/types";
+import {Entity, FunctionPropertyNames, FieldsExpression, GetOptions } from "@subql/types-core";
 import assert from 'assert';
 
 
 
+export type BlockProps = Omit<Block, NonNullable<FunctionPropertyNames<Block>> | '_name'>;
 
-export type BlockProps = Omit<Block, NonNullable<FunctionPropertyNames<Block>>>;
+/*
+ * Compat types allows for support of alternative `id` types without refactoring the node
+ */
+type CompatBlockProps = Omit<BlockProps, 'id'> & { id: string; };
+type CompatEntity = Omit<Entity, 'id'> & { id: string; };
 
-export class Block implements Entity {
+export class Block implements CompatEntity {
 
-    constructor(id: string) {
+    constructor(
+        
+        id: string,
+        hash: string,
+        number: bigint,
+        timestamp: Date,
+    ) {
         this.id = id;
+        this.hash = hash;
+        this.number = number;
+        this.timestamp = timestamp;
+        
     }
-
 
     public id: string;
-
     public hash: string;
-
     public number: bigint;
-
     public timestamp: Date;
-
     public debitPool?: bigint;
+    
 
-
-    async save(): Promise<void>{
-        let id = this.id;
-        assert(id !== null, "Cannot save Block entity without an ID");
-        await store.set('Block', id.toString(), this);
+    get _name(): string {
+        return 'Block';
     }
-    static async remove(id:string): Promise<void>{
+
+    async save(): Promise<void> {
+        const id = this.id;
+        assert(id !== null, "Cannot save Block entity without an ID");
+        await store.set('Block', id.toString(), this as unknown as CompatBlockProps);
+    }
+
+    static async remove(id: string): Promise<void> {
         assert(id !== null, "Cannot remove Block entity without an ID");
         await store.remove('Block', id.toString());
     }
 
-    static async get(id:string): Promise<Block | undefined>{
+    static async get(id: string): Promise<Block | undefined> {
         assert((id !== null && id !== undefined), "Cannot get Block entity without an ID");
         const record = await store.get('Block', id.toString());
-        if (record){
-            return this.create(record as BlockProps);
-        }else{
+        if (record) {
+            return this.create(record as unknown as BlockProps);
+        } else {
             return;
         }
     }
 
 
+    /**
+     * Gets entities matching the specified filters and options.
+     *
+     * ⚠️ This function will first search cache data followed by DB data. Please consider this when using order and offset options.⚠️
+     * */
+    static async getByFields(filter: FieldsExpression<BlockProps>[], options: GetOptions<BlockProps>): Promise<Block[]> {
+        const records = await store.getByFields<CompatBlockProps>('Block', filter  as unknown as FieldsExpression<CompatBlockProps>[], options as unknown as GetOptions<CompatBlockProps>);
+        return records.map(record => this.create(record as unknown as BlockProps));
+    }
 
     static create(record: BlockProps): Block {
-        assert(typeof record.id === 'string', "id must be provided");
-        let entity = new this(record.id);
+        assert(record.id !== undefined && record.id !== null, "id must be provided");
+        const entity = new this(
+            record.id,
+            record.hash,
+            record.number,
+            record.timestamp,
+        );
         Object.assign(entity,record);
         return entity;
     }

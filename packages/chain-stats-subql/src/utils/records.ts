@@ -17,8 +17,7 @@ export async function getToken(id: string) {
     let record = await Token.get(id)
 
     if (!record) {
-        record = new Token(id)
-        record.decimals = await getTokenDecimals(api as any, id);
+        const decimals = await getTokenDecimals(api as any, id);
 
         let issuance = BigInt(0)
 
@@ -29,6 +28,8 @@ export async function getToken(id: string) {
             issuance = BigInt(rawIssuance.toString())
         }
 
+        record = new Token(id, decimals, BigInt(0), issuance, BigInt(0))
+        record.decimals = decimals;
         record.volume = BigInt(0)
         record.reserved = BigInt(0)
         record.issuance = issuance
@@ -44,7 +45,7 @@ export async function getHourToken(tokenName: string, timestamp: Date) {
     let record = await HourToken.get(id)
 
     if (!record) {
-        record = new HourToken(id)
+        record = new HourToken(id, tokenName, BigInt(0), BigInt(0), BigInt(0))
 
         record.tokenId = tokenName
         record.volume = BigInt(0)
@@ -62,7 +63,7 @@ export async function getDailyToken(tokenName: string, timestamp: Date) {
     let record = await DailyToken.get(id)
 
     if (!record) {
-        record = new DailyToken(id)
+        record = new DailyToken(id, tokenName, BigInt(0), BigInt(0), BigInt(0))
 
         record.tokenId = tokenName
         record.volume = BigInt(0)
@@ -80,7 +81,7 @@ export async function getAccount(id: string) {
     if (!record) {
         const isSystem = isSystemAccount(id)
 
-        record = new Account(id)
+        record = new Account(id, id)
 
         record.address = id
         record.mark = isSystem ? 'system' : 'user'
@@ -99,7 +100,7 @@ export async function getAccountBalance(
     let record = await AccountBalance.get(id)
 
     if (!record) {
-        record = new AccountBalance(id)
+        record = new AccountBalance(id, address, tokenName, BigInt(0), BigInt(0), BigInt(0), blockNumber)
 
         record.accountId = address
         record.tokenId = tokenName
@@ -123,7 +124,7 @@ export async function getHourAccountBalance(address: string, tokenName: string, 
     let record = await HourAccountBalance.get(id)
 
     if (!record) {
-        record = new HourAccountBalance(id)
+        record = new HourAccountBalance(id, address, tokenName, BigInt(0), BigInt(0), BigInt(0))
 
         // initialize all value
         record.accountId = address
@@ -144,7 +145,7 @@ export async function getDailyAccountBalance(address: string, tokenName: string,
     let record = await DailyAccountBalance.get(id)
 
     if (!record) {
-        record = new DailyAccountBalance(id)
+        record = new DailyAccountBalance(id, address, tokenName, BigInt(0), BigInt(0), BigInt(0))
 
         // initialize all value
         record.accountId = address

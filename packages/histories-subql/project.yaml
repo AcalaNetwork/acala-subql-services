@@ -4,10 +4,10 @@ version: 1.0.0
 runner:
   node:
     name: '@subql/node'
-    version: '*'
+    version: "6.4.6"
   query:
     name: '@subql/query'
-    version: '*'
+    version: "2.25.0"
 schema:
   file: ./schema.graphql
 network:

@@ -40,7 +40,7 @@ RUN set -e \
 
 # =============
 
-FROM onfinality/subql-node:v6.0.4
+FROM subquerynetwork/subql-node-substrate:v6.4.6
 LABEL maintainer="hello@acala.network"
 
 # subql node changed default user to USER 1000

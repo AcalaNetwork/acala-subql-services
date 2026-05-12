@@ -5,7 +5,7 @@ export const getClaimRewards = async (id: string) => {
 	let record = await ClaimRewards.get(id);
 
 	if (!record) {
-		record = new ClaimRewards(id);
+		record = new ClaimRewards(id, BigInt(0), '');
 
 		record.addressId = "";
 		record.tokenId = "";
@@ -24,7 +24,7 @@ export const getDepositDexShare = async (id: string) => {
 	let record = await DepositDexShare.get(id);
 
 	if (!record) {
-		record = new DepositDexShare(id);
+		record = new DepositDexShare(id, BigInt(0), '');
 
 		record.addressId = "";
     record.tokenId = '';
@@ -41,7 +41,7 @@ export const getPayoutRewards = async (id: string) => {
 	let record = await PayoutRewards.get(id);
 
 	if (!record) {
-		record = new PayoutRewards(id);
+		record = new PayoutRewards(id, BigInt(0), '');
 
 		record.addressId = "";
 		record.tokenId = "";
@@ -60,7 +60,7 @@ export const getWithdrawDexShare = async (id: string) => {
 	let record = await WithdrawDexShare.get(id);
 
 	if (!record) {
-		record = new WithdrawDexShare(id);
+		record = new WithdrawDexShare(id, BigInt(0), '');
 
 		record.addressId = "";
 		record.tokenId = "";

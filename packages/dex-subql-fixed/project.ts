@@ -23,11 +23,11 @@ const project: SubstrateProject = {
   runner: {
     node: {
       name: "@subql/node",
-      version: ">=3.0.1",
+      version: "6.4.6",
     },
     query: {
       name: "@subql/query",
-      version: "*",
+      version: "2.25.0",
     },
   },
   schema: {

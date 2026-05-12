@@ -6,6 +6,7 @@ export async function handleRebonded(event: SubstrateEvent) {
   logger.info('start handleRebonded');
   const index = event.idx.toString();
   const timestamp = event.block.timestamp;
+  if (!timestamp) throw new Error("Missing block timestamp");
   const blockNumber = BigInt(event.block.block.header.number.toNumber());
 
   /**

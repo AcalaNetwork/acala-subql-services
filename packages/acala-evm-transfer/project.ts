@@ -22,11 +22,11 @@ const project: EthereumProject = {
   runner: {
     node: {
       name: "@subql/node-ethereum",
-      version: ">=3.0.0",
+      version: "6.5.0",
     },
     query: {
       name: "@subql/query",
-      version: "*",
+      version: "2.25.0",
     },
   },
   schema: {

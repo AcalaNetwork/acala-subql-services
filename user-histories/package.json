@@ -23,12 +23,12 @@
   "license": "MIT",
   "devDependencies": {
     "@polkadot/api": "^12",
-    "@subql/types": "latest",
+    "@subql/types": "3.15.0",
     "typescript": "^5.2.2",
-    "@subql/cli": "latest",
+    "@subql/cli": "6.6.3",
     "@acala-network/type-definitions": "latest",
-    "@subql/testing": "latest",
-    "@subql/node": "latest",
+    "@subql/testing": "2.3.1",
+    "@subql/node": "6.4.6",
     "dotenv": "latest"
   },
   "resolutions": {

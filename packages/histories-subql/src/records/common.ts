@@ -22,7 +22,7 @@ export const getToken = async (token: string) => {
 
 	if (!record) {
 		const decimals = await getTokenDecimals(api as any, token);
-		record = new Token(token);
+		record = new Token(token, token, Number(decimals.toString()));
 
 		record.decimals = Number(decimals.toString());
 		record.name = token;

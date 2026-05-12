@@ -1,66 +1,96 @@
 // Auto-generated , DO NOT EDIT
-import {Entity, FunctionPropertyNames} from "@subql/types";
+import {Entity, FunctionPropertyNames, FieldsExpression, GetOptions } from "@subql/types-core";
 import assert from 'assert';
 
 
 
+export type DailyTokenProps = Omit<DailyToken, NonNullable<FunctionPropertyNames<DailyToken>> | '_name'>;
 
-type DailyTokenProps = Omit<DailyToken, NonNullable<FunctionPropertyNames<DailyToken>>>;
+/*
+ * Compat types allows for support of alternative `id` types without refactoring the node
+ */
+type CompatDailyTokenProps = Omit<DailyTokenProps, 'id'> & { id: string; };
+type CompatEntity = Omit<Entity, 'id'> & { id: string; };
 
-export class DailyToken implements Entity {
+export class DailyToken implements CompatEntity {
 
-    constructor(id: string) {
+    constructor(
+        
+        id: string,
+        tokenId: string,
+        volume: bigint,
+        issuance: bigint,
+        reserved: bigint,
+    ) {
         this.id = id;
+        this.tokenId = tokenId;
+        this.volume = volume;
+        this.issuance = issuance;
+        this.reserved = reserved;
+        
     }
-
 
     public id: string;
-
     public tokenId: string;
-
     public volume: bigint;
-
     public issuance: bigint;
-
     public reserved: bigint;
-
     public timestmap?: Date;
-
     public updateAtBlock?: bigint;
+    
 
-
-    async save(): Promise<void>{
-        let id = this.id;
-        assert(id !== null, "Cannot save DailyToken entity without an ID");
-        await store.set('DailyToken', id.toString(), this);
+    get _name(): string {
+        return 'DailyToken';
     }
-    static async remove(id:string): Promise<void>{
+
+    async save(): Promise<void> {
+        const id = this.id;
+        assert(id !== null, "Cannot save DailyToken entity without an ID");
+        await store.set('DailyToken', id.toString(), this as unknown as CompatDailyTokenProps);
+    }
+
+    static async remove(id: string): Promise<void> {
         assert(id !== null, "Cannot remove DailyToken entity without an ID");
         await store.remove('DailyToken', id.toString());
     }
 
-    static async get(id:string): Promise<DailyToken | undefined>{
+    static async get(id: string): Promise<DailyToken | undefined> {
         assert((id !== null && id !== undefined), "Cannot get DailyToken entity without an ID");
         const record = await store.get('DailyToken', id.toString());
-        if (record){
-            return DailyToken.create(record as DailyTokenProps);
-        }else{
+        if (record) {
+            return this.create(record as unknown as DailyTokenProps);
+        } else {
             return;
         }
     }
 
+    static async getByTokenId(tokenId: string, options: GetOptions<CompatDailyTokenProps>): Promise<DailyToken[]> {
+        // Inputs must be cast as the store interface has not been updated to support alternative ID types
+        const records = await store.getByField<CompatDailyTokenProps>('DailyToken', 'tokenId', tokenId, options);
+        return records.map(record => this.create(record as unknown as DailyTokenProps));
+    }
+    
 
-    static async getByTokenId(tokenId: string): Promise<DailyToken[] | undefined>{
-      
-      const records = await store.getByField('DailyToken', 'tokenId', tokenId);
-      return records.map(record => DailyToken.create(record as DailyTokenProps));
-      
+
+    /**
+     * Gets entities matching the specified filters and options.
+     *
+     * ⚠️ This function will first search cache data followed by DB data. Please consider this when using order and offset options.⚠️
+     * */
+    static async getByFields(filter: FieldsExpression<DailyTokenProps>[], options: GetOptions<DailyTokenProps>): Promise<DailyToken[]> {
+        const records = await store.getByFields<CompatDailyTokenProps>('DailyToken', filter  as unknown as FieldsExpression<CompatDailyTokenProps>[], options as unknown as GetOptions<CompatDailyTokenProps>);
+        return records.map(record => this.create(record as unknown as DailyTokenProps));
     }
 
-
     static create(record: DailyTokenProps): DailyToken {
-        assert(typeof record.id === 'string', "id must be provided");
-        let entity = new DailyToken(record.id);
+        assert(record.id !== undefined && record.id !== null, "id must be provided");
+        const entity = new this(
+            record.id,
+            record.tokenId,
+            record.volume,
+            record.issuance,
+            record.reserved,
+        );
         Object.assign(entity,record);
         return entity;
     }

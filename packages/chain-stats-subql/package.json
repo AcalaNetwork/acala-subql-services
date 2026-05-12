@@ -22,9 +22,9 @@
   "author": "qwer951123",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@subql/cli": "1.0.2-0",
-    "@subql/node": "1.1.2",
-    "@subql/types": "^1.1.0",
+    "@subql/cli": "6.6.3",
+    "@subql/node": "6.4.6",
+    "@subql/types": "3.15.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.0.0"
@@ -43,6 +43,8 @@
     "@acala-network/types": "4.1.6-30",
     "@acala-network/sdk-core": "4.1.6-30",
     "@acala-network/sdk-wallet": "4.1.6-30",
-    "@acala-network/type-definitions": "4.1.6-30"
+    "@acala-network/type-definitions": "4.1.6-30",
+    "@subql/node": "6.4.6",
+    "@subql/types": "3.15.0"
   }
 }
