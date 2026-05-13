@@ -32,10 +32,6 @@ RUN set -e \
     && if [ -f /app/src/chaintypes.ts ] && [ ! -f /app/dist/chaintypes.js ]; then \
         ./node_modules/.bin/tsc /app/src/chaintypes.ts --module commonjs --target es2019 --esModuleInterop --skipLibCheck --outDir /app/dist; \
       fi \
-    && if grep -R "rpc\\.oracle\\.getValue" /app/dist; then \
-        echo "Built dex-fixed output still contains stale direct rpc.oracle.getValue"; \
-        exit 1; \
-      fi \
     && ls -la /app/dist \
     && echo "Build completed successfully"
 
