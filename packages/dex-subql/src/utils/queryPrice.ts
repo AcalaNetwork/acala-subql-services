@@ -1,6 +1,6 @@
 import { AnyApi, FixedPointNumber as FN, MaybeCurrency, Token, forceToCurrencyId } from "@acala-network/sdk-core";
 import { SubstrateBlock } from '@subql/types/dist/interfaces';
-import { getPool, getToken } from ".";
+import { getBlock, getPool, getToken } from "./record";
 import { getTokenName } from './getTokenName';
 import { PriceBundle } from "../types";
 
@@ -26,6 +26,19 @@ const queryPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
 	const value = result?.unwrapOrDefault?.() || result;
 
 	return FN.fromInner(value?.value?.value?.toString() || value?.value?.toString() || 0, 18);
+}
+
+export const ensurePriceBundleBlock = async (block: SubstrateBlock) => {
+	const blockId = block.block.header.number.toString();
+	const blockRecord = await getBlock(blockId);
+
+	blockRecord.hash = block.block.hash.toString();
+	blockRecord.number = BigInt(blockId);
+	blockRecord.timestamp = block.timestamp;
+
+	await blockRecord.save();
+
+	return blockRecord;
 }
 
 const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, stakingCurrency: string, StableCurrency: string) => {
@@ -177,11 +190,12 @@ export const getStablePriceBundle = async (api: AnyApi, block: SubstrateBlock, t
 
 	if (!record) {
 		const price = token === 'KUSD' ? await getKusdMarketPrice(api, block) : await getAusdMarketPrice(api, block);
+		const blockRecord = await ensurePriceBundleBlock(block);
 
 		record = new PriceBundle(id);
 
-		(record as any).tokenId = token
-		record.blockId = block.block.header.number.toString();
+		record.TokenId = token;
+		record.blockId = blockRecord.id;
 		record.price = BigInt((price || FN.ZERO).toChainData())
 
 		await record.save();

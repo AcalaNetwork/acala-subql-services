@@ -4,10 +4,10 @@ node_modules
 
 # Build artifacts
 dist
+**/dist
 build
+**/build
 *.tsbuildinfo
-!packages/*/dist
-!packages/*/dist/**
 
 # Git
 .git

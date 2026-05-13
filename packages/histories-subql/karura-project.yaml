@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: karura-homa
+name: karura-histories
 version: 1.0.0
 runner:
   node:
@@ -132,6 +132,5 @@ dataSources:
           filter:
             module: auction
             method: Bid
-
 
 

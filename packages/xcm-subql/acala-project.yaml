@@ -1,8 +1,7 @@
 specVersion: 1.0.0
-name: acala-liquid-staking
+name: acala-xcm
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 version: 1.0.0
-description: 'liquid protocal statistics'
-repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
 runner:
   node:
     name: "@subql/node"
@@ -10,7 +9,7 @@ runner:
   query:
     name: "@subql/query"
     version: "2.25.0"
-schema: 
+schema:
     file: ./schema.graphql
 network:
   chainId: "0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c"
@@ -20,32 +19,22 @@ network:
     file: './dist/chain-types.js'
 dataSources:
   - kind: substrate/Runtime
-    startBlock: 3000000
+    startBlock: 5502000
     mapping:
       file: "./dist/index.js"
       handlers:
-        - handler: sync
+        - handler: handleXCMOut
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: Minted
-        - handler: sync
+            module: xTokens
+            method: TransferredAssets
+        - handler: handleXCMOut
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: RedeemedByFastMatch
-        - handler: sync
+            module: xTokens
+            method: TransferredMultiAssets
+        - handler: handleXCMIn
           kind: substrate/EventHandler
           filter:
-            module: homa
-            method: RedeemedByUnbond
-        - handler: sync
-          kind: substrate/EventHandler
-          filter:
-            module: homa
-            method: CurrentEraBumped
-        - handler: sync
-          kind: substrate/EventHandler
-          filter:
-            module: homa
-            method: LedgerBondedReset
+            module: messageQueue
+            method: Processed

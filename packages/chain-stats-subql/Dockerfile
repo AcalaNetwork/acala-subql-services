@@ -16,12 +16,9 @@ COPY packages/chain-stats-subql/package.json packages/chain-stats-subql/bun.lock
 RUN bun install
 COPY packages/chain-stats-subql/ ./
 RUN set -e \
-    && if [ -d /app/dist ]; then \
-        echo "Using prebuilt dist from build context"; \
-      else \
-        ./node_modules/.bin/subql codegen; \
-        ./node_modules/.bin/subql build --output dist; \
-      fi \
+    && rm -rf /app/dist \
+    && ./node_modules/.bin/subql codegen \
+    && ./node_modules/.bin/subql build --output dist \
     && for i in 1 2 3 4 5; do [ -d /app/dist ] && break; sleep 1; done \
     && if [ ! -d /app/dist ]; then \
         echo "SubQL build did not create /app/dist"; \

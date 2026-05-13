@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: karura-staking
+name: acala-xcm
 repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 version: 1.0.0
 runner:

@@ -2,7 +2,7 @@ specVersion: 1.0.0
 name: karura-dex
 version: 1.0.0
 description: 'statistics tokens data of karura network'
-repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 runner:
   node:
     name: "@subql/node"
