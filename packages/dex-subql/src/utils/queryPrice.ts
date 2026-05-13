@@ -4,6 +4,46 @@ import { getBlock, getPool, getToken } from "./record";
 import { getTokenName } from './getTokenName';
 import { PriceBundle } from "../types";
 
+const warnInvalidPrice = (message: string) => {
+	const logger = (globalThis as any).logger;
+
+	if (typeof logger?.warn === 'function') {
+		logger.warn(message);
+	}
+};
+
+const isUnsignedIntegerString = (value: string) => {
+	return value.length > 0 && [...value].every((char) => char >= '0' && char <= '9');
+};
+
+const fromOracleInner = (value: unknown) => {
+	const inner = (value as any)?.value?.value?.toString?.() || (value as any)?.value?.toString?.() || "0";
+
+	if (!isUnsignedIntegerString(inner)) {
+		warnInvalidPrice(`Invalid oracle price value ${inner}; defaulting to zero`);
+		return FN.ZERO;
+	}
+
+	return FN.fromInner(inner, 18);
+};
+
+export const toSafePriceChainData = (price: FN | undefined | null, context: string) => {
+	if (!price) return BigInt(0);
+
+	const chainData = price.toChainData()?.toString() || "0";
+
+	if (!isUnsignedIntegerString(chainData)) {
+		warnInvalidPrice(`Invalid ${context} price ${chainData}; defaulting to zero`);
+		return BigInt(0);
+	}
+
+	return BigInt(chainData);
+};
+
+const divideOrZero = (numerator: FN, denominator: FN) => {
+	return denominator.isZero() ? FN.ZERO : numerator.div(denominator);
+};
+
 const getOracleValue = async (api: AnyApi, token: MaybeCurrency) => {
 	const currencyId = forceToCurrencyId(api as any, token);
 	const query = (api as any)?.query?.acalaOracle?.values || (api as any)?.query?.oracle?.values;
@@ -25,7 +65,7 @@ const queryPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
 	const result = await getOracleValue(api, token);
 	const value = result?.unwrapOrDefault?.() || result;
 
-	return FN.fromInner(value?.value?.value?.toString() || value?.value?.toString() || 0, 18);
+	return fromOracleInner(value);
 }
 
 export const ensurePriceBundleBlock = async (block: SubstrateBlock) => {
@@ -50,9 +90,12 @@ const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, 
 	const amountB = FN.fromInner(_amountB.toString(), 18);
 	const StakingPrice = stakingCurrency === 'DOT' ? await getDotMarketPrice(api, block) : await getKsmMarketPrice(api, block);
 	const StablePrice =  stakingCurrency === 'DOT' ? await getAusdMarketPrice(api, block) : await getKusdMarketPrice(api, block);
+	const totalAmount = amountA.add(amountB);
 	
-	const partA = rateA.mul(StakingPrice).times(amountA).div(amountA.add(amountB));
-	const partB = rateB.mul(StablePrice).times(amountB).div(amountA.add(amountB));
+	if (totalAmount.isZero()) return FN.ZERO;
+
+	const partA = divideOrZero(rateA.mul(StakingPrice).times(amountA), totalAmount);
+	const partB = divideOrZero(rateB.mul(StablePrice).times(amountB), totalAmount);
 
 	return partA.add(partB);
 }
@@ -71,8 +114,10 @@ const getPriceFromDexPool = async (tokenA: string, tokenB: string) => {
 	} 
 
 	
-	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
-	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
+	const token0Amount = pool.token0Amount || BigInt(0);
+	const token1Amount = pool.token1Amount || BigInt(0);
+	const amount0 = FN.fromInner(token0Amount.toString(), token0.decimals || 18);
+	const amount1 = FN.fromInner(token1Amount.toString(), token1.decimals || 18);
 
 	if (amount0.isZero() || amount1.isZero()) return {
 		rate: FN.ZERO,
@@ -81,7 +126,7 @@ const getPriceFromDexPool = async (tokenA: string, tokenB: string) => {
 
 	return {
 		rate: pool.token0Id === tokenA ? amount1.div(amount0) : amount0.div(amount1),
-		amount: pool.token0Amount + pool.token1Amount
+		amount: token0Amount + token1Amount
 	}
 }
 
@@ -99,10 +144,10 @@ const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	const token0 = await getToken(pool.token0Id);
 	const token1 = await getToken(pool.token1Id);
 
-	const stableAmount = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals);
-	const stakingAmount = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals);
+	const stableAmount = FN.fromInner((pool.token0Amount || BigInt(0)).toString(), token0.decimals || 18);
+	const stakingAmount = FN.fromInner((pool.token1Amount || BigInt(0)).toString(), token1.decimals || 18);
 
-	return stakingCurrencyMarketPrice.mul(stakingAmount.div(stableAmount));
+	return stableAmount.isZero() ? FN.ZERO : stakingCurrencyMarketPrice.mul(stakingAmount.div(stableAmount));
 }
 
 const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
@@ -114,10 +159,10 @@ const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 	const token1 = await getToken(pool.token1Id); // AUSD
 
 	
-	const amount0 = FN.fromInner(pool.token0Amount.toString() || "0", token0.decimals); // ACA
-	const amount1 = FN.fromInner(pool.token1Amount.toString() || "0", token1.decimals); // AUSD
+	const amount0 = FN.fromInner((pool.token0Amount || BigInt(0)).toString(), token0.decimals || 18); // ACA
+	const amount1 = FN.fromInner((pool.token1Amount || BigInt(0)).toString(), token1.decimals || 18); // AUSD
 
-	return !amount0.isZero() ? acaPrice.mul(amount0.div(amount1)) : FN.ZERO;
+	return !amount0.isZero() && !amount1.isZero() ? acaPrice.mul(amount0.div(amount1)) : FN.ZERO;
 }
 
 const getKsmMarketPrice = (api: AnyApi, block: SubstrateBlock) => {
@@ -170,11 +215,12 @@ export const queryPrice = async (api: any, block: SubstrateBlock, token: string)
 	price.setPrecision(18);
 
 	const tokenData = await getToken(token);
-	tokenData.price = BigInt(price.toChainData());
+	const chainData = toSafePriceChainData(price, `${token} block ${block.block.header.number.toString()}`);
+	tokenData.price = chainData;
 
 	if(queryToken != token) {
 		const queryTokenData = await getToken(queryToken);
-		queryTokenData.price = BigInt(price.toChainData());
+		queryTokenData.price = chainData;
 		await queryTokenData.save();
 	}
 
@@ -196,7 +242,7 @@ export const getStablePriceBundle = async (api: AnyApi, block: SubstrateBlock, t
 
 		record.TokenId = token;
 		record.blockId = blockRecord.id;
-		record.price = BigInt((price || FN.ZERO).toChainData())
+		record.price = toSafePriceChainData(price || FN.ZERO, `${token} price bundle ${block.block.header.number.toString()}`)
 
 		await record.save();
 	}

@@ -50,6 +50,7 @@ COPY --from=builder /app/schema.graphql /app/
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/project.yaml /app/
 COPY --from=builder /app/acala-project.yaml /app/
+COPY --from=builder /app/karura-project.yaml /app/
 
 RUN chown -R 1000:1000 /app
 

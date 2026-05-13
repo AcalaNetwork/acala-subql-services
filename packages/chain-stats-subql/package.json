@@ -9,9 +9,9 @@
   "private": true,
   "scripts": {
     "start": "bun run build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=2 --port=3123",
-    "build": "subql codegen && subql build",
+    "build": "subql codegen && subql build && mkdir -p dist/data && cp src/data/*.json dist/data/",
     "prepack": "rm -rf dist && npm build",
-    "test": "jest",
+    "test": "bun test tests/*.test.ts",
     "codegen": "./node_modules/.bin/subql codegen"
   },
   "files": [

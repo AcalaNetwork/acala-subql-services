@@ -19,6 +19,8 @@ RUN set -e \
     && rm -rf /app/dist \
     && ./node_modules/.bin/subql codegen \
     && ./node_modules/.bin/subql build --output dist \
+    && mkdir -p /app/dist/data \
+    && cp /app/src/data/*.json /app/dist/data/ \
     && for i in 1 2 3 4 5; do [ -d /app/dist ] && break; sleep 1; done \
     && if [ ! -d /app/dist ]; then \
         echo "SubQL build did not create /app/dist"; \

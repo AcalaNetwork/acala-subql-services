@@ -1,11 +1,8 @@
 import { SubstrateBlock } from "@subql/types/dist/interfaces";
 import { getBlock, getToken } from "../utils/records";
-import acalaNative from "../data/acala-1870000-native.json";
-import acalaNonNative from "../data/acala-1870000-non-native.json";
-import karuraNative from "../data/karura-2650000-native.json";
-import karuraNonNative from "../data/karura-2650000-non-native.json";
 import { updateAccountBalance } from "../utils/updateAccountBalance";
 import { insertBefore, startAt } from "./mappingHandlers";
+import { getInitialBalanceRecords } from "../utils/balanceData";
 
 
 export async function handleBlock(block: SubstrateBlock) {
@@ -17,24 +14,16 @@ export async function handleBlock(block: SubstrateBlock) {
   record.timestamp = block.timestamp;
 
   if (blockNumber <= insertBefore) {
-    const isAcala = api.registry.chainSS58 === 10
-    let accountData = []
-
-    if (isAcala) {
-      accountData = [...acalaNative as any, ...acalaNonNative as any]
-    } else {
-      accountData = [...karuraNative as any, ...karuraNonNative as any]
-    }
-
+    const network = api.registry.chainSS58 === 10 ? "acala" : "karura";
     const round = Number(blockNumber - startAt);
+    const startIndex = round * 1000;
+    const accountData = await getInitialBalanceRecords(network, startIndex, 1000);
 
-    logger.info(`total ${accountData.length}, start insert ${round * 1000}`);
+    logger.info(`start insert ${startIndex}, batch ${accountData.length}`);
 
-    for (let i = 0; i < 1000; i++) {
-      const data = accountData[i + round * 1000] as { account: string; token: string; free: string; reserved: string; frozen: string };
+    if (accountData.length === 0) return;
 
-      if (!data) return;
-
+    for (const data of accountData) {
       const token = await getToken(data.token);
 
       await token.save();
