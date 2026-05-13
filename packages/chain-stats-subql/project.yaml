@@ -2,7 +2,7 @@ specVersion: 1.0.0
 name: acala-stats
 version: 1.0.0
 description: 'statistics tokens data'
-repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'
+repository: 'https://github.com/AcalaNetwork/acala-subql-services'
 runner:
   node:
     name: "@subql/node"

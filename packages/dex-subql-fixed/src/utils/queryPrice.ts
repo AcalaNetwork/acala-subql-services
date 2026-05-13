@@ -21,7 +21,7 @@ const getOracleValue = async (api: AnyApi, token: MaybeCurrency) => {
 	throw new Error(`Oracle price source is unavailable for ${getTokenName(token)}`);
 }
 
-const queryPriceFromOracle = async (api: AnyApi, _block: SubstrateBlock, token: MaybeCurrency) => {
+const queryPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
 	const result = await getOracleValue(api, token);
 	const value = result?.unwrapOrDefault?.() || result;
 
@@ -106,7 +106,7 @@ const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 }
 
 const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
-	const acaPrice = await queryPriceFromOracle(api, block as any, 'ACA')
+	const acaPrice = await queryPriceFromOracle(api, 'ACA')
 	
 	const pool = await getPool('ACA', 'AUSD')
 	
@@ -124,7 +124,7 @@ const getKsmMarketPrice = (api: AnyApi, block: SubstrateBlock) => {
 	const stakingCurrency = api.consts.prices.getStakingCurrencyId;
 	const stakingCurrencyName = getTokenName(stakingCurrency as any);
 
-	return queryPriceFromOracle(api, block as any, stakingCurrencyName)
+	return queryPriceFromOracle(api, stakingCurrencyName)
 }
 
 const getDotMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {

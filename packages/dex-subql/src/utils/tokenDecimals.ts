@@ -1,5 +1,6 @@
 import {
 	AnyApi,
+	MaybeCurrency,
 	forceToCurrencyName,
 	getERC20TokenAddressFromName,
 	getForeignAssetIdFromName,
@@ -14,7 +15,7 @@ import {
 
 let tokenDecimals: Record<string, number> = {};
 
-const getTokenName = (token: unknown) => forceToCurrencyName(token as any);
+const getTokenName = (token: MaybeCurrency) => forceToCurrencyName(token);
 
 const hydrateNativeTokenDecimals = (api: AnyApi) => {
 	if (Object.keys(tokenDecimals).length > 0) return;
@@ -27,7 +28,7 @@ const hydrateNativeTokenDecimals = (api: AnyApi) => {
 	);
 };
 
-export async function getTokenDecimals(api: AnyApi, token: unknown) {
+export async function getTokenDecimals(api: AnyApi, token: MaybeCurrency) {
 	hydrateNativeTokenDecimals(api);
 
 	const name = getTokenName(token);

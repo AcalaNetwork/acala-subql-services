@@ -16,12 +16,9 @@ COPY packages/earn-subql/package.json packages/earn-subql/bun.lock ./
 RUN bun install
 COPY packages/earn-subql/ ./
 RUN set -e \
-    && if [ -d /app/dist ]; then \
-        echo "Using prebuilt dist from build context"; \
-      else \
-        ./node_modules/.bin/subql codegen; \
-        ./node_modules/.bin/subql build --output dist; \
-      fi \
+    && rm -rf /app/dist \
+    && ./node_modules/.bin/subql codegen \
+    && ./node_modules/.bin/subql build --output dist \
     && for i in 1 2 3 4 5; do [ -d /app/dist ] && break; sleep 1; done \
     && if [ ! -d /app/dist ]; then \
         echo "SubQL build did not create /app/dist"; \
@@ -52,6 +49,7 @@ COPY --from=builder /app/package.json /app/
 COPY --from=builder /app/schema.graphql /app/
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/project.yaml /app/
+COPY --from=builder /app/karura-project.yaml /app/
 
 RUN chown -R 1000:1000 /app
 
