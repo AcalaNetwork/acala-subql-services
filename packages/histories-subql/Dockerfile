@@ -59,4 +59,5 @@ USER 1000
 
 EXPOSE 3000
 
-ENTRYPOINT ["/sbin/tini", "--", "/bin/run", "--historical=height", "-f", "/app"]
+ENTRYPOINT ["/sbin/tini", "--", "/bin/run"]
+CMD ["--historical=height", "-f", "/app"]

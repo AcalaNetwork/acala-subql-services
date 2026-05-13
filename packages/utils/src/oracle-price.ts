@@ -19,16 +19,26 @@ const getLiquidCrowdloanPrice = (api: AnyApi, lease: number, currentRelayBlockNu
 
 // query price via oracle feed
 const queryFeedPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
-    if(api?.query?.acalaOracle?.values) {
-        const result = await (api.query.acalaOracle.values(forceToCurrencyId(api as any, token)) as any)
+    const currencyId = forceToCurrencyId(api as any, token)
+    const query = (api as any)?.query?.acalaOracle?.values || (api as any)?.query?.oracle?.values
 
-        return FixedPointNumber.fromInner(result?.value?.value?.toString() || result?.value?.toString() || 0, 18)
-    } else {
+    if(query) {
+        const result = await query(currencyId)
+        const value = result?.unwrapOrDefault?.() || result
+
+        return FixedPointNumber.fromInner(value?.value?.value?.toString() || value?.value?.toString() || 0, 18)
+    }
+
+    const getValue = (api as any)?.rpc?.oracle?.getValue
+
+    if (typeof getValue === 'function') {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = (await (api.rpc as any).oracle.getValue('Aggregated', forceToCurrencyId(api, token))) as any
+        const result = (await getValue('Aggregated', currencyId)) as any
     
         return FixedPointNumber.fromInner(result?.value?.value?.toString() || result?.value?.toString() || 0, 18)
     }
+
+    throw new Error(`Oracle price source is unavailable for ${forceToCurrencyName(token)}`)
 }
 
 // query liquid token price via homa lite

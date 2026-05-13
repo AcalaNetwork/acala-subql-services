@@ -1,9 +1,32 @@
-import { AnyApi, FixedPointNumber as FN, MaybeCurrency, Token } from "@acala-network/sdk-core";
+import { AnyApi, FixedPointNumber as FN, MaybeCurrency, Token, forceToCurrencyId } from "@acala-network/sdk-core";
 import { SubstrateBlock } from '@subql/types/dist/interfaces';
 import { getPool, getToken } from ".";
 import { getTokenName } from './getTokenName';
-import { queryPriceFromOracle } from "@acala-network/subql-utils";
 import { PriceBundle } from "../types";
+
+const getOracleValue = async (api: AnyApi, token: MaybeCurrency) => {
+	const currencyId = forceToCurrencyId(api as any, token);
+	const query = (api as any)?.query?.acalaOracle?.values || (api as any)?.query?.oracle?.values;
+
+	if (query) {
+		return query(currencyId);
+	}
+
+	const getValue = (api as any)?.rpc?.oracle?.getValue;
+
+	if (typeof getValue === 'function') {
+		return getValue('Aggregated', currencyId);
+	}
+
+	throw new Error(`Oracle price source is unavailable for ${getTokenName(token)}`);
+}
+
+const queryPriceFromOracle = async (api: AnyApi, token: MaybeCurrency) => {
+	const result = await getOracleValue(api, token);
+	const value = result?.unwrapOrDefault?.() || result;
+
+	return FN.fromInner(value?.value?.value?.toString() || value?.value?.toString() || 0, 18);
+}
 
 const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, stakingCurrency: string, StableCurrency: string) => {
 	const { rate: rateA, amount: _amountA } = await getPriceFromDexPool(token, stakingCurrency);
@@ -70,7 +93,7 @@ const getKusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
 }
 
 const getAusdMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
-	const acaPrice = await queryPriceFromOracle(api, block, 'ACA')
+	const acaPrice = await queryPriceFromOracle(api, 'ACA')
 	
 	const pool = await getPool('ACA', 'AUSD')
 	
@@ -88,7 +111,7 @@ const getKsmMarketPrice = (api: AnyApi, block: SubstrateBlock) => {
 	const stakingCurrency = api.consts.prices.getStakingCurrencyId;
 	const stakingCurrencyName = getTokenName(stakingCurrency as any);
 
-	return queryPriceFromOracle(api, block, stakingCurrencyName)
+	return queryPriceFromOracle(api, stakingCurrencyName)
 }
 
 const getDotMarketPrice = async (api: AnyApi, block: SubstrateBlock) => {
