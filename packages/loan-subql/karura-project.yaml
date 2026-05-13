@@ -12,7 +12,6 @@ schema:
     file: ./schema.graphql
 network:
   chainId: '0xbaf5aabe40646d11f0ee8abbdc64f4a4b7674925cba08e4a05ff9ebed6e2126b'
-  dictionary: https://api.subquery.network/sq/subquery/karura-dictionary
   endpoint: wss://karura.api.onfinality.io/public-ws
   chaintypes:
     file: './dist/chain-types.js'
