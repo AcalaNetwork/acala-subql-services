@@ -4,15 +4,19 @@ import { getAccount, getRequestedRedeem } from "../records";
 import { getBlockHash, getBlockNumber, getBlockTimestamp } from "../utils/block";
 import { getExtrinsicHashFromEvent } from "../utils/extrinsic";
 
+type BooleanCodec = {
+  toString(): string;
+};
+
 export const handleRequestedRedeem = async (event: SubstrateEvent) => {
-  const [address, liquid_amount, allow_fast_match] = event.event.data as unknown as [AccountId, Balance, any];
+  const [address, liquidAmount, allowFastMatch] = event.event.data as unknown as [AccountId, Balance, BooleanCodec];
   const account = await getAccount(address.toString());
 
   const historyId = `${getBlockNumber(event.block)}-${event.idx.toString()}`;
   const history = await getRequestedRedeem(historyId);
   history.addressId = account.id;
-  history.amount = BigInt(liquid_amount.toString());
-  history.allowFastMatch = allow_fast_match.toString() === "true";
+  history.amount = BigInt(liquidAmount.toString());
+  history.allowFastMatch = allowFastMatch.toString() === "true";
   history.blockNumber = getBlockNumber(event.block);
   history.blockHash = getBlockHash(event.block);
   history.timestamp = getBlockTimestamp(event.block);

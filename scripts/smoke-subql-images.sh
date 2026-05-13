@@ -32,11 +32,18 @@ docker run -d \
 
 for _ in {1..30}; do
   if docker exec "${POSTGRES}" pg_isready -U postgres >/dev/null 2>&1; then
+    postgres_ready=true
     break
   fi
 
   sleep 1
 done
+
+if [[ "${postgres_ready:-false}" != "true" ]]; then
+  docker logs "${POSTGRES}" 2>&1 || true
+  echo "postgres failed to become ready"
+  exit 1
+fi
 
 run_smoke() {
   local name="$1"

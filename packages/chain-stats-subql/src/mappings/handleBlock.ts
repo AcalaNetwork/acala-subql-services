@@ -21,8 +21,6 @@ export async function handleBlock(block: SubstrateBlock) {
 
     logger.info(`start insert ${startIndex}, batch ${accountData.length}`);
 
-    if (accountData.length === 0) return;
-
     for (const data of accountData) {
       const token = await getToken(data.token);
 
@@ -37,8 +35,6 @@ export async function handleBlock(block: SubstrateBlock) {
       )
     }
   }
-
-
 
   await record.save();
 }

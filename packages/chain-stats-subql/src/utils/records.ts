@@ -1,4 +1,4 @@
-import { isSystemAccount, getNativeCurrency, getTokenDecimals, isTokenEqual, getSystemAccountName } from '@acala-network/subql-utils'
+import { isSystemAccount, getNativeCurrency, getTokenDecimals, isTokenEqual } from '@acala-network/subql-utils'
 import { stringToHex, u8aToHex } from '@polkadot/util'
 import { decodeAddress } from '@polkadot/util-crypto'
 import { Block, Token, Account, AccountBalance, DailyAccountBalance, HourAccountBalance, HourToken, DailyToken } from '../types/models'
@@ -131,8 +131,8 @@ export async function getAccountBalance(
         record.accountId = address
         record.tokenId = tokenName
 
-        let free = BigInt(0);
-        let reserved = BigInt(0);
+        const free = BigInt(0);
+        const reserved = BigInt(0);
 
         record.total = free + reserved
         record.free = free
