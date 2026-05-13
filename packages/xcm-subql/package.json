@@ -10,7 +10,7 @@
     "start": "bun run build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=100 --port=3123",
     "build": "subql codegen && subql build",
     "prepack": "rm -rf dist && npm build",
-    "test": "jest",
+    "test": "bun test tests/*.test.ts",
     "codegen": "./node_modules/.bin/subql codegen"
   },
   "homepage": "https://github.com/subquery/subql-starter",
