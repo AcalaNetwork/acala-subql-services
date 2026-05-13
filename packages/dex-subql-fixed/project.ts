@@ -17,7 +17,7 @@ dotenv.config({ path: dotenvPath });
 const project: SubstrateProject = {
   specVersion: "1.0.0",
   version: "0.0.1",
-  name: "acala-starter",
+  name: "acala-dex",
   description:
     "This project can be used as a starting point for developing your SubQuery project. It indexes all transfers on Acala network",
   runner: {

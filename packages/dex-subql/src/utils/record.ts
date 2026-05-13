@@ -1,6 +1,6 @@
 import { createDexShareName, CurrencyObject, FixedPointNumber, getCurrencyObject } from "@acala-network/sdk-core";
-import { getTokenDecimals } from "@acala-network/subql-utils";
 import { Position } from "@acala-network/types/interfaces";
+import { getTokenDecimals } from "./tokenDecimals";
 import {
 	Account, Block, Extrinsic,
 	AddLiquidity,

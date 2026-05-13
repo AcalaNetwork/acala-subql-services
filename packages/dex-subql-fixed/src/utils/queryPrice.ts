@@ -1,9 +1,45 @@
 import { AnyApi, FixedPointNumber as FN, MaybeCurrency, Token, forceToCurrencyId } from "@acala-network/sdk-core";
 import { SubstrateBlock } from '@subql/types/dist/interfaces';
-import { getPool, getToken } from ".";
+import { getBlock, getPool, getToken } from "./record";
 import { getTokenName } from './getTokenName';
 import { PriceBundle } from "../types";
-import { queryPriceFromOracle } from "@acala-network/subql-utils";
+
+const getOracleValue = async (api: AnyApi, token: MaybeCurrency) => {
+	const currencyId = forceToCurrencyId(api as any, token);
+	const query = (api as any)?.query?.acalaOracle?.values || (api as any)?.query?.oracle?.values;
+
+	if (query) {
+		return query(currencyId);
+	}
+
+	const getValue = (api as any)?.rpc?.oracle?.getValue;
+
+	if (typeof getValue === 'function') {
+		return getValue('Aggregated', currencyId);
+	}
+
+	throw new Error(`Oracle price source is unavailable for ${getTokenName(token)}`);
+}
+
+const queryPriceFromOracle = async (api: AnyApi, _block: SubstrateBlock, token: MaybeCurrency) => {
+	const result = await getOracleValue(api, token);
+	const value = result?.unwrapOrDefault?.() || result;
+
+	return FN.fromInner(value?.value?.value?.toString() || value?.value?.toString() || 0, 18);
+}
+
+export const ensurePriceBundleBlock = async (block: SubstrateBlock) => {
+	const blockId = block.block.header.number.toString();
+	const blockRecord = await getBlock(blockId);
+
+	blockRecord.hash = block.block.hash.toString();
+	blockRecord.number = BigInt(blockId);
+	blockRecord.timestamp = block.timestamp;
+
+	await blockRecord.save();
+
+	return blockRecord;
+}
 
 const getOtherPrice = async (api: AnyApi, block: SubstrateBlock, token: string, stakingCurrency: string, StableCurrency: string) => {
 	const { rate: rateA, amount: _amountA } = await getPriceFromDexPool(token, stakingCurrency);
@@ -154,11 +190,12 @@ export const getStablePriceBundle = async (api: AnyApi, block: SubstrateBlock, t
 
 	if (!record) {
 		const price = token === 'KUSD' ? await getKusdMarketPrice(api, block) : await getAusdMarketPrice(api, block);
+		const blockRecord = await ensurePriceBundleBlock(block);
 
 		record = new PriceBundle(id);
 
 		record.tokenId = token
-		record.blockId = block.block.header.number.toString();
+		record.blockId = blockRecord.id;
 		record.price = BigInt((price || FN.ZERO).toChainData())
 
 		await record.save();

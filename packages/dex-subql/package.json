@@ -11,7 +11,7 @@
     "start": "bun run build && ./node_modules/.bin/subql-node -f . --timeout=512 --batch-size=100 --port=3123",
     "build": "subql codegen && subql build",
     "prepack": "rm -rf dist && npm build",
-    "test": "jest",
+    "test": "bun test tests/queryPrice.test.ts",
     "codegen": "./node_modules/.bin/subql codegen"
   },
   "files": [
@@ -32,7 +32,6 @@
   "dependencies": {
     "@acala-network/sdk-core": "^4.1.6-30",
     "@acala-network/sdk-wallet": "^4.1.6-30",
-    "@acala-network/subql-utils": "^0.1.23",
     "@acala-network/type-definitions": "^4.1.6-30",
     "@acala-network/types": "^4.1.6-30",
     "@open-web3/util": "^1.1.4",

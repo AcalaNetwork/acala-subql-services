@@ -70,6 +70,15 @@ jobs:
           bun install
           bun run build
 
+      - name: Verify dex bundle
+        working-directory: packages/dex-subql
+        run: |
+          bun run test
+          if grep -R "rpc\\.oracle\\.getValue" dist; then
+            echo "Built dex output still contains stale direct rpc.oracle.getValue"
+            exit 1
+          fi
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
         with:
@@ -116,6 +125,14 @@ jobs:
         run: |
           bun install
           bun run build
+
+      - name: Verify dex fixed bundle
+        working-directory: packages/dex-subql-fixed
+        run: |
+          if grep -R "rpc\\.oracle\\.getValue" dist; then
+            echo "Built dex-fixed output still contains stale direct rpc.oracle.getValue"
+            exit 1
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4

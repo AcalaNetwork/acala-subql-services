@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: acala-tokens
+name: acala-stats
 version: 1.0.0
 description: 'statistics tokens data'
 repository: 'https://github.com/AcalaNetwork/acala-tokens-subql'

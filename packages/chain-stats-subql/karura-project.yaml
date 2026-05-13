@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: karura-tokens
+name: karura-stats
 version: 1.0.0
 description: 'statistics tokens data of karura network'
 repository: 'https://github.com/AcalaNetwork/acala-subql-services'
