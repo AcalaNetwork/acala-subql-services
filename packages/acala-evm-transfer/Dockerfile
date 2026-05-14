@@ -42,11 +42,16 @@ WORKDIR /app
 COPY --from=builder /app/package.json /app/
 COPY --from=builder /app/schema.graphql /app/
 COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/project.yaml /app/
+COPY --from=builder /app/project.yaml.template /app/
+COPY --from=builder /app/project.yaml.template /app/project.yaml
+COPY --from=builder /app/docker/entrypoint.sh /app/entrypoint.sh
 COPY --from=builder /app/abis /app/abis
 
-RUN chown -R 1000:1000 /app
+RUN chmod +x /app/entrypoint.sh && chown -R 1000:1000 /app
 
 USER 1000
 
 EXPOSE 3000
+
+ENTRYPOINT ["/sbin/tini", "--", "/app/entrypoint.sh"]
+CMD ["-f=/app"]

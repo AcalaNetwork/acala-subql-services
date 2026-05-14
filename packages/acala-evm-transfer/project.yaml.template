@@ -1,0 +1,41 @@
+specVersion: 1.0.0
+version: 0.0.1
+name: acala-evm-transfer
+description: Acala EVM Transfer
+runner:
+  node:
+    name: '@subql/node-ethereum'
+    version: 6.5.0
+  query:
+    name: '@subql/query'
+    version: 2.25.0
+schema:
+  file: ./schema.graphql
+network:
+  chainId: "__CHAIN_ID__"
+  endpoint: "__ENDPOINT__"
+dataSources:
+  - kind: ethereum/Runtime
+    options:
+      abi: erc20
+    assets:
+      erc20:
+        file: ./abis/erc20.json
+    startBlock: 6000000
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - kind: ethereum/TransactionHandler
+          handler: handleTransfer
+          filter:
+            function: transfer(address to,uint256 value)
+        - kind: ethereum/TransactionHandler
+          handler: handleApprove
+          filter:
+            function: approve(address spender,uint256 value)
+        - kind: ethereum/LogHandler
+          handler: handleTransferEvent
+          filter:
+            topics:
+              - Transfer(address indexed from, address indexed to, uint256 amount)
+repository: https://github.com/subquery/ethereum-subql-starter
