@@ -9,7 +9,12 @@ export async function handleTransferEvent(event: TransferLog) {
   if (!event.args) return;
 
   const address = event.address;
-  const token = await getToken(address);
+  const token = await getToken(address, {
+    handler: "handleTransferEvent",
+    blockHeight: event.block.number,
+    transactionHash: event.transactionHash,
+    logIndex: event.logIndex,
+  });
 
   const transferEvent = new TransferEvent(
     `${event.transactionHash}-${event.logIndex}`,
@@ -24,4 +29,3 @@ export async function handleTransferEvent(event: TransferLog) {
 
   await transferEvent.save();
 }
-

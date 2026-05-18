@@ -12,7 +12,11 @@ export async function handleTransfer(call: TransferTransaction) {
   const receipt = await call.receipt();
   const success = receipt.status;
   const address = call.to;
-  let token = await getToken(address);
+  const token = await getToken(address, {
+    handler: "handleTransfer",
+    blockHeight: call.blockNumber,
+    transactionHash: call.hash,
+  });
 
   const transfer = new Transfer(
     call.hash,

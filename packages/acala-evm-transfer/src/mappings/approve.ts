@@ -10,7 +10,11 @@ export async function handleApprove(call: ApproveTransaction) {
   const receipt = await call.receipt();
   const success = receipt.status;
   const address = call.to;
-  const token = await getToken(address);
+  const token = await getToken(address, {
+    handler: "handleApprove",
+    blockHeight: call.blockNumber,
+    transactionHash: call.hash,
+  });
 
   const approve = new Approve(
     call.hash,

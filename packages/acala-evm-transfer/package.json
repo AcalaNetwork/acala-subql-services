@@ -10,6 +10,7 @@
     "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
     "prepack": "rm -rf dist && npm run build",
     "test": "subql build && subql-node-ethereum test",
+    "test:unit": "bun test tests/token.test.ts",
     "build:typechain": "typechain --target=ethers-v5 --out-dir=contracts abis/*.json",
     "build:develop": "NODE_ENV=develop subql codegen && NODE_ENV=develop subql build"
   },
